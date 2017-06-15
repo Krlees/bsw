@@ -17,9 +17,14 @@ use Auth;
 
 class BaseController extends Controller
 {
-    use FormTraits;
 
-    protected $users;
+    protected $user_ses; //存储的用户信息
+
+    public function __construct()
+    {
+        $this->middleware('api.token') or $this->responseApi(1000);
+        $this->user_ses = cache('user_ses');
+    }
 
     /**
      * 统一回调

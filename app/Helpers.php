@@ -91,8 +91,11 @@ if (!function_exists('custom_config')) {
     {
         $arr = [
             '0' => '操作成功',
+            '1000' => 'Token不存在或不正确',
+            '1001' => 'sign认证失败',
             '1004' => '缺少必须参数',
-            '9000' => '数据库插入失败'
+            '9000' => '数据库插入失败',
+            '80001' => '其他参数错误'
         ];
 
         return array_get($arr, $code, 80001);
@@ -337,6 +340,28 @@ if (!function_exists('is_mobile_request')) {
         } else {
             return FALSE;
         }
+    }
+}
+
+if (!function_exists('create_sign')) {
+    /**
+     * 判断手机访问
+     */
+    function create_sign($timestamp, $salt)
+    {
+        $key = 'bsw42839';
+        return md5($timestamp . $salt . $key);
+    }
+}
+
+if (!function_exists('create_token')) {
+
+    /**
+     * 创建token
+     */
+    function create_token($user_id, $username, $salt)
+    {
+        return md5(md5($user_id . mt_rand(10000, 99999)) . $username . $salt);
     }
 }
 
