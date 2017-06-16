@@ -21,11 +21,18 @@ class UserWallet extends Model
      */
     protected $table = 'user_wallet';
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'uesr_id';
 
     public function userWalletRecordTb()
     {
         return 'user_wallet_record';
+    }
+
+    public function get($userId)
+    {
+        $result = DB::table($this->table)->where('user_id',$userId)->first();
+
+        return obj2arr($result);
     }
 
     

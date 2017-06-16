@@ -23,9 +23,10 @@ class Member extends Model
 
     protected $primaryKey = 'id';
 
-    public function get()
+    public function get($id)
     {
-
+        $result = DB::table($this->table)->find($id);
+        return obj2arr($result);
     }
 
     /**
