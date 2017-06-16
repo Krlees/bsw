@@ -23,6 +23,16 @@ class District extends Model
 
     protected $primaryKey = 'id';
 
+    public function nameGetId($name,$level)
+    {
+        $district = DB::table('district')->where(['name'=>$name,'level'=>$level])->first(['id']);
+        return $district ? $district->id : 0;
+    }
 
+    public function get($id)
+    {
+        $district = DB::table('district')->find($id);
+        return $district ? $district->name : '';
+    }
     
 }

@@ -27,5 +27,21 @@ class Product extends Model
     {
         return 'product_category';
     }
-    
+
+    public function get($id)
+    {
+        return DB::table($this->table)->find($id);
+    }
+
+    public function getList($cateId=0,$field=['*'])
+    {
+        $db = DB::table($this->table);
+        if($cateId){
+            $db->where('category_id',$cateId);
+        }
+        $result = $db->get($field);
+
+        return obj2arr($result);
+    }
+
 }

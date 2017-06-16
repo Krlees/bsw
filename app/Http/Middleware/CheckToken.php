@@ -8,7 +8,7 @@ use Route;
 use DB;
 use Cache;
 
-class checkToken
+class CheckToken
 {
     /**
      * Handle an incoming request.
@@ -22,7 +22,7 @@ class checkToken
     {
         $token = $request->input('token');
         if (!$this->checkToken($token)) {
-            return false;
+            return response()->json(['code'=>1000,'msg'=>'Token不正确']);
         }
 
         return $next($request);
@@ -34,7 +34,7 @@ class checkToken
             return false;
 
         // 查询缓存中有没有存储token
-        if (cache::has('user_ses')) {
+        if (cache()->has($token)) {
             return true;
         }
 
@@ -52,7 +52,7 @@ class checkToken
         $userData = obj2arr($userData);
         unset($userToken['password']);
 
-        Cache::forever('user_ses',$userData);
+        Cache::forever($token,$userData);
 
         return true;
 

@@ -28,6 +28,17 @@ class Adv extends Model
         return 'adv_position';
     }
 
+    public function get($classify)
+    {
+        $advPosition = DB::table($this->advPositionTb())->where('classify',$classify)->first(['id']);
+        return DB::table($this->table)->where('position_id',$advPosition->id)->get();
+    }
+
+    public function getList()
+    {
+        return DB::table($this->advPositionTb())->get();
+    }
+
 
 
 }

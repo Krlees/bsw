@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
+use App\Models\UserToken;
 use App\Traits\Admin\FormTraits;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -18,12 +18,21 @@ use Auth;
 class BaseController extends Controller
 {
 
-    protected $user_ses; //存储的用户信息
+    protected $user_ses = []; //存储的用户信息
 
     public function __construct()
     {
-        $this->middleware('api.token') or $this->responseApi(1000);
-        $this->user_ses = cache('user_ses');
+        if (request()->has('token')) {
+            $this->user_ses = cache(request()->input('token'));
+        }
+    }
+
+    public function pageInit()
+    {
+        $page = request('page',0);
+        $limit = request('limit',20);
+
+        return compact('page','limit');
     }
 
     /**

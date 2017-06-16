@@ -19,7 +19,7 @@ class Comment extends Model
      *
      * @var string
      */
-    protected $table = 'channel';
+    protected $table = 'comment';
 
     protected $primaryKey = 'id';
 
@@ -27,5 +27,23 @@ class Comment extends Model
     {
         return 'comment_img';
     }
-    
+
+    /**
+     * 获取评论列表
+     * @param $page
+     * @param $limit
+     * @param $where
+     * @return array
+     */
+    public function getList($page, $limit, $where)
+    {
+        $db = DB::table($this->table);
+        if($where)
+            $db->where($where);
+
+        $result = $db->offset($page*$limit)->limit($limit)->get();
+
+        return obj2arr($result);
+
+    }
 }

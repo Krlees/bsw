@@ -18,36 +18,60 @@ use Illuminate\Http\Request;
 Route::group(['namespace' => 'Api'], function () {
     // 公用接口
     Route::group(['prefix' => 'public'], function () {
-        Route::any('register', 'PublicController@register');
+        Route::post('register', 'PublicController@register'); //普通手机注册
         Route::any('login', 'PublicController@login');
         Route::any('oauth-login', 'PublicController@oauthLogin'); //oauth第三方注册或登录
-        Route::any('send-sms','PublicController@sendSms'); // 发生短信信息
-        Route::any('check-valid','PublicController@checkValid'); // 检测验证码
-        Route::any('about','PublicController@about'); // 关于我们
-        Route::any('jpush','PublicController@jpush'); // 推送消息
+        Route::any('forget-pwd', 'PublicController@forgetPwd');
+        Route::any('send-sms', 'PublicController@sendSms'); // 发生短信信息
+        Route::any('check-valid', 'PublicController@checkValid'); // 检测验证码
+        Route::any('about', 'PublicController@about'); // 关于我们
+        Route::any('jpush', 'PublicController@jpush'); // 推送消息
+        Route::get('adv', 'PublicController@adv'); // 获取广告位的信息
+        Route::get('point-get-address/{lng},{lat}', 'PublicController@pointGetAddress'); // 获取广告位的信息
+        Route::get('address-get-point', 'PublicController@addressGetPoint'); // 获取广告位的信息
+
     });
 
     // 信息接口
-    Route::group(['namespace' => 'transaction'], function(){
+    Route::group(['prefix' => 'transaction'], function () {
         Route::get('get/{id}', 'TransactionController@get');
         Route::get('get-list', 'TransactionController@getList');
+        Route::get('get-vip-list', 'TransactionController@getVipList');
         Route::get('get-job-resume/{id}', 'TransactionController@getJobResume'); //获取求职信息的简历库
         Route::get('collect/{id}', 'TransactionController@collect'); // 收藏
     });
 
+    // 产品
+    Route::group(['prefix' => 'product'], function () {
+        Route::get('get-list', 'ProductController@getList');
+    });
+
+    // 产品
+    Route::group(['prefix' => 'label'], function () {
+        Route::get('get-list', 'LabelController@getList');
+        Route::get('get-user/{id?}', 'LabelController@getUser');
+    });
+
+    // 订单
+    Route::group(['prefix' => 'order'], function () {
+        Route::post('create', 'OrderController@create');
+        Route::get('get/{id}', 'OrderController@get');
+        Route::get('get-list', 'OrderController@getList');
+    });
+
     // 评论
-    Route::group(['namespace' => 'comment'], function(){
+    Route::group(['prefix' => 'comment'], function () {
         Route::get('get/{id}', 'CommentController@get'); // 根据评论ID，获取评论详情
-        Route::get('get-list/{tid}', 'CommentController@getList'); //根据信息ID，获取信息下的评论列表
+        Route::get('get-list', 'CommentController@getList'); //根据信息ID，获取信息下的评论列表
     });
 
     // 首页
-    Route::group(['namespace' => 'home'], function(){
-        Route::get('index', 'HomeController@index'); // 根据评论ID，获取评论详情
-    });
+//    Route::group(['prefix' => 'adv'], function(){
+//        Route::get('get-list', 'AdvController@getList');
+//    });
 
     // 用户
-    Route::group(['namespace' => 'user'], function(){
+    Route::group(['prefix' => 'user'], function () {
         Route::get('get/{id}', 'UserController@get'); //获取用户基本信息
         Route::get('get-list', 'UserController@getList'); //获取用户列表
         Route::get('get-wallet/{id}', 'UserController@getWallet'); //获取用户财务信息，余额和记录等
@@ -55,8 +79,8 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('postVerify/{id}', 'UserController@postVerify'); // 提交认证资料
     });
 
-    // 用户
-    Route::group(['namespace' => 'red-packet'], function(){
+    // 红包
+    Route::group(['prefix' => 'red-packet'], function () {
         Route::get('get/{id}', 'PacketController@get'); // 获取红包详情
         Route::get('get-list', 'PacketController@getList');
         Route::get('get-user-packet', 'PacketController@getUserPacket'); // 获取用户抢到的红包
@@ -65,7 +89,7 @@ Route::group(['namespace' => 'Api'], function () {
     });
 
     // 用户好友
-    Route::group(['namespace' => 'user-friend'], function(){
+    Route::group(['prefix' => 'user-friend'], function () {
         Route::get('get-list', 'UserFriendController@getList'); // 获取我的好友列表
         Route::get('create', 'UserFriendController@create'); // 加好友
         Route::get('delete', 'UserFriendController@delete'); // 删除好友

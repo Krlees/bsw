@@ -23,6 +23,10 @@ class Label extends Model
 
     protected $primaryKey = 'id';
 
-
+    public function getByName($id)
+    {
+        $result = DB::table($this->table)->find($id,['name']);
+        return $result ? $result->name : '';
+    }
     
 }

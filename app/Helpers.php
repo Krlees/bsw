@@ -93,6 +93,7 @@ if (!function_exists('custom_config')) {
             '0' => '操作成功',
             '1000' => 'Token不存在或不正确',
             '1001' => 'sign认证失败',
+            '1002' => '账户或密码错误',
             '1004' => '缺少必须参数',
             '9000' => '数据库插入失败',
             '80001' => '其他参数错误'
@@ -168,6 +169,16 @@ if (!function_exists('picture')) {
             }
         }
         return 'http://' . $_SERVER['HTTP_HOST'] . '/nopic.jpg';
+    }
+}
+
+if (!function_exists('picture_url')) {
+    function picture_url($name)
+    {
+        if(empty($name))
+            return '';
+
+        return 'http://' . $_SERVER['HTTP_HOST'];
     }
 }
 
@@ -359,12 +370,86 @@ if (!function_exists('create_token')) {
     /**
      * 创建token
      */
-    function create_token($user_id, $username, $salt)
+    function create_token($user_id, $salt)
     {
-        return md5(md5($user_id . mt_rand(10000, 99999)) . $username . $salt);
+        return md5(md5($user_id . mt_rand(10000, 99999)) . $salt);
     }
 }
 
+if (!function_exists('password')) {
+    /**
+     * 生成密码
+     * @param $pwd
+     */
+    function password($pwd)
+    {
+        return md5(md5($pwd));
+    }
+}
 
+if (!function_exists('check_mobile_format')) {
+    /**
+     * 检测手机格式
+     */
+    function check_mobile_format($mobile)
+    {
+        $search = '/^(1(([35][0-9])|(47)|[8][0126789]))\d{8}$/';
+        if (preg_match($search, $mobile)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+if (!function_exists('check_valid')) {
+    function check_valid($mobile, $type, $valid)
+    {
+        $oldValid = cache($type . '_' . $mobile);
+        if( empty($oldValid) || $oldValid != $valid){
+            return false;
+        }
+
+        return true;
+    }
+}
+
+if (!function_exists('create_randomstr')) {
+    /**
+     * 生成随机字符串
+     * @param string $lenth 长度
+     * @return string 字符串
+     */
+    function create_randomstr($lenth = 6)
+    {
+        return random($lenth, '123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ');
+    }
+}
+
+if (!function_exists('random')) {
+    /**
+     * 产生随机字符串
+     * @param    int $length 输出长度
+     * @param    string $chars 可选的 ，默认为 0123456789
+     * @return   string     字符串
+     */
+    function random($length, $chars = '0123456789')
+    {
+        $hash = '';
+        $max = strlen($chars) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $hash .= $chars[mt_rand(0, $max)];
+        }
+        return $hash;
+    }
+}
+
+/**
+ * 创建订单
+ */
+function create_order_sn($type,$product_id)
+{
+    return date('md').sprintf('%02d',$type).sprintf('%02d',$product_id).random(7);
+}
 
 

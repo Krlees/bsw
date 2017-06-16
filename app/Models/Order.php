@@ -23,6 +23,31 @@ class Order extends Model
 
     protected $primaryKey = 'id';
 
+    public function get($id)
+    {
+        return DB::table($this->table)->find($id);
+    }
 
-    
+    public function getList($userId = 0)
+    {
+        $db = DB::table($this->table);
+        if ($userId)
+            $db->where('user_id', $userId);
+        $result = $db->get();
+
+        return obj2arr($result);
+    }
+
+    public function create($data)
+    {
+        try {
+            $id = DB::table($this->table)->insertGetId($data);
+
+            return $id;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+
 }

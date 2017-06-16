@@ -58,7 +58,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'wechat.oauth' => \Overtrue\LaravelWechat\Middleware\OAuthAuthenticate::class,
-        'api.token' => \App\Http\Middleware\checkToken::class,
+        'api.token' => \App\Http\Middleware\CheckToken::class,
 //        'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
 //        'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
 //        'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
