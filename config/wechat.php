@@ -16,8 +16,8 @@ return [
     /*
      * 账号基本信息，请从微信公众平台/开放平台获取
      */
-    'app_id'  => env('WECHAT_APPID', 'wxe64ffd96ea5834e8'),         // AppID
-    'secret'  => env('WECHAT_SECRET', 'a95e1dabb2564a763db4875dcaeb1641'),     // AppSecret
+    'app_id'  => env('WECHAT_APPID', 'wx9af66caaa22e9733'),         // AppID
+    'secret'  => env('WECHAT_SECRET', 'c0478543b10809288059af52d51775c4'),     // AppSecret
     'token'   => env('WECHAT_TOKEN', 'krlee'),          // Token
     'aes_key' => env('WECHAT_AES_KEY', ''),                    // EncodingAESKey
 
@@ -59,16 +59,16 @@ return [
     /*
      * 微信支付
      */
-    // 'payment' => [
-    //     'merchant_id'        => env('WECHAT_PAYMENT_MERCHANT_ID', 'your-mch-id'),
-    //     'key'                => env('WECHAT_PAYMENT_KEY', 'key-for-signature'),
-    //     'cert_path'          => env('WECHAT_PAYMENT_CERT_PATH', 'path/to/your/cert.pem'), // XXX: 绝对路径！！！！
-    //     'key_path'           => env('WECHAT_PAYMENT_KEY_PATH', 'path/to/your/key'),      // XXX: 绝对路径！！！！
-    //     // 'device_info'     => env('WECHAT_PAYMENT_DEVICE_INFO', ''),
-    //     // 'sub_app_id'      => env('WECHAT_PAYMENT_SUB_APP_ID', ''),
-    //     // 'sub_merchant_id' => env('WECHAT_PAYMENT_SUB_MERCHANT_ID', ''),
-    //     // ...
-    // ],
+     'payment' => [
+         'merchant_id'        => env('WECHAT_PAYMENT_MERCHANT_ID', '1301190401'),
+         'key'                => env('WECHAT_PAYMENT_KEY', '5e2014db022d0eeab03703a10267c83a'),
+         'cert_path'          => env('WECHAT_PAYMENT_CERT_PATH', 'path/to/your/cert.pem'), // XXX: 绝对路径！！！！
+         'key_path'           => env('WECHAT_PAYMENT_KEY_PATH', 'path/to/your/key'),      // XXX: 绝对路径！！！！
+         // 'device_info'     => env('WECHAT_PAYMENT_DEVICE_INFO', ''),
+         // 'sub_app_id'      => env('WECHAT_PAYMENT_SUB_APP_ID', ''),
+         // 'sub_merchant_id' => env('WECHAT_PAYMENT_SUB_MERCHANT_ID', ''),
+         // ...
+     ],
 
     /*
      * 开发模式下的免授权模拟授权用户资料

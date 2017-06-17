@@ -49,5 +49,15 @@ class Order extends Model
         }
     }
 
+    public function updateData($id,$data)
+    {
+        try {
+            $b = DB::table($this->table)->where('id',$id)->update($data);
+            return $b!==false;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
 
 }

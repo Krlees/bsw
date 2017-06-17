@@ -88,6 +88,12 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
 // Auth退出
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
+// 微信
+Route::any('/wechat', 'WechatController@serve');
+Route::group(['prefix' => 'wx-oauth','middreware'=>['web','wechat.oauth']], function () {
+
+});
+
 // 常用组件
 Route::group(['prefix' => 'components'], function () {
     Route::post('upload','ComponentsController@upload');

@@ -29,7 +29,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('adv', 'PublicController@adv'); // 获取广告位的信息
         Route::get('point-get-address/{lng},{lat}', 'PublicController@pointGetAddress'); // 获取广告位的信息
         Route::get('address-get-point', 'PublicController@addressGetPoint'); // 获取广告位的信息
-
+        Route::get('get-new-user', 'PublicController@getNewUser'); // 获取新用户
     });
 
     // 信息接口
@@ -81,6 +81,10 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('delete-friend/{followId}', 'UserController@deleteFriend'); // 删除好友
         Route::get('my-friend', 'UserController@myFriend'); // 删除好友
         Route::get('my-fans', 'UserController@myFans'); // 删除好友
+    });
+
+    Route::group(['prefix' => 'pay'], function () {
+        Route::post('wallet', 'PayController@wallet');
     });
 
     // 红包

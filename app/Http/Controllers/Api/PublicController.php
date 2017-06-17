@@ -12,14 +12,18 @@ use App\Models\UserToken;
 use App\Traits\GaodemapTraits;
 use App\Traits\SmsTraits;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseController;
 use Cache;
 
-class PublicController extends Controller
+class PublicController extends BaseController
 {
 
     use SmsTraits;
     use GaodemapTraits;
+
+    public function __construct()
+    {
+    }
 
     /**
      * 手机注册用户
@@ -232,25 +236,15 @@ district: "霞浦县",
 
     }
 
-
-    /**
-     * 统一回调
-     *
-     * @param $code     状态码
-     * @param $msg      提示文字
-     * @param $data     数据
-     * @prams $href     跳转的网址
-     * @author krlee <lkd0769@126.com>
-     */
-    public function responseApi($code = 0, $msg = '', $data = [])
+    public function getNewUser(Member $member)
     {
+        $pages = $this->pageInit();
+        $data = $member->getList($pages['page'],$pages['limit']);
 
-        if (!$msg) {
-            $msg = custom_config($code);
-        }
-
-        echo json_encode(compact('code', 'msg', 'data', 'href'));
-        exit;
+        $this->responseApi(0,'',$data);
     }
+
+
+
 
 }
