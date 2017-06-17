@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends BaseController
@@ -19,7 +20,7 @@ class OrderController extends BaseController
      * @param Request $request
      * @param Order $order
      */
-    public function create(Request $request, Order $order)
+    public function create(Request $request, Order $order, Product $product)
     {
 
         $type = $request->input('type') or $this->responseApi(1004);
@@ -28,6 +29,11 @@ class OrderController extends BaseController
         $created_at = date('Y-m-d H:i:s');
         $order_sn = create_order_sn($type, $product_id);
         $status = 1;
+        $price = $request->input('price');
+        if(!$price){
+            $products = $product->get($product_id);
+            $price = $products->price;
+        }
 
         $user_id = ($this->user_ses) ? $this->user_ses->id : 0;
 

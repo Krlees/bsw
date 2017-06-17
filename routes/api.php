@@ -76,6 +76,11 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('get-wallet', 'UserController@getWallet'); //获取用户财务信息，余额和记录等
         Route::get('get-setting', 'UserController@getSetting'); //获取用户个人设置
         Route::post('post-verify', 'UserController@postVerify'); // 提交认证资料
+        Route::get('get-verify', 'UserController@getVerify'); // 提交认证资料
+        Route::get('add-friend/{followId}', 'UserController@addFriend'); // 加好友
+        Route::get('delete-friend/{followId}', 'UserController@deleteFriend'); // 删除好友
+        Route::get('my-friend', 'UserController@myFriend'); // 删除好友
+        Route::get('my-fans', 'UserController@myFans'); // 删除好友
     });
 
     // 红包
@@ -85,13 +90,6 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('get-user-packet', 'PacketController@getUserPacket'); // 获取用户抢到的红包
         Route::get('get-send', 'PacketController@getSend'); // 获取用户发出去的红包
         Route::post('create', 'PacketController@create'); // 创建新的红包
-    });
-
-    // 用户好友
-    Route::group(['prefix' => 'user-friend'], function () {
-        Route::get('get-list', 'UserFriendController@getList'); // 获取我的好友列表
-        Route::get('create', 'UserFriendController@create'); // 加好友
-        Route::get('delete', 'UserFriendController@delete'); // 删除好友
     });
 
 

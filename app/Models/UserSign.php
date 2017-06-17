@@ -28,5 +28,10 @@ class UserSign extends Model
             return false;
         }
     }
+
+    public function get($userId)
+    {
+        return DB::table($this->table)->where('user_id',$userId)->first();
+    }
     
 }
