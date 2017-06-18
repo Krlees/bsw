@@ -58,5 +58,50 @@ class PayController extends BaseController
 
     }
 
+    /**
+     * 支付宝PC支付
+     * @param Request $request
+     * @param Order $order
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function alipayPc(Request $request, Order $order)
+    {
+        $order_id = 2;
+        $order_id = $request->input('order_id') or $this->responseApi(1004);
+
+        $orderData = $order->get($order_id);
+
+        // 创建支付单。
+        $alipay = app('alipay.web');
+        $alipay->setOutTradeNo($orderData->order_sn);
+        $alipay->setTotalFee($orderData->price);
+        $alipay->setSubject($orderData->order_sn);
+        $alipay->setBody($orderData->order_sn);
+
+        //$alipay->setQrPayMode('4'); //该设置为可选，添加该参数设置，支持二维码支付。
+
+        // 跳转到支付页面。
+        return redirect()->to($alipay->getPayLink());
+    }
+
+    public function alipayWap(Request $request, Order $order)
+    {
+        $order_id = 2;
+        $order_id = $request->input('order_id') or $this->responseApi(1004);
+
+        $orderData = $order->get($order_id);
+
+        // 创建支付单。
+        $alipay = app('alipay.mobile');
+        $alipay->setOutTradeNo('order_id');
+        $alipay->setTotalFee('order_price');
+        $alipay->setSubject('goods_name');
+        $alipay->setBody('goods_description');
+
+        // 返回签名后的支付参数给支付宝移动端的SDK。
+        return $alipay->getPayPara();
+    }
+
+
 
 }

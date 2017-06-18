@@ -30,6 +30,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('point-get-address/{lng},{lat}', 'PublicController@pointGetAddress'); // 获取广告位的信息
         Route::get('address-get-point', 'PublicController@addressGetPoint'); // 获取广告位的信息
         Route::get('get-new-user', 'PublicController@getNewUser'); // 获取新用户
+        Route::get('alipay', 'PublicController@alipay');
     });
 
     // 信息接口

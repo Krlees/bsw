@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Adv;
 use App\Models\Member;
 use App\Models\Menu;
+use App\Models\Order;
 use App\Models\Setting;
 use App\Models\UserLoginRecord;
 use App\Models\UserOauth;
@@ -245,6 +246,23 @@ district: "霞浦县",
     }
 
 
+    public function alipay(Order $order)
+    {
+        $id = 2;
 
+        $orderData = $order->get($id);
+
+        // 创建支付单。
+        $alipay = app('alipay.web');
+        $alipay->setOutTradeNo($orderData->order_sn);
+        $alipay->setTotalFee($orderData->price);
+        $alipay->setSubject($orderData->order_sn);
+        $alipay->setBody($orderData->order_sn);
+
+        //$alipay->setQrPayMode('4'); //该设置为可选，添加该参数设置，支持二维码支付。
+
+        // 跳转到支付页面。
+        return redirect()->to($alipay->getPayLink());
+    }
 
 }
