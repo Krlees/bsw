@@ -125,13 +125,43 @@ class PublicController extends BaseController
     }
 
     /**
-     * 第三方Oauth登录
+     * 第三方微信登录
      * @param Request $request
      * @param UserOauth $userOauth
      */
-    public function oauthLogin(Request $request, UserOauth $userOauth)
+    public function wxLogin(Request $request, Member $member)
     {
+        $data = $request->all();
+        unset($data['token']);
 
+        $count = \DB::table($member->getTable())->where('openid', $data['open_id'])->count();
+        if (!$count) {
+            $result = $member->create($data);
+        } else {
+            $result = $member->updateData($this->user_ses->id, $data);
+        }
+
+        $result ? $this->responseApi(0) : $this->responseApi(9000);
+    }
+
+    /**
+     * 第三方qq登录
+     * @param Request $request
+     * @param UserOauth $userOauth
+     */
+    public function qqLogin(Request $request, Member $member)
+    {
+        $data = $request->all();
+        unset($data['token']);
+
+        $count = \DB::table($member->getTable())->where('openid', $data['open_id'])->count();
+        if (!$count) {
+            $result = $member->create($data);
+        } else {
+            $result = $member->updateData($this->user_ses->id, $data);
+        }
+
+        $result ? $this->responseApi(0) : $this->responseApi(9000);
     }
 
     /**
