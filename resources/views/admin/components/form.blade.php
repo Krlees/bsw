@@ -1,5 +1,7 @@
 @inject('formPresenter','App\Presenters\Admin\FormPresenter')
 
+@include('admin.common.css')
+@include('admin.common.js')
 <link rel="stylesheet" type="text/css" href="{{asset('hplus/css/Validform_v5.3.2.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('hplus/css/plugins/webuploader/webuploader.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('hplus/css/demo/webuploader-demo.css')}}">

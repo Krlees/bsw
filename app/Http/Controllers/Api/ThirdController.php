@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController;
+use Illuminate\Http\Request;
 
 class ThirdController extends BaseController
 {
     /**
      * 第三方app微信登录
      */
-    public function appWxLogin()
+    public function appWxLogin(Request $request)
     {
+        //$data = $request->input('data') or $this->responseApi(1004);
 
     }
 

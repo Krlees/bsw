@@ -34,7 +34,7 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
 
-    @component('admin.components.table_base',$reponse)
+    @component('admin.components.table',$reponse)
     @endcomponent
 </div>
 
@@ -121,7 +121,7 @@
         var parentid = row.id;
         var cur_table = $detail.html('<table></table>').find('table');
         $(cur_table).bootstrapTable({
-            url: '{{url('admin/menu/get-sub-menu')}}' + '/' + parentid,
+            url: '{{url('admin/menu/index')}}' + '?pid=' +parentid,
             method: 'get',
             queryParams: {},
             ajaxOptions: {},
@@ -129,7 +129,6 @@
             detailView: true,//父子表
             uniqueId: "id",
             columns: [
-                {!! $tablePresenter->jsCheckbox() !!}
                 {!! $tablePresenter->jsColums('ID','id','true') !!}
                 {!! $tablePresenter->jsColums('名称','name') !!}
                 {!! $tablePresenter->jsColums('路由','url') !!}

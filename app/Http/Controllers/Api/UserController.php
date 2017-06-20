@@ -76,8 +76,8 @@ class UserController extends BaseController
      */
     public function addFriend($followId, UserFollow $userFollow)
     {
-        if($userFollow->check($this->user_ses->id, $followId)){
-            return $this->responseApi(80001,'该好友不存在！');
+        if ($userFollow->check($this->user_ses->id, $followId)) {
+            return $this->responseApi(80001, '该好友不存在！');
         }
 
         $result = $userFollow->create($this->user_ses->id, $followId);
@@ -90,8 +90,8 @@ class UserController extends BaseController
      */
     public function deleteFriend($followId, UserFollow $userFollow)
     {
-        if(!$userFollow->check($this->user_ses->id, $followId)){
-            return $this->responseApi(80001,'该好友不存在！');
+        if (!$userFollow->check($this->user_ses->id, $followId)) {
+            return $this->responseApi(80001, '该好友不存在！');
         }
 
         $result = $userFollow->del($this->user_ses->id, $followId);
@@ -105,7 +105,7 @@ class UserController extends BaseController
     public function myFriend(UserFollow $userFollow)
     {
         $result = $userFollow->getFollow($this->user_ses->id);
-        $this->responseApi(0,'',$result);
+        $this->responseApi(0, '', $result);
     }
 
     /**
@@ -115,6 +115,18 @@ class UserController extends BaseController
     public function myFans(UserFollow $userFollow)
     {
         $result = $userFollow->getFans($this->user_ses->id);
-        $this->responseApi(0,'',$result);
+        $this->responseApi(0, '', $result);
+    }
+
+    /**
+     * 检查token
+     */
+    public function checkToken(Request $request, Member $member)
+    {
+        $registration_id = $request->input('RegistrationID') or $this->responseApi(1004);
+        $this->user_ses->registration_id = $registration_id; // jpush极光推送ID
+
+        $result = $member->updateData($this->user_ses->id, compact('registration_id'));
+        $result ? $this->responseApi(0,'',obj2arr($this->user_ses)) : $this->responseApi(9000);
     }
 }

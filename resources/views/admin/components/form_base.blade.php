@@ -1,4 +1,5 @@
 @inject('formPresenter','App\Presenters\Admin\FormPresenter')
+<link rel="stylesheet" type="text/css" href="{{asset('hplus/css/Validform_v5.3.2.css')}}">
 
 @foreach ($formField as $i=>$v )
     <div class="form-group">

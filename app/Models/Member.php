@@ -71,6 +71,17 @@ class Member extends Model
 
     }
 
+    public function updateData($id, $data)
+    {
+        try {
+            $result = DB::table($this->table)->where('id', $id)->update($data);
+
+            return $result !== false ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     public function oauthCreate($data)
     {
 

@@ -22,10 +22,10 @@ class PayController extends BaseController
      * @param Order $order
      * @param UserWallet $userWallet
      */
-    public function wallet(Request $request, Order $order, UserWallet $userWallet)
+    public function wallet(Request $request, UserWallet $userWallet)
     {
         $order_id = $request->input('order_id') or $this->responseApi(1004);
-        $orderData = $order->get($order_id);
+        $orderData = $this->getOrderData($order_id);
         if ($orderData->status != 1) {
             $this->responseApi(80001, '该订单状态错误，请重新下单');
         }
@@ -64,7 +64,7 @@ class PayController extends BaseController
      * @param Order $order
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function alipayPc(Request $request, Order $order)
+    public function alipayPc(Request $request)
     {
         $order_id = 2;
         $order_id = $request->input('order_id') or $this->responseApi(1004);
@@ -84,12 +84,10 @@ class PayController extends BaseController
         return redirect()->to($alipay->getPayLink());
     }
 
-    public function alipayWap(Request $request, Order $order)
+    public function alipayWap(Request $request)
     {
         $order_id = 2;
-        $order_id = $request->input('order_id') or $this->responseApi(1004);
-
-        $orderData = $order->get($order_id);
+        $orderData = $this->getOrderData($order_id);
 
         // 创建支付单。
         $alipay = app('alipay.mobile');
@@ -102,6 +100,29 @@ class PayController extends BaseController
         return $alipay->getPayPara();
     }
 
+    public function alipayApp(Request $request, Order $order)
+    {
 
+    }
+
+    public function wxpayPc(Request $request, Order $order)
+    {
+
+    }
+
+    public function wxpayWap(Request $request, Order $order)
+    {
+
+    }
+
+    public function wxpayApp(Request $request, Order $order)
+    {
+
+    }
+
+    private function getOrderData($order_id)
+    {
+        return app('App\Models\Order')->get($order_id);
+    }
 
 }

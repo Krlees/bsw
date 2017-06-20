@@ -58,7 +58,7 @@ class BaseController extends Controller
      * @prams $href     跳转的网址
      * @author krlee <lkd0769@126.com>
      */
-    public function responseData($code = 0, $msg = '', $data = [], $href = '')
+    public function responseApi($code = 0, $msg = '', $data = [], $href = '')
     {
 
         if (!$msg) {
@@ -87,10 +87,10 @@ class BaseController extends Controller
      *
      * @param $param
      */
-    public function cleanAjaxTableParam($param)
+    public function cleanAjaxPageParam($param)
     {
         $param['offset'] = array_get($param, 'offset', 0);
-        $param['offset'] = array_get($param, 'limit', 10);
+        $param['limit'] = array_get($param, 'limit', 10);
         $param['sort'] = array_get($param, 'sort', false);
         $param['order'] = array_get($param, 'order', 'desc');
 

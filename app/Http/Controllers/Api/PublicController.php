@@ -42,7 +42,7 @@ class PublicController extends BaseController
         $lng = $request->input('lng');
         $lat = $request->input('lat');
         $valid = $request->input('valid');
-        $type = $request->input('register', 'register');
+        $type = $request->input('register', 'mobile');
         if (!$valid || !$timestamp || !$salt || !$sign || !$username || !$password || !$register_type || !$lng || !$lat) {
             $this->responseApi(1004);
         } elseif ($register_type != 'mobile') {
