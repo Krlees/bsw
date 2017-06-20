@@ -64,7 +64,7 @@ class PayController extends BaseController
      * @param Order $order
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function alipayPc(Request $request)
+    public function alipayPc(Request $request, Order $order)
     {
         $order_id = 2;
         $order_id = $request->input('order_id') or $this->responseApi(1004);

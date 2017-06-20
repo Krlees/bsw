@@ -87,8 +87,9 @@ class BaseController extends Controller
      *
      * @param $param
      */
-    public function cleanAjaxPageParam($param)
+    public function cleanAjaxPageParam()
     {
+        $param = request()->all();
         $param['offset'] = array_get($param, 'offset', 0);
         $param['limit'] = array_get($param, 'limit', 10);
         $param['sort'] = array_get($param, 'sort', false);

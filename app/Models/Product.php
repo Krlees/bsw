@@ -9,10 +9,10 @@
 namespace App\Models;
 
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 use DB;
 
-class Product extends Model
+class Product extends BaseModel
 {
     /**
      * 与模型关联的数据表

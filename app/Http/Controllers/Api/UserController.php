@@ -129,7 +129,7 @@ class UserController extends BaseController
         $registration_id = $request->input('RegistrationID') or $this->responseApi(1004);
 
         // 判断网易云通讯token
-        if (!$this->user_ses->netease_token) {
+        if (!isset($this->user_ses->netease_token)) {
             $res = $this->getNetToken($this->user_ses->id, $this->user_ses->nickname, picture_url($this->user_ses->avatar));
             if ($res) {
                 $member->updateData($this->user_ses->id, ['netease_token' => $res['info']['token']]);

@@ -20,6 +20,8 @@ Route::group(['namespace' => 'Api'], function () {
     Route::group(['prefix' => 'public'], function () {
         Route::post('register', 'PublicController@register'); //普通手机注册
         Route::any('login', 'PublicController@login');
+        Route::any('qq-login', 'PublicController@qqlogin');
+        Route::any('wx-login', 'PublicController@wxlogin');
         Route::any('oauth-login', 'PublicController@oauthLogin'); //oauth第三方注册或登录
         Route::any('forget-pwd', 'PublicController@forgetPwd');
         Route::any('send-sms', 'PublicController@sendSms'); // 发生短信信息
@@ -30,7 +32,8 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('point-get-address/{lng},{lat}', 'PublicController@pointGetAddress'); // 获取广告位的信息
         Route::get('address-get-point', 'PublicController@addressGetPoint'); // 获取广告位的信息
         Route::get('get-new-user', 'PublicController@getNewUser'); // 获取新用户
-        Route::get('alipay', 'PublicController@alipay');
+        Route::get('alipay', 'PublicController@alipay'); // 支付宝支付
+        Route::get('wxpay', 'PublicController@wxpay'); // 微信支付
     });
 
     // 信息接口

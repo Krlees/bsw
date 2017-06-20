@@ -39,8 +39,8 @@
                         <div class="col-sm-4 col-sm-offset-2">
                             <button class="btn btn-primary" type="submit"><i class="fa fa-paper-plane-o"></i> 提交
                             </button>
-                            <a href="javascript:" onclick="javascript:history.go(-1)" class="btn btn-white" id="back"><i
-                                        class="fa fa-reply"></i> 返回</a>
+                            {{--<a href="javascript:" onclick="javascript:history.go(-1)" class="btn btn-white" id="back"><i--}}
+                                        {{--class="fa fa-reply"></i> 返回</a>--}}
                         </div>
                     </div>
                     {!! Form::close() !!}

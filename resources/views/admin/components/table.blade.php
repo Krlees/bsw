@@ -263,7 +263,7 @@
             title: $title,
             shadeClose: true,
             shade: 0.5,
-            area: ['800px', '75%'],
+            area: ['800px', '85%'],
             content: url //iframe的url
         });
     }
