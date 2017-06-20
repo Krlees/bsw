@@ -100,7 +100,7 @@ class PublicController extends BaseController
             $res = $this->getNetToken($user->id, $user->nickname, picture_url($user->avatar));
             if ($res) {
                 $member->updateData($user->id, ['netease_token' => $res['info']['token']]);
-                $user->netease_token = $res['token'];
+                $user->netease_token = $res['info']['token'];
             }
         }
 
