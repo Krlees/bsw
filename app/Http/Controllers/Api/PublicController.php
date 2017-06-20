@@ -103,7 +103,7 @@ class PublicController extends BaseController
                 $member->updateData($user->id, ['netease_token' => $res['info']['token']]);
                 $this->user_ses->netease_token = $res['info']['token'];
                 $this->user_ses->accid = $res['info']['accid'];
-                
+
                 cache()->forever($request->input('token'), $this->user_ses);
             }
         }
@@ -309,6 +309,12 @@ district: "霞浦县",
 
         // 跳转到支付页面。
         return redirect()->to($alipay->getPayLink());
+    }
+
+    public function clearCache()
+    {
+        cache()->flush();
+        $this->responseApi(0);
     }
 
 }
