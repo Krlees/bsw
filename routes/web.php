@@ -27,12 +27,12 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     Route::get('dashboard', 'IndexController@dashboard');
 
     // 权限管理
-    Route::group(['prefix' => 'permission'], function () {
-        Route::any('index', 'PermissionController@index');
-        Route::any('add', 'PermissionController@add');
-        Route::any('edit/{id}', 'PermissionController@edit');
-        Route::any('del', 'PermissionController@del');
-        Route::any('get-sub-perm/{id}', 'PermissionController@getSubPerm');
+    Route::group(['prefix' => 'product'], function () {
+        Route::any('index', 'ProductController@index');
+        Route::any('add', 'ProductController@add');
+        Route::any('edit/{id}', 'ProductController@edit');
+        Route::any('del', 'ProductController@del');
+        Route::any('category', 'ProductController@getSubPerm');
     });
 
     // 角色管理

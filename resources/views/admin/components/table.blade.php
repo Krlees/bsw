@@ -209,7 +209,7 @@
                     strs += '<a class="view btn btn-xs btn-info tooltips" href="{{isset($action['showUrl'])?$action['showUrl']:''}}/' + row[uniqueId] + '" title="查看" data-toggle="modal" data-target="#myModal" data-original-title="查看" data-placement="top"><i class="fa fa-eye"></i></a>　';
                     break;
                 case 'edit':
-                    strs += '<a class="edit btn btn-xs btn-outline btn-warning tooltips" href="javascript:void(0)" title="编辑"><i class="fa fa-edit"></i></a>　';
+                    strs += '<a class="edit btn btn-xs btn-outline btn-warning tooltips" href="javascript:void(0)" title="编辑">编辑 <i class="fa fa-edit"></i></a>　';
                     break;
                 case 'remove':
                     strs += '<a class="remove btn btn-xs btn-outline btn-danger tooltips destroy_item" href="javascript:void(0)" title="删除"> <i class="fa fa-trash"></i></a>　';

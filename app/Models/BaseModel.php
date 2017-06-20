@@ -11,9 +11,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+
 class BaseModel extends Model
 {
-    public function ajaxData($tableName,$where=false,$searchField='name',$fields=['*'])
+    public function ajaxData($tableName, $param, $where = false, $searchField = 'name', $fields = ['*'])
     {
         $where = $where ?: [];
         if (isset($param['search']))
@@ -26,6 +27,54 @@ class BaseModel extends Model
         $total = DB::table($tableName)->where($where)->count();
 
         return compact('rows', 'total');
+    }
+
+    public function createData($tbName, $data)
+    {
+        try {
+            $id = DB::table($tbName)->insertGetId($data);
+
+            return $id ?: false;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function updateData($tbName, $id, $data)
+    {
+        try {
+            $b = DB::table($tbName)->where('id', $id)->update($data);
+
+            return $b !== false ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function delData($tbName, $ids)
+    {
+        try {
+            $b = DB::table($tbName)->whereIn('id', $ids)->delete();
+
+            return $b !== false ? true : false;
+        } catch (\Exception $e) {
+
+        }
+    }
+
+    public function getInfo($tbName, $id)
+    {
+        return DB::table($tbName)->find($id);
+    }
+
+    public function getOnlyField($tbName, $id, $field)
+    {
+        $res = DB::table($tbName)->find($id, [$field]);
+        if (empty($res)) {
+            return '';
+        }
+
+        return $res->{$field};
     }
 
 

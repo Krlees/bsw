@@ -93,6 +93,7 @@ class PublicController extends BaseController
         // 检测登录信息
         $user = $member->checkLogin($username, $pwd) or $this->responseApi(1002);
         unset($user->password);
+        $user->user_id = $user->id;
 
         // 网易云通讯token
         $user->netease_token = "";

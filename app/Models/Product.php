@@ -33,15 +33,20 @@ class Product extends BaseModel
         return DB::table($this->table)->find($id);
     }
 
-    public function getList($cateId=0,$field=['*'])
+    public function getList($cateId = 0, $field = ['*'])
     {
         $db = DB::table($this->table);
-        if($cateId){
-            $db->where('category_id',$cateId);
+        if ($cateId) {
+            $db->where('category_id', $cateId);
         }
         $result = $db->get($field);
 
         return obj2arr($result);
+    }
+
+    public function getCateList()
+    {
+        return DB::table($this->productCategoryTb())->get();
     }
 
 }

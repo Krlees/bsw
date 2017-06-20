@@ -17,6 +17,9 @@ class UserController extends BaseController
     {
         $this->middleware('api.token') or $this->responseApi(1000);
         parent::__construct();
+        if (empty($this->user_ses)) {
+            $this->responseApi(80001, "用户未登录");
+        }
     }
 
     /**
@@ -134,7 +137,8 @@ class UserController extends BaseController
             if ($res) {
                 $member->updateData($this->user_ses->id, ['netease_token' => $res['info']['token']]);
                 $this->user_ses->netease_token = $res['info']['token'];
-                cache()->forever($request->input('token'),  $this->user_ses);
+                $this->user_ses->accid = $res['info']['accid'];
+                cache()->forever($request->input('token'), $this->user_ses);
             }
         }
 
@@ -142,7 +146,7 @@ class UserController extends BaseController
         if ($result) {
             $this->user_ses->registration_id = $registration_id; // jpush极光推送ID
 
-            cache()->forever($request->input('token'),  $this->user_ses);
+            cache()->forever($request->input('token'), $this->user_ses);
             $this->responseApi(0, '', obj2arr($this->user_ses));
         }
 
