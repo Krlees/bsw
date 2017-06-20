@@ -134,12 +134,15 @@ class UserController extends BaseController
             if ($res) {
                 $member->updateData($this->user_ses->id, ['netease_token' => $res['info']['token']]);
                 $this->user_ses->netease_token = $res['info']['token'];
+                cache()->forever($request->input('token'),  $this->user_ses);
             }
         }
 
         $result = $member->updateData($this->user_ses->id, compact('registration_id'));
         if ($result) {
             $this->user_ses->registration_id = $registration_id; // jpush极光推送ID
+
+            cache()->forever($request->input('token'),  $this->user_ses);
             $this->responseApi(0, '', obj2arr($this->user_ses));
         }
 
