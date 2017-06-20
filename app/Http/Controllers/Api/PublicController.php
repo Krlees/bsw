@@ -11,6 +11,7 @@ use App\Models\UserLoginRecord;
 use App\Models\UserOauth;
 use App\Models\UserToken;
 use App\Traits\GaodemapTraits;
+use App\Traits\NetEaseTraits;
 use App\Traits\SmsTraits;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
@@ -19,6 +20,7 @@ use Cache;
 class PublicController extends BaseController
 {
 
+    use NetEaseTraits;
     use SmsTraits;
     use GaodemapTraits;
 
@@ -91,6 +93,16 @@ class PublicController extends BaseController
         // 检测登录信息
         $user = $member->checkLogin($username, $pwd) or $this->responseApi(1002);
         unset($user->password);
+
+        // 网易云通讯token
+        $user->netease_token = "";
+        if (empty($user->netease_token)) {
+            $res = $this->getNetToken($user->id, $user->nickname, picture_url($user->avatar));
+            if ($res) {
+                $member->updateData($user->id, ['netease_token' => $res['token']]);
+                $user->netease_token = $res['token'];
+            }
+        }
 
         // 查询出token
         $token = $userToken->getForUserId($user->id);
@@ -206,7 +218,7 @@ district: "霞浦县",
             $city = $res->regeocode->addressComponent->city;
         }
 
-        $this->responseApi(0,'',compact('city'));
+        $this->responseApi(0, '', compact('city'));
     }
 
     /**
@@ -226,7 +238,7 @@ district: "霞浦县",
             $location = $res->geocodes[0]->location;
         }
 
-        $this->responseApi(0,'',compact('location'));
+        $this->responseApi(0, '', compact('location'));
     }
 
     /**
@@ -240,9 +252,9 @@ district: "霞浦县",
     public function getNewUser(Member $member)
     {
         $pages = $this->pageInit();
-        $data = $member->getList($pages['page'],$pages['limit']);
+        $data = $member->getList($pages['page'], $pages['limit']);
 
-        $this->responseApi(0,'',$data);
+        $this->responseApi(0, '', $data);
     }
 
 

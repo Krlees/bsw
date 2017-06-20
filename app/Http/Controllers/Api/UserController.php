@@ -6,10 +6,13 @@ use App\Models\Member;
 use App\Models\UserFollow;
 use App\Models\UserSign;
 use App\Models\UserWallet;
+use App\Traits\NetEaseTraits;
 use Illuminate\Http\Request;
 
 class UserController extends BaseController
 {
+    use NetEaseTraits;
+
     public function __construct(Request $request)
     {
         $this->middleware('api.token') or $this->responseApi(1000);
@@ -124,9 +127,22 @@ class UserController extends BaseController
     public function checkToken(Request $request, Member $member)
     {
         $registration_id = $request->input('RegistrationID') or $this->responseApi(1004);
-        $this->user_ses->registration_id = $registration_id; // jpush极光推送ID
+
+        // 判断网易云通讯token
+        if (!$this->user_ses->netease_token) {
+            $res = $this->getNetToken($this->user_ses->id, $this->user_ses->nickname, picture_url($this->user_ses->avatar));
+            if ($res) {
+                $member->updateData($this->user_ses->id, ['netease_token' => $res['token']]);
+                $this->user_ses->netease_token = $res['token'];
+            }
+        }
 
         $result = $member->updateData($this->user_ses->id, compact('registration_id'));
-        $result ? $this->responseApi(0,'',obj2arr($this->user_ses)) : $this->responseApi(9000);
+        if ($result) {
+            $this->user_ses->registration_id = $registration_id; // jpush极光推送ID
+            $this->responseApi(0, '', obj2arr($this->user_ses));
+        }
+
+        $this->responseApi(9000);
     }
 }

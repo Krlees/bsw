@@ -7,9 +7,6 @@ use App\Library\NetEaseServer;
 trait NetEaseTraits
 {
 
-    /**
-     * 获取网易云token
-     */
 
     /**
      * 获取云通讯token
