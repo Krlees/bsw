@@ -99,7 +99,7 @@ if (!function_exists('custom_config')) {
             '80001' => '其他参数错误'
         ];
 
-        return array_get($arr, $code, 80001);
+        return array_get($arr, $code, '其他错误');
     }
 }
 

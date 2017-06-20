@@ -69,7 +69,7 @@
                             @foreach ($menu->sub as $subMenu)
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a class="J_menuItem" href="{{url($subMenu->url)}}">{{$subMenu->name}}</a>
+                                        <a class="J_menuItem1" href="{{url($subMenu->url)}}">{{$subMenu->name}}</a>
                                     </li>
                                 </ul>
                             @endforeach
@@ -85,71 +85,71 @@
     <!--右侧部分开始-->
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
-            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i
-                                class="fa fa-bars"></i> </a>
-                    <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
+            {{--<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">--}}
+                {{--<div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i--}}
+                                {{--class="fa fa-bars"></i> </a>--}}
+                    {{--<form role="search" class="navbar-form-custom" method="post" action="search_results.html">--}}
                         {{--<div class="form-group">--}}
                         {{--<input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search"--}}
                         {{--id="top-search">--}}
                         {{--</div>--}}
-                    </form>
-                </div>
-                <ul class="nav navbar-top-links navbar-right">
+                    {{--</form>--}}
+                {{--</div>--}}
+                {{--<ul class="nav navbar-top-links navbar-right">--}}
                     {{--消息块--}}
-                    <li class="dropdown">
-                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                            <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-messages">
+                    {{--<li class="dropdown">--}}
+                        {{--<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">--}}
+                            {{--<i class="fa fa-envelope"></i> <span class="label label-warning">16</span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="dropdown-menu dropdown-messages">--}}
                             {{--这里循环最新通知消息--}}
 
-                            <li class="m-t-xs">
-                                <div class="dropdown-messages-box">
-                                    <a href="profile.html" class="pull-left">
-                                        <img alt="image" class="img-circle" src="img/a7.jpg">
-                                    </a>
-                                    <div class="media-body">
-                                        <small class="pull-right">46小时前</small>
-                                        <strong>小四</strong> 这个在日本投降书上签字的军官，建国后一定是个不小的干部吧？
-                                        <br>
-                                        <small class="text-muted">3天前 2014.11.8</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <div class="dropdown-messages-box">
-                                    <a href="profile.html" class="pull-left">
-                                        <img alt="image" class="img-circle" src="img/a4.jpg">
-                                    </a>
-                                    <div class="media-body ">
-                                        <small class="pull-right text-navy">25小时前</small>
-                                        <strong>国民岳父</strong> 如何看待“男子不满自己爱犬被称为狗，刺伤路人”？——这人比犬还凶
-                                        <br>
-                                        <small class="text-muted">昨天</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="divider"></li>
+                            {{--<li class="m-t-xs">--}}
+                                {{--<div class="dropdown-messages-box">--}}
+                                    {{--<a href="profile.html" class="pull-left">--}}
+                                        {{--<img alt="image" class="img-circle" src="img/a7.jpg">--}}
+                                    {{--</a>--}}
+                                    {{--<div class="media-body">--}}
+                                        {{--<small class="pull-right">46小时前</small>--}}
+                                        {{--<strong>小四</strong> 这个在日本投降书上签字的军官，建国后一定是个不小的干部吧？--}}
+                                        {{--<br>--}}
+                                        {{--<small class="text-muted">3天前 2014.11.8</small>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</li>--}}
+                            {{--<li class="divider"></li>--}}
+                            {{--<li>--}}
+                                {{--<div class="dropdown-messages-box">--}}
+                                    {{--<a href="profile.html" class="pull-left">--}}
+                                        {{--<img alt="image" class="img-circle" src="img/a4.jpg">--}}
+                                    {{--</a>--}}
+                                    {{--<div class="media-body ">--}}
+                                        {{--<small class="pull-right text-navy">25小时前</small>--}}
+                                        {{--<strong>国民岳父</strong> 如何看待“男子不满自己爱犬被称为狗，刺伤路人”？——这人比犬还凶--}}
+                                        {{--<br>--}}
+                                        {{--<small class="text-muted">昨天</small>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</li>--}}
+                            {{--<li class="divider"></li>--}}
 
                             {{--查看更多--}}
-                            <li>
-                                <div class="text-center link-block">
-                                    <a class="J_menuItem" href="mailbox.html" data-index="88">
-                                        <i class="fa fa-envelope"></i> <strong> 查看所有消息</strong>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <span class="text-muted text-xs block">超级管理员, 欢迎你
-                                    <b class="caret"></b>
-                                </span>
-                    </li>
-                </ul>
-            </nav>
+                            {{--<li>--}}
+                                {{--<div class="text-center link-block">--}}
+                                    {{--<a class="J_menuItem" href="mailbox.html" data-index="88">--}}
+                                        {{--<i class="fa fa-envelope"></i> <strong> 查看所有消息</strong>--}}
+                                    {{--</a>--}}
+                                {{--</div>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                    {{--<li class="dropdown">--}}
+                        {{--<span class="text-muted text-xs block">超级管理员, 欢迎你--}}
+                                    {{--<b class="caret"></b>--}}
+                                {{--</span>--}}
+                    {{--</li>--}}
+                {{--</ul>--}}
+            {{--</nav>--}}
 
         </div>
         <div class="row content-tabs">

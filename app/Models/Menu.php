@@ -20,13 +20,18 @@ class Menu extends Model
 
     public $timestamps = false;
 
+    public function get($id)
+    {
+        return DB::table($this->table)->find($id);
+    }
+
     public function ajaxList($param)
     {
         $where = [];
         if (isset($param['search']))
-            $where[] = ['name','like','%'.$param['search'].'%'];
-        if( isset($param['pid']))
-            $where[] = ['pid','=',$param['pid']];
+            $where[] = ['name', 'like', '%' . $param['search'] . '%'];
+        if (isset($param['pid']))
+            $where[] = ['pid', '=', $param['pid']];
 
         $sort = array_get($param, 'sort') ?: $this->getKeyName();
         $order = array_get($param, 'order', 'desc');
@@ -45,9 +50,46 @@ class Menu extends Model
         return DB::table($this->table)->where('pid', $pid)->get(['id', 'name']);
     }
 
-    public function create()
+    public function create($data)
     {
+        try {
+            $id = DB::table($this->table)->insertGetId($data);
 
+            return $id ?: false;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
+    public function updateData($id, $data)
+    {
+        try {
+            $b = DB::table($this->table)->where('id', $id)->update($data);
+
+            return $b !== false ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function delData($ids)
+    {
+        DB::beginTransaction();
+        try {
+
+            $b1 = DB::table($this->table)->whereIn('id', $ids)->delete();
+            $b2 = DB::table($this->table)->whereIn('pid', $ids)->delete();
+
+            if($b1!==false && $b2 !== false){
+                DB::commit();
+                return true;
+            }
+
+        } catch (\Exception $e) {
+
+        }
+
+        DB::rollBack();
+        return false;
+    }
 }

@@ -7,7 +7,7 @@
 </head>
 
 <body class="gray-bg">
-@component('admin.components.form_base',$reponse)
+@component('admin.components.form',$reponse)
 @endcomponent
 </body>
 </html>

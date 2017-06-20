@@ -224,7 +224,8 @@
     /* 操作选项 */
     window.operateEvents = {
         'click .edit': function (e, value, row, index) {
-            window.location.href = "{{array_get($action,'editUrl','')}}/" + row[uniqueId];
+            var url = "{{array_get($action,'editUrl','')}}/" + row[uniqueId];
+            dislog(url,'编辑');
 //            alert('You click like action, row: ' + JSON.stringify(row));
         },
         'click .remove': function (e, value, row, index) {
@@ -255,8 +256,16 @@
     }
 
     // 弹窗
-    function dislog() {
-        
+    function dislog(url,$title='标题') {
+        layer.open({
+            type: 2,
+            anim: 2,
+            title: $title,
+            shadeClose: true,
+            shade: 0.5,
+            area: ['800px', '75%'],
+            content: url //iframe的url
+        });
     }
 
 

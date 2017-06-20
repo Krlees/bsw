@@ -13,7 +13,7 @@ class TablePresenter
     {
         if (isset($createUrl{0})) {
             return <<<Eof
-<a href="{$createUrl}" class="btn btn-outline btn-default add" title="新建">
+<a href="javascript:;" class="btn btn-outline btn-default" onclick="dislog('{$createUrl}','添加')" title="新建">
     <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
 </a>
 Eof;

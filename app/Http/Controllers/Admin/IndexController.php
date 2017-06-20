@@ -12,9 +12,9 @@ class IndexController extends BaseController
 {
     public function index(Menu $menu)
     {
-        $menus = DB::table($menu->getTable())->where('pid', 0)->get();
+        $menus = DB::table($menu->getTable())->where('pid', 0)->where('is_show',1)->orderBy('sort','desc')->get();
         foreach ($menus as $k => $v) {
-            $v->sub = DB::table($menu->getTable())->where('pid', $v->id)->get();
+            $v->sub = DB::table($menu->getTable())->where('pid', $v->id)->where('is_show',1)->get();
         }
 
         return view('admin/index', compact('menus'));

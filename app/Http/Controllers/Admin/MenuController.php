@@ -25,8 +25,8 @@ class MenuController extends BaseController
             $param = $this->cleanAjaxPageParam($request->all());
             $results = $this->menu->ajaxList($param);
 
-            if($param['pid'] > 0 ){
-                $this->responseApi(0,'',$results['rows']);
+            if ($param['pid'] > 0) {
+                $this->responseApi(0, '', $results['rows']);
             }
 
             return $this->responseAjaxTable($results['total'], $results['rows']);
@@ -49,7 +49,7 @@ class MenuController extends BaseController
             $data = $request->input('data');
 
             $b = $this->menu->create($data);
-            return $b ? $this->responseData(0) : $this->responseData(400);
+            return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
             $menu_data = obj2arr($this->menu->getList(0));
@@ -59,7 +59,7 @@ class MenuController extends BaseController
             $this->createField('text', 'Url路由', 'data[url]');
             $this->createField('text', 'Icon', 'data[icon]');
             $this->createField('text', '排序', 'data[sort]', 0, ['dataType' => '*']);
-           // $this->createField('text', '权限名', 'data[permission_name]');
+            // $this->createField('text', '权限名', 'data[permission_name]');
             $this->createField('radio', '是否显示', 'data[is_show]', [
                 [
                     'text' => '是',
@@ -76,20 +76,21 @@ class MenuController extends BaseController
         }
     }
 
-    public function edit(Request $request, $id)
+    public function edit($id, Request $request)
     {
         if ($request->ajax()) {
             $data = $request->input('data');
 
-            $affected = $this->menu->updateData($data, $id);
-            return $affected ? $this->responseData(0) : $this->responseData(400);
+            $affected = $this->menu->updateData($id,$data);
+            return $affected ? $this->responseApi(0) : $this->responseApi(400);
 
         } else {
-            $data = $this->menu->findMenuById($id);
+            $data = $this->menu->get($id);
+            $data = obj2arr($data);
 
             // 菜单顶级分类
-            $topMenuData = $this->menu->getTopMenu();
-            $selectData = $this->returnSelectFormat($topMenuData, 'name', 'id', $data['pid']);
+            $menu_data = obj2arr($this->menu->getList(0));
+            $selectData = $this->cleanSelect($menu_data, 'name', 'id', $data['pid']);
 
             $this->createField('select', '上级菜单', 'data[pid]', $selectData);
             $this->createField('text', '名称', 'data[name]', $data['name'], ['dataType' => 's1-30']);
@@ -108,20 +109,17 @@ class MenuController extends BaseController
                 ]
             ]);
 
-            $reponse = $this->returnFormFormat('编辑菜单', $this->formField, url('admin/menu/edit/' . $id));
+            $reponse = $this->responseForm('编辑菜单', $this->formField, url('admin/menu/edit/' . $id));
             return view('admin/menu/edit', compact('reponse'));
         }
     }
 
-    public function del(Request $request)
+    public function del()
     {
-        $ids = $request->input('ids');
-        if (!is_array($ids)) {
-            $ids = explode(",", $ids);
-        }
+        $ids = $this->getDelIds();
 
         $affected = $this->menu->delData($ids);
-        $affected ? $this->responseData(0) : $this->responseData(200);
+        $affected ? $this->responseApi(0) : $this->responseApi(200);
     }
 
     /**
@@ -132,7 +130,7 @@ class MenuController extends BaseController
     public function getSubMenu($id)
     {
         $data = $this->menu->getMenuSelects($id);
-        return $data ? $this->responseData(0, "操作成功", $data) : $this->responseData(200, "操作失败");
+        return $data ? $this->responseApi(0, "操作成功", $data) : $this->responseApi(200, "操作失败");
     }
 
 

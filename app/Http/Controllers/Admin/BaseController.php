@@ -126,5 +126,14 @@ class BaseController extends Controller
 
     }
 
+    public function getDelIds()
+    {
+        $ids = request('ids');
+        if (is_array($ids)) {
+            return $ids;
+        }
+
+        return explode(",", $ids);
+    }
 
 }
