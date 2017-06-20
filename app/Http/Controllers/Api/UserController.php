@@ -133,7 +133,7 @@ class UserController extends BaseController
             $res = $this->getNetToken($this->user_ses->id, $this->user_ses->nickname, picture_url($this->user_ses->avatar));
             if ($res) {
                 $member->updateData($this->user_ses->id, ['netease_token' => $res['token']]);
-                $this->user_ses->netease_token = $res['token'];
+                $this->user_ses->netease_token = $res['info']['token'];
             }
         }
 
