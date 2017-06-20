@@ -32,7 +32,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('add', 'ProductController@add');
         Route::any('edit/{id}', 'ProductController@edit');
         Route::any('del', 'ProductController@del');
-        Route::any('category', 'ProductController@getSubPerm');
+        Route::any('category', 'ProductController@category');
+        Route::any('category-add', 'ProductController@categoryAdd');
+        Route::any('category-edit/{id}', 'ProductController@categoryEdit');
+        Route::any('category-del', 'ProductController@categoryDel');
     });
 
     // 角色管理
@@ -90,13 +93,13 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 // 微信
 Route::any('/wechat', 'WechatController@serve');
-Route::group(['prefix' => 'wx-oauth','middreware'=>['web','wechat.oauth']], function () {
+Route::group(['prefix' => 'wx-oauth', 'middreware' => ['web', 'wechat.oauth']], function () {
 
 });
 
 // 常用组件
 Route::group(['prefix' => 'components'], function () {
-    Route::post('upload','ComponentsController@upload');
+    Route::post('upload', 'ComponentsController@upload');
 });
 
 Auth::routes();

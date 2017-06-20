@@ -106,16 +106,16 @@ class ProductController extends BaseController
 
             // 过滤参数
             $param = $this->cleanAjaxPageParam();
-            $results = $this->product->ajaxData($this->product->getTable());
+            $results = $this->product->ajaxData($this->product->productCategoryTb(), $param);
 
             return $this->responseAjaxTable($results['total'], $results['rows']);
 
         } else {
 
             $reponse = $this->responseTable(url('admin/product/category'), [
-                'addUrl' => url('admin/product/categoryAdd'),
-                'editUrl' => url('admin/product/categoryedit'),
-                'removeUrl' => url('admin/product/categoryDel'),
+                'addUrl' => url('admin/product/category-add'),
+                'editUrl' => url('admin/product/category-edit'),
+                'removeUrl' => url('admin/product/category-del'),
                 'autoSearch' => true
             ]);
 
@@ -129,22 +129,49 @@ class ProductController extends BaseController
 
             $data = $request->input('data');
 
-            $b = $this->product->createData($this->product->getTable(), $data);
+            $b = $this->product->createData($this->product->productCategoryTb(), $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
 
-
             $this->createField('text', '名称', 'data[name]');
-            $this->createField('text', '价钱', 'data[price]');
-            $this->createField('text', '有效期', 'data[times]', '', ['placeholder' => '填写天数,0则不限期']);
-            $this->createField('textarea', '参数', 'data[attrs]');
+            $this->createField('textarea', '描述', 'data[desc]');
 
             $reponse = $this->responseForm('添加产品分类', $this->getFormField());
 
-            return view('admin/product/add', compact('reponse'));
+            return view('admin/product/categoryAdd', compact('reponse'));
 
         }
+    }
+
+    public function categoryEdit($id, Request $request)
+    {
+        if ($request->ajax()) {
+
+            $data = $request->input('data');
+
+            $b = $this->product->updateData($this->product->productCategoryTb(), $id, $data);
+            return $b ? $this->responseApi(0) : $this->responseApi(9000);
+
+        } else {
+            $info = $this->product->getInfo($this->product->productCategoryTb(), $id);
+
+            $this->createField('text', '名称', 'data[name]', $info->name);
+            $this->createField('textarea', '描述', 'data[desc]', $info->desc);
+
+            $reponse = $this->responseForm('添加产品分类', $this->getFormField());
+
+            return view('admin/product/categoryAdd', compact('reponse'));
+
+        }
+    }
+
+    public function categoryDel()
+    {
+        $ids = $this->getDelIds();
+
+        $result = $this->product->delData($this->product->productCategoryTb(), $ids);
+        $result ? $this->responseApi(0) : $this->responseApi(9000);
     }
 
 }
