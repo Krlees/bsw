@@ -123,8 +123,9 @@ class PublicController extends BaseController
 
         // 记录用户登录
         $userLoginRecord->create($user->id, $lng, $lat);
+        $user->token = $token;
 
-        $this->responseApi(0, '', ['token' => $token, 'data' => $user]);
+        $this->responseApi(0, '', obj2arr($user));
 
     }
 
