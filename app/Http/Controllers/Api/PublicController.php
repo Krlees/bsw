@@ -150,6 +150,26 @@ class PublicController extends BaseController
         $result ? $this->responseApi(0) : $this->responseApi(9000);
     }
 
+//{
+//"ret":0,
+//"msg":"",
+//"is_lost":0,
+//"nickname":"一杯酒几分愁",
+//"gender":"男",
+//"province":"广东",
+//"city":"东莞",
+//"figureurl":"http://qzapp.qlogo.cn/qzapp/1105339225/FD81E043DE61654E5D5890A513CA74EA/30",
+//"figureurl_1":"http://qzapp.qlogo.cn/qzapp/1105339225/FD81E043DE61654E5D5890A513CA74EA/50",
+//"figureurl_2":"http://qzapp.qlogo.cn/qzapp/1105339225/FD81E043DE61654E5D5890A513CA74EA/100",
+//"figureurl_qq_1":"http://q.qlogo.cn/qqapp/1105339225/FD81E043DE61654E5D5890A513CA74EA/40",
+//"figureurl_qq_2":"http://q.qlogo.cn/qqapp/1105339225/FD81E043DE61654E5D5890A513CA74EA/100",
+//"is_yellow_vip":"0",
+//"vip":"0",
+//"yellow_vip_level":"0",
+//"level":"0",
+//"is_yellow_year_vip":"0"
+//}
+
     /**
      * 第三方qq登录
      * @param Request $request
@@ -157,17 +177,41 @@ class PublicController extends BaseController
      */
     public function qqLogin(Request $request, Member $member)
     {
-        $data = $request->all();
-        unset($data['token']);
-
-        $count = \DB::table($member->getTable())->where('openid', $data['open_id'])->count();
-        if (!$count) {
-            $result = $member->create($data);
-        } else {
-            $result = $member->updateData($this->user_ses->id, $data);
+        $param = $request->all();
+        if ($param['ret'] != 0) {
+            $this->responseApi(80001, '数据有误');
         }
 
-        $result ? $this->responseApi(0) : $this->responseApi(9000);
+        if (!$member->checkOpenID($param['openid'])) {
+            $data = [
+                'avatar' => $param['figureurl_qq_2'],
+                'sex' => $param['gender'],
+                'nickname' => $param['nickname'],
+                'province' => $param['province'],
+                'city' => $param['city'],
+                'username' => 'qq' . substr($param['openid'], 0, 9),
+                'openid' => $param['openid'],
+                'password' => '',
+                'register_type' => 'qq',
+                'lng' => $param['lng'],
+                'lat' => $param['lat'],
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+
+            $id = $member->create($data);
+            if( $id ){
+                $res = $member->get($id);
+                $this->responseApi(0,'',$res);
+            }
+
+            $this->responseApi(80001,'qq注册失败');
+
+        }
+
+        $res = $member->getForOpenID($param['opend']);
+
+
+        $this->responseApi(0,'',$res);
     }
 
     /**

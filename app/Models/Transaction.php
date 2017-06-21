@@ -48,22 +48,24 @@ class Transaction extends Model
 
     public function get($id)
     {
-        $trans = DB::table($this->table)->find($id, ['id', 'user_id', 'title', 'content', 'ext1', 'area_info', 'address', 'days']);
+        $trans = DB::table($this->table)->find($id, ['id', 'user_id', 'title', 'content', 'ext1', 'province', 'city', 'address', 'days']);
         if (empty($trans))
             return [];
 
         $imgs = $this->getImg($trans->id);
         if ($imgs) {
             foreach ($imgs as $img) {
-                if ($imgs->is_cover == 1)
-                    $trans->cover = $img;
+                if ($img->is_cover == 1)
+                    $trans->cover = $img->img;
+
+                $trans->imgs[] = $img->img;
             }
         }
 
         $avatars = DB::table('user')->find($trans->user_id, ['avatar']);
 
-        $trans->imgs = $imgs;
-        $trans->head_img = picture_url($avatars->avatar);
+
+        $trans->avatar = picture_url($avatars->avatar);
 
 
         return obj2arr($trans);

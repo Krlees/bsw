@@ -129,5 +129,18 @@ class Member extends Model
         return $users;
     }
 
+    public function checkOpenID($openid)
+    {
+        $count = DB::table($this->table)->where('openid', $openid)->count();
+
+        return $count > 0 ? true : false;
+    }
+
+    public function getForOpenID($openid)
+    {
+        $result = DB::table($this->table)->where('openid', $openid)->get();
+
+        return $result;
+    }
 
 }

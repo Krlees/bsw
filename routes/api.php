@@ -87,7 +87,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('delete-friend/{followId}', 'UserController@deleteFriend'); // 删除好友
         Route::get('my-friend', 'UserController@myFriend'); // 我的好友
         Route::get('my-fans', 'UserController@myFans'); // 我的粉丝
-        Route::get('check-token', 'UserController@checkToken'); //
+        Route::any('check-token', 'UserController@checkToken'); //
     });
 
     Route::group(['prefix' => 'pay'], function () {
