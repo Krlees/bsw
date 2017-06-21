@@ -32,9 +32,9 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('point-get-address/{lng},{lat}', 'PublicController@pointGetAddress'); // 获取广告位的信息
         Route::get('address-get-point', 'PublicController@addressGetPoint'); // 获取广告位的信息
         Route::get('get-new-user', 'PublicController@getNewUser'); // 获取新用户
-        Route::get('alipay', 'PublicController@alipay'); // 支付宝支付
-        Route::get('wxpay', 'PublicController@wxpay'); // 微信支付
-        Route::get('clear-cache', 'PublicController@clearCache'); // 微信支付
+        Route::any('alipay', 'PublicController@alipay'); // 支付宝支付
+        Route::any('wxpay', 'PublicController@wxpay'); // 微信支付
+        Route::any('clear-cache', 'PublicController@clearCache'); // 微信支付
 
     });
 
@@ -52,7 +52,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('get-list', 'ProductController@getList');
     });
 
-    // 产品
+    // 标签
     Route::group(['prefix' => 'label'], function () {
         Route::get('get-list', 'LabelController@getList');
         Route::get('get-user/{id?}', 'LabelController@getUser');
@@ -82,12 +82,12 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('get-wallet', 'UserController@getWallet'); //获取用户财务信息，余额和记录等
         Route::get('get-setting', 'UserController@getSetting'); //获取用户个人设置
         Route::post('post-verify', 'UserController@postVerify'); // 提交认证资料
-        Route::get('get-verify', 'UserController@getVerify'); // 提交认证资料
-        Route::get('add-friend/{followId}', 'UserController@addFriend'); // 加好友
+        Route::get('get-verify', 'UserController@getVerify'); // 获取认证资料
+        Route::post('add-friend/{followId}', 'UserController@addFriend'); // 加好友
         Route::get('delete-friend/{followId}', 'UserController@deleteFriend'); // 删除好友
-        Route::get('my-friend', 'UserController@myFriend'); // 删除好友
-        Route::get('my-fans', 'UserController@myFans'); // 删除好友
-        Route::get('check-token', 'UserController@checkToken'); // 删除好友
+        Route::get('my-friend', 'UserController@myFriend'); // 我的好友
+        Route::get('my-fans', 'UserController@myFans'); // 我的粉丝
+        Route::get('check-token', 'UserController@checkToken'); //
     });
 
     Route::group(['prefix' => 'pay'], function () {

@@ -74,6 +74,7 @@ class PublicController extends BaseController
      */
     public function login(Request $request, Member $member, UserLoginRecord $userLoginRecord, UserToken $userToken)
     {
+
         $timestamp = $request->input('timestamp');
         $salt = $request->input('salt');
         $sign = $request->input('sign');
@@ -125,7 +126,7 @@ class PublicController extends BaseController
         $userLoginRecord->create($user->id, $lng, $lat);
         $user->token = $token;
 
-        $this->responseApi(0, '', obj2arr($user));
+        $this->responseApi(0, '', $user);
 
     }
 
