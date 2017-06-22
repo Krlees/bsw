@@ -51,6 +51,10 @@ class TransactionController extends BaseController
         foreach ($labelData as $key => $val) {
             $where[] = ['label_id', '=', $val['id']];
             $result = $transaction->getList($pages['page'], 4, $where);
+            if (empty($result)) {
+                continue;
+            }
+
             foreach ($result as $k => $v) {
                 $lock = true;
                 $isVip = false;
@@ -115,6 +119,7 @@ class TransactionController extends BaseController
             $return[$key]['label_id'] = $val['id'];
             $return[$key]['label_name'] = $val['name'];
             $return[$key]['list'] = $result;
+
         }
 
 
