@@ -38,7 +38,7 @@ class TransactionController extends BaseController
 
         $where[] = ['channel_id', '=', $channelId];
         $return = [];
-        $labelData = $label->getList($label->getTable(), 0, 4);
+        $labelData = $label->getList($label->getTable());
         foreach ($labelData as $key => $val) {
             $where[] = ['label_id', '=', $val['id']];
             $result = $transaction->getList($pages['page'], 4, $where);
@@ -103,7 +103,7 @@ class TransactionController extends BaseController
 
         $where[] = ['channel_id', '=', $channelId];
         $return = [];
-        $labelData = $label->getList($label->getTable(), 0, 4);
+        $labelData = $label->getList($label->getTable());
         foreach ($labelData as $key => $val) {
             $where[] = ['label_id', '=', $val['id']];
             $result = $transaction->getList($pages['page'], 4, $where);
@@ -253,6 +253,8 @@ class TransactionController extends BaseController
     private function _helpOrder($result, $userVip, $transaction)
     {
         foreach ($result as $k=>$v) {
+            $lock = true;
+            $isVip = false;
 
             /* 判断当前用户VIP是否有效 */
             if ($this->user_ses) {
@@ -303,6 +305,8 @@ class TransactionController extends BaseController
             $result[$k]['lock'] = $lock;
             $result[$k]['isVip'] = $isVip;
         }
+
+        return $result;
     }
 
 }
