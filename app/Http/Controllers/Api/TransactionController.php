@@ -119,6 +119,8 @@ class TransactionController extends BaseController
             $return[$key]['list'] = $result;
 
         }
+
+        $this->responseApi(0,'',$return);
     }
 
     /**
