@@ -43,6 +43,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('get/{id}', 'TransactionController@get');
         Route::get('get-list', 'TransactionController@getList');
         Route::get('get-vip-list', 'TransactionController@getVipList');
+        Route::get('get-vip-info', 'TransactionController@getVipInfo');
         Route::get('get-job-resume/{id}', 'TransactionController@getJobResume'); //获取求职信息的简历库
         Route::get('collect/{id}', 'TransactionController@collect'); // 收藏
     });
