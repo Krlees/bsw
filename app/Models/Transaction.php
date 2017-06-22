@@ -111,4 +111,11 @@ class Transaction extends Model
         $count = DB::table($this->transactionPayRecordTb())->where(['transaction_id' => $id, 'user_id' => $userId])->count();
         return $count ? true : false;
     }
+
+    public function getCitys()
+    {
+        $result = DB::table($this->table)->groupBy('city')->get(['city']);
+
+        return obj2arr($result);
+    }
 }

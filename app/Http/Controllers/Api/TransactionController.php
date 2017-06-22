@@ -163,17 +163,41 @@ class TransactionController extends BaseController
     {
         $channelId = $request->input('channel_id') or $this->responseApi(1004);
         $channelType = $request->input('channel_type');
-        if($channelType)
+        if ($channelType)
             $where[] = ['channel_type', '=', $channelType];
 
-        $result = $transaction->getList($channelId);
+        $where[] = ['channel_id', '=', $channelId];
         $pages = $this->pageInit();
 
-        $where[] = ['channel_id', '=', $channelId];
-        $result = $transaction->getList($pages['page'], $pages['limit'], $where);
+        // 判断是否是职位下的求职频道
+        if ($channelId == 5 && $channelType == '求职') {
+
+            // 职位下的求职频道格式不一样
+            $citys = $transaction->getCitys();
+            foreach ($citys as $k => $v) {
+                $where[] = ['city', '=', $v['city']];
+                $arr = $transaction->getList($pages['page'], 4, $where);
+                if (empty($arr))
+                    continue;
+
+                $result[$k]['city'] = $v['city'];
+                $result[$k]['list'] = $arr;
+            }
+
+        } else {
+            $result = $transaction->getList($pages['page'], $pages['limit'], $where);
+        }
+
 
         $this->responseApi(0, '', $result);
 
+    }
+
+    private function _helpJobList()
+    {
+//        $result[$k]['dueTime'] = $lockTime; //剩余时间
+//        $result[$k]['lock'] = $lock;
+//        $result[$k]['isVip'] = $isVip;
     }
 
     /**
