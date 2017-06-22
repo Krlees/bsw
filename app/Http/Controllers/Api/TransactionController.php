@@ -120,7 +120,7 @@ class TransactionController extends BaseController
 
         }
 
-        $this->responseApi(0,'',$return);
+        $this->responseApi(0, '', $return);
     }
 
     /**
@@ -162,7 +162,17 @@ class TransactionController extends BaseController
     public function getList(Request $request, Transaction $transaction)
     {
         $channelId = $request->input('channel_id') or $this->responseApi(1004);
+        $channelType = $request->input('channel_type');
+        if($channelType)
+            $where[] = ['channel_type', '=', $channelType];
+
         $result = $transaction->getList($channelId);
+        $pages = $this->pageInit();
+
+        $where[] = ['channel_id', '=', $channelId];
+        $result = $transaction->getList($pages['page'], $pages['limit'], $where);
+
+        $this->responseApi(0, '', $result);
 
     }
 
@@ -252,7 +262,7 @@ class TransactionController extends BaseController
 
     private function _helpOrder($result, $userVip, $transaction)
     {
-        foreach ($result as $k=>$v) {
+        foreach ($result as $k => $v) {
             $lock = true;
             $isVip = false;
 
