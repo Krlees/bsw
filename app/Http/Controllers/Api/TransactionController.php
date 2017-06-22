@@ -39,7 +39,7 @@ class TransactionController extends BaseController
         $channelId = 1;
 
         $where[] = ['channel_id', '=', $channelId];
-        if (!$city && $city != '全部') {
+        if ($city && $city != '全部') {
             $where[] = ['city', '=', $city];
         }
         if ($labelId) {

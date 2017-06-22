@@ -90,11 +90,13 @@ class Transaction extends Model
             $imgs = $this->getImg($v['id']);
             if ($imgs) {
                 foreach ($imgs as $img) {
-                    if ($imgs->is_cover == 1)
-                        $result[$k]['cover'] = $img;
+                    if ($img->is_cover == 1)
+                        $result[$k]['cover'] = $img->img;
+
+                    $result[$k]['imgs'][] = $img->img;
                 }
             }
-            $result[$k]['imgs'] = $imgs;
+
 
             $avatars = DB::table('user')->find($v['user_id'], ['avatar']);
             $result[$k]['head_img'] = picture_url($avatars->avatar);
