@@ -33,14 +33,14 @@ class TransactionController extends BaseController
     public function getVipList(Request $request, Transaction $transaction, UserVip $userVip)
     {
         //$channelId = $request->input('channel_id') or $this->responseApi(1004);
-        $cityId = $request->input('city_id', 0); //默认获取全部
+        $city = $request->input('city_id'); //默认获取全部
         $labelId = $request->input('label_id');
         $pages = $this->pageInit();
         $channelId = 1;
 
         $where[] = ['channel_id', '=', $channelId];
-        if (!$cityId && $cityId != '全部') {
-            $where[] = ['city_id', '=', $cityId];
+        if (!$city && $city != '全部') {
+            $where[] = ['city', '=', $city];
         }
         if ($labelId) {
             $where[] = ['label_id', '=', $labelId];

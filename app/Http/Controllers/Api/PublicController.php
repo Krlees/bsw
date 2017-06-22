@@ -129,7 +129,20 @@ class PublicController extends BaseController
         $this->responseApi(0, '', $user);
 
     }
-
+//{
+//"openid": "oHYOIwJ6dCsYk-45vzlRaMcY_Zj4",
+//"nickname": "正在加载，，，",
+//"sex": 1,
+//"language": "zh_CN",
+//"city": "Wuhan",
+//"province": "Hubei",
+//"country": "CN",
+//"headimgurl": "http:\/\/wx.qlogo.cn\/mmopen\/J6wbbMytqfIaUUOkGCiaxeaomZsmqicJZgMicYoJREJwQ1nOO72Mo6jiaVWeia8KsibD5OQfVHmUeaHC1EABPQkbKxL7gB3iauyZZDv\/0",
+//"privilege": [
+//
+//],
+//"unionid": "o8F3gv3I5joR0R-AnnnZayCNUGQs"
+//}
     /**
      * 第三方微信登录
      * @param Request $request
@@ -137,17 +150,55 @@ class PublicController extends BaseController
      */
     public function wxLogin(Request $request, Member $member)
     {
-        $data = $request->all();
-        unset($data['token']);
-
-        $count = \DB::table($member->getTable())->where('openid', $data['open_id'])->count();
-        if (!$count) {
-            $result = $member->create($data);
-        } else {
-            $result = $member->updateData($this->user_ses->id, $data);
+        $param = $request->all();
+        if ($param['ret'] != 0) {
+            $this->responseApi(80001, '数据有误');
         }
 
-        $result ? $this->responseApi(0) : $this->responseApi(9000);
+        $data = [
+            'sex' => $param['sex'] == '1' ? '男' : '女',
+            'openid' => $param['unionid'] ?: $param['openid'],
+            'nickname' => $param['nickname'],
+            "city" => $param['Wuhan'],
+            "province" => $param['Hubei'],
+            "avatar" => $param['headimgurl'],
+            'created_at' => date('Y-m-d H:i:s'),
+            'password' => '',
+            'register_type' => 'qq',
+            'username' => substr($param['unionid'], 0,11)
+        ];
+
+
+        if (!$member->checkOpenID($param['openid'])) {
+            $data = [
+                'avatar' => $param['figureurl_qq_2'],
+                'sex' => $param['gender'],
+                'nickname' => $param['nickname'],
+                'province' => $param['province'],
+                'city' => $param['city'],
+                'username' => 'qq' . substr($param['openid'], 0, 9),
+                'openid' => $param['openid'],
+                'password' => '',
+                'register_type' => 'qq',
+                'lng' => $param['lng'],
+                'lat' => $param['lat'],
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+
+            $id = $member->create($data);
+            if( $id ){
+                $res = $member->get($id);
+                $this->responseApi(0,'',$res);
+            }
+
+            $this->responseApi(80001,'qq注册失败');
+
+        }
+
+        $res = $member->getForOpenID($param['opend']);
+
+
+        $this->responseApi(0,'',$res);
     }
 
 //{
