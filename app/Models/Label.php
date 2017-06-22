@@ -12,7 +12,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Label extends Model
+class Label extends BaseModel
 {
     /**
      * 与模型关联的数据表

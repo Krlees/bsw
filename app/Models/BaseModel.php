@@ -62,6 +62,13 @@ class BaseModel extends Model
         }
     }
 
+    public function getList($tbName, $page=0, $limit = 20, $where = null)
+    {
+        $where = $where ?: [];
+        $result = DB::table($tbName)->offset($page * $limit)->limit($limit)->where($where)->get();
+        return obj2arr($result);
+    }
+
     public function getInfo($tbName, $id)
     {
         return DB::table($tbName)->find($id);

@@ -61,8 +61,15 @@ class Member extends Model
         try {
             $id = DB::table($this->table)->insertGetId($data);
             if ($id) {
+                DB::table('user_wallet')->insert([
+                    'user_id' => $id,
+                    'pwd' => '',
+                    'money' => 0,
+                    'cashout' => 0
+                ]);
                 return $id;
             }
+
 
             return false;
         } catch (\Exception $e) {

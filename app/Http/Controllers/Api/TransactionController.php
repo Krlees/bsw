@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController;
+use App\Models\Label;
 use App\Models\Transaction;
 use App\Models\UserVip;
 use App\Traits\DistrictTraits;
@@ -21,7 +22,7 @@ class TransactionController extends BaseController
     {
         $data = $transaction->get($id);
 
-        $this->responseApi(0,'',$data);
+        $this->responseApi(0, '', $data);
     }
 
     /**
@@ -30,87 +31,91 @@ class TransactionController extends BaseController
      * @param Request $request
      * @param Transaction $transaction
      */
-    public function getVipList(Request $request, Transaction $transaction, UserVip $userVip)
+    public function getVipList(Request $request, Label $label, Transaction $transaction, UserVip $userVip)
     {
         //$channelId = $request->input('channel_id') or $this->responseApi(1004);
         $city = $request->input('city'); //默认获取全部
-        $labelId = $request->input('label_id');
         $pages = $this->pageInit();
         $channelId = 1;
 
         $where[] = ['channel_id', '=', $channelId];
-        if ($city && $city != '全部') {
-            $where[] = ['city', '=', $city];
-        }
-        if ($labelId) {
-            $where[] = ['label_id', '=', $labelId];
-        }
+//        if ($city && $city != '全部') {
+//            $where[] = ['city', '=', $city];
+//        }
+//        if ($labelId) {
+//            $where[] = ['label_id', '=', $labelId];
+//        }
 
-        $result = $transaction->getList($pages['page'], $pages['limit'], $where);
-        if (!$labelId) {
-            $this->responseApi(0,'',$result);
-        }
+        $return = [];
+        $labelData = $label->getList($label->getTable(), 0, 4);
+        foreach ($labelData as $key => $val) {
+            $result = $transaction->getList($pages['page'], $pages['limit'], $where);
+            foreach ($result as $k => $v) {
+                $lock = true;
+                $isVip = false;
 
-        foreach ($result as $k => $v) {
-            $lock = true;
-            $isVip = false;
 
+                /* 判断当前用户VIP是否有效 */
+                if ($this->user_ses) {
+                    if ($userVip->checkExpires($v['label_id'], $this->user_ses->id))
+                        $isVip = true;
+                }
 
-            /* 判断当前用户VIP是否有效 */
-            if ($this->user_ses) {
-                if($userVip->checkExpires($v['label_id'], $this->user_ses->id))
-                    $isVip = true;
-            }
+                // 1. 判断是否是自己发的，自己发的自动解锁
+                if ($this->user_ses) {
+                    if ($this->user_ses->id == $v['user_id']) {
+                        $lock = false;
+                        $result[$k]['lock'] = $lock;
+                        $result[$k]['isVip'] = $isVip;
+                        continue;
+                    }
+                }
 
-            // 1. 判断是否是自己发的，自己发的自动解锁
-            if ($this->user_ses) {
-                if($this->user_ses->id == $v['user_id']) {
-                    $lock = false;
+                // 2. 检测用户是否购买
+                if ($this->checkUserPay($v['id'], $transaction)) {
+                    unset($result[$k]);
+                    continue;
+                }
+
+                // 3. 判断是否是必须用钱购买，【VIP】无效,但是vip享受5折价格
+                if ($v['is_must_pay']) {
                     $result[$k]['lock'] = $lock;
                     $result[$k]['isVip'] = $isVip;
                     continue;
                 }
-            }
 
-            // 2. 检测用户是否购买
-            if ($this->checkUserPay($v['id'],$transaction)) {
-                unset($result[$k]);
-                continue;
-            }
+                // 超过72小时，归为0
+                $lockTime = time() - strtotime($v['created_at']); //剩余时间
+                if ($lockTime > 72 * 60 * 60) {
+                    $lockTime = 0;
+                }
 
-            // 3. 判断是否是必须用钱购买，【VIP】无效,但是vip享受5折价格
-            if ($v['is_must_pay']) {
+                // 4. 判断是否需要正常购买，【VIP】有效
+                if ($v['is_normal_pay']) {
+
+                    /* 判断VIP */
+                    if ($isVip) {
+                        $lock = false;
+                        $result[$k]['lock'] = $lock;
+                        $result[$k]['isVip'] = $isVip;
+                        continue;
+                    }
+                }
+
+                // 5. 超过72小时，可免费查看
+                if ($lockTime == 0) {
+                    $lock = false;
+                }
+
                 $result[$k]['lock'] = $lock;
                 $result[$k]['isVip'] = $isVip;
-                continue;
             }
 
-            // 超过72小时，归为0
-            $lockTime = time() - strtotime($v['created_at']); //剩余时间
-            if ($lockTime > 72 * 60 * 60) {
-                $lockTime = 0;
-            }
-
-            // 4. 判断是否需要正常购买，【VIP】有效
-            if ($v['is_normal_pay']) {
-
-                /* 判断VIP */
-                if ($isVip) {
-                    $lock = false;
-                    $result[$k]['lock'] = $lock;
-                    $result[$k]['isVip'] = $isVip;
-                    continue;
-                }
-            }
-
-            // 5. 超过72小时，可免费查看
-            if ($lockTime == 0) {
-                $lock = false;
-            }
-
-            $result[$k]['lock'] = $lock;
-            $result[$k]['isVip'] = $isVip;
+            $return[$key]['cate_id'] = $val['id'];
+            $return[$key]['cate_name'] = $val['name'];
+            $return[$key]['list'] = $result;
         }
+
 
         $this->responseApi(0, '', $result);
     }
@@ -140,7 +145,7 @@ class TransactionController extends BaseController
     /**
      * 检测用户是否已购买
      */
-    private function checkUserPay($transId,$transaction)
+    private function checkUserPay($transId, $transaction)
     {
         $user_id = $this->user_ses ? $this->user_ses->id : false;
         if (!$user_id) {
