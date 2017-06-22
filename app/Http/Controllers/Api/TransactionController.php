@@ -117,7 +117,7 @@ class TransactionController extends BaseController
         }
 
 
-        $this->responseApi(0, '', $result);
+        $this->responseApi(0, '', $return);
     }
 
     /**
