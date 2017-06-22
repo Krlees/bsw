@@ -151,38 +151,19 @@ class PublicController extends BaseController
     public function wxLogin(Request $request, Member $member)
     {
         $param = $request->all();
-        if ($param['ret'] != 0) {
-            $this->responseApi(80001, '数据有误');
-        }
 
-        $data = [
-            'sex' => $param['sex'] == '1' ? '男' : '女',
-            'openid' => $param['unionid'] ?: $param['openid'],
-            'nickname' => $param['nickname'],
-            "city" => $param['Wuhan'],
-            "province" => $param['Hubei'],
-            "avatar" => $param['headimgurl'],
-            'created_at' => date('Y-m-d H:i:s'),
-            'password' => '',
-            'register_type' => 'qq',
-            'username' => substr($param['unionid'], 0,11)
-        ];
-
-
-        if (!$member->checkOpenID($param['openid'])) {
+        if (!$member->checkOpenID($param['unionid'])) {
             $data = [
-                'avatar' => $param['figureurl_qq_2'],
-                'sex' => $param['gender'],
+                'sex' => $param['sex'] == '1' ? '男' : '女',
+                'openid' => $param['unionid'] ?: $param['openid'],
                 'nickname' => $param['nickname'],
-                'province' => $param['province'],
-                'city' => $param['city'],
-                'username' => 'qq' . substr($param['openid'], 0, 9),
-                'openid' => $param['openid'],
+                "city" => $param['Wuhan'],
+                "province" => $param['Hubei'],
+                "avatar" => $param['headimgurl'],
+                'created_at' => date('Y-m-d H:i:s'),
                 'password' => '',
                 'register_type' => 'qq',
-                'lng' => $param['lng'],
-                'lat' => $param['lat'],
-                'created_at' => date('Y-m-d H:i:s')
+                'username' => substr($param['unionid'], 0,11)
             ];
 
             $id = $member->create($data);
@@ -191,7 +172,7 @@ class PublicController extends BaseController
                 $this->responseApi(0,'',$res);
             }
 
-            $this->responseApi(80001,'qq注册失败');
+            $this->responseApi(80001,'微信注册失败');
 
         }
 

@@ -33,7 +33,7 @@ class TransactionController extends BaseController
     public function getVipList(Request $request, Transaction $transaction, UserVip $userVip)
     {
         //$channelId = $request->input('channel_id') or $this->responseApi(1004);
-        $city = $request->input('city_id'); //默认获取全部
+        $city = $request->input('city'); //默认获取全部
         $labelId = $request->input('label_id');
         $pages = $this->pageInit();
         $channelId = 1;

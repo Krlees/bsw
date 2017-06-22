@@ -80,12 +80,12 @@ class Transaction extends Model
         }
 
 
-        $result = $db->offset($page * $limit)->limit($limit)->get(['id', 'user_id', 'title', 'content', 'label_id', 'created_at', 'city_id', 'ext1', 'is_must_pay', 'is_normal_pay', 'is_wallet_pay', 'is_juan_pay', 'days', 'user_id']);
+        $result = $db->offset($page * $limit)->limit($limit)->get(['id', 'user_id', 'title', 'content', 'label_id', 'created_at', 'city', 'ext1', 'is_must_pay', 'is_normal_pay', 'is_wallet_pay', 'is_juan_pay', 'days', 'user_id']);
         $result = obj2arr($result);
         foreach ($result as $k => $v) {
             $label = DB::table('label')->find($v['label_id'], ['name']);
             $result[$k]['label_name'] = $label->name;
-            $result[$k]['city'] = $this->getByCity($v['city_id']);
+            $result[$k]['city'] = $this->getByCity($v['city']);
 
             $imgs = $this->getImg($v['id']);
             if ($imgs) {
