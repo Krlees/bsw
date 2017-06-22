@@ -180,7 +180,7 @@ class TransactionController extends BaseController
                 if (empty($arr))
                     continue;
 
-                $result[$k]['city'] = $v['city'];
+                $result[$k]['label_name'] = $v['city'];
                 $result[$k]['list'] = $arr;
             }
 

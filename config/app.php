@@ -185,7 +185,8 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,    // 角色权限包
         Arcanedev\LogViewer\LogViewerServiceProvider::class, // logview日子包
         Overtrue\LaravelWechat\ServiceProvider::class,    // 微信包
-        Latrell\Alipay\AlipayServiceProvider::class      // 支付宝
+        Latrell\Alipay\AlipayServiceProvider::class,      // 支付宝
+        Overtrue\LaravelPinyin\ServiceProvider::class   //中文转拼音
 
     ],
 

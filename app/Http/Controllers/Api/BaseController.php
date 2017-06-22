@@ -29,10 +29,10 @@ class BaseController extends Controller
 
     public function pageInit()
     {
-        $page = request('page',0);
-        $limit = request('limit',20);
+        $page = request('page', 0);
+        $limit = request('limit', 20);
 
-        return compact('page','limit');
+        return compact('page', 'limit');
     }
 
     /**
@@ -51,7 +51,7 @@ class BaseController extends Controller
             $msg = custom_config($code);
         }
 
-        echo json_encode(compact('code', 'msg', 'data', 'href'));
+        echo \GuzzleHttp\json_encode(compact('code', 'msg', 'data', 'href'), JSON_UNESCAPED_UNICODE);
         exit;
     }
 

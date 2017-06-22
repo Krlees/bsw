@@ -35,7 +35,6 @@ Route::group(['namespace' => 'Api'], function () {
         Route::any('alipay', 'PublicController@alipay'); // 支付宝支付
         Route::any('wxpay', 'PublicController@wxpay'); // 微信支付
         Route::any('clear-cache', 'PublicController@clearCache'); // 微信支付
-
     });
 
     // 信息接口
