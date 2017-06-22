@@ -49,7 +49,8 @@ class TransactionController extends BaseController
         $return = [];
         $labelData = $label->getList($label->getTable(), 0, 4);
         foreach ($labelData as $key => $val) {
-            $result = $transaction->getList($pages['page'], $pages['limit'], $where);
+            $where[] = ['label_id', '=', $val['id']];
+            $result = $transaction->getList($pages['page'], 4, $where);
             foreach ($result as $k => $v) {
                 $lock = true;
                 $isVip = false;
@@ -111,8 +112,8 @@ class TransactionController extends BaseController
                 $result[$k]['isVip'] = $isVip;
             }
 
-            $return[$key]['cate_id'] = $val['id'];
-            $return[$key]['cate_name'] = $val['name'];
+            $return[$key]['label_id'] = $val['id'];
+            $return[$key]['label_name'] = $val['name'];
             $return[$key]['list'] = $result;
         }
 
