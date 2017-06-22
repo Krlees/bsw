@@ -190,6 +190,7 @@ class TransactionController extends BaseController
                 $lock = false;
             }
 
+            $result[$k]['dueTime'] = $lockTime; //剩余时间
             $result[$k]['lock'] = $lock;
             $result[$k]['isVip'] = $isVip;
         }
