@@ -87,6 +87,8 @@ class Transaction extends Model
             $result[$k]['label_name'] = $label->name;
             $result[$k]['city'] = $this->getByCity($v['city']);
 
+            $result[$k]['imgs'] = [];
+            $result[$k]['cover'] = '';
             $imgs = $this->getImg($v['id']);
             if ($imgs) {
                 foreach ($imgs as $img) {

@@ -23,9 +23,11 @@ class UserController extends BaseController
 
             // 过滤参数
             $param = $this->cleanAjaxPageParam();
-            $results = $this->user->ajaxData($this->user->getTable(), $param);
+            $results = $this->user->ajaxData($this->user->getTable(), $param, false, 'nickname');
             foreach ($results['rows'] as $k => &$v) {
+                $v['user_id'] = $v->id;
                 $v['register_type'] = $this->getRegisterType($v['register_type']);
+                $v['area_info'] = $v['province'] . $v['city'] . $v['area'] . ' ' . $v['address'];
             }
 
             return $this->responseAjaxTable($results['total'], $results['rows']);
@@ -72,7 +74,7 @@ class UserController extends BaseController
 
             $data = $request->input('data');
 
-            $b = $this->user->updateData($this->user->getTable(), $id, $data);
+            $b = $this->user->updateData($id, $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
@@ -102,9 +104,11 @@ class UserController extends BaseController
     /**
      * 经营项目图片
      */
-    public function projectImg($id)
+    public function projectImg($id, Request $request)
     {
+        $result = DB::table('user_project_img')->where('user_id', $id)->get();
 
+        return view('admin.user.project_img', compact('result'));
     }
 
 }

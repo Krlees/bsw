@@ -10,8 +10,10 @@
     <script>
         var colums = [
                 {!! $tablePresenter->jsCheckbox() !!}
+                {!! $tablePresenter->jsColums('ID','user_id','true') !!}
                 {!! $tablePresenter->jsColums('用户名','username') !!}
                 {!! $tablePresenter->jsColums('昵称','nickname') !!}
+                {!! $tablePresenter->jsColums('所在地址','area_info') !!}
                 {!! $tablePresenter->jsColums('添加时间','created_at') !!}
                 {!! $tablePresenter->jsColums('用户类型','register_type') !!}
                 {!! $tablePresenter->jsColums('加入时间','created_at','true') !!}
@@ -45,7 +47,7 @@
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var str = '<a onclick="dislog(\'/admin/user/project_img/' + value + '\')" class="picture btn btn-xs btn-outline btn-warning tooltips" href="javascript:void(0)" title="相册">相册 <i class="fa fa-edit"></i></a>　';
+                    var str = '<a onclick="dislog(\'/admin/member/project-img/' + value + '\')" class="picture btn btn-xs btn-outline btn-warning tooltips" href="javascript:void(0)" title="相册">相册 <i class="fa fa-edit"></i></a>　';
                     str += '<a class="btn btn-xs btn-outline btn-danger tooltips" href="javascript:void(0)" title="红包">红包 <i class="fa fa-edit"></i></a>';
 
                     return str;

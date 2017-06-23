@@ -9,8 +9,9 @@ trait BaseModelTraits
     public function ajaxData($tableName, $param, $where = false, $searchField = 'name', $fields = ['*'])
     {
         $where = $where ?: [];
-        if (isset($param['search']))
+        if (isset($param['search'])) {
             $where[] = [$searchField, 'like', '%' . $param['search'] . '%'];
+        }
 
         $sort = array_get($param, 'sort') ?: $this->getKeyName();
         $order = array_get($param, 'order', 'desc');

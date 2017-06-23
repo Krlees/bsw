@@ -89,17 +89,6 @@ class TransactionController extends BaseController
             $result[$k]['label_name'] = $label->name;
             $result[$k]['city'] = $this->getByCity($v['city']);
 
-            $imgs = $this->getImg($v['id']);
-            if ($imgs) {
-                foreach ($imgs as $img) {
-                    if ($img->is_cover == 1)
-                        $result[$k]['cover'] = $img->img;
-
-                    $result[$k]['imgs'][] = $img->img;
-                }
-            }
-
-
             $avatars = DB::table('user')->find($v['user_id'], ['avatar']);
             $result[$k]['head_img'] = picture_url($avatars->avatar);
 
