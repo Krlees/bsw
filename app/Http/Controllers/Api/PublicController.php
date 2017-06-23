@@ -101,7 +101,7 @@ class PublicController extends BaseController
         if (empty($user->netease_token)) {
             $res = $this->getNetToken($user->id, $user->nickname, picture_url($user->avatar));
             if ($res) {
-                $member->updateData($user->id, ['netease_token' => $res['info']['token']]);
+                $member->updateData($member->getTable(), $user->id, ['netease_token' => $res['info']['token']]);
                 $user->netease_token = $res['info']['token'];
                 $user->accid = $res['info']['accid'];
 
@@ -163,23 +163,23 @@ class PublicController extends BaseController
                 'created_at' => date('Y-m-d H:i:s'),
                 'password' => '',
                 'register_type' => 'qq',
-                'username' => substr($param['unionid'], 0,11)
+                'username' => substr($param['unionid'], 0, 11)
             ];
 
             $id = $member->create($data);
-            if( $id ){
+            if ($id) {
                 $res = $member->get($id);
-                $this->responseApi(0,'',$res);
+                $this->responseApi(0, '', $res);
             }
 
-            $this->responseApi(80001,'微信注册失败');
+            $this->responseApi(80001, '微信注册失败');
 
         }
 
         $res = $member->getForOpenID($param['opend']);
 
 
-        $this->responseApi(0,'',$res);
+        $this->responseApi(0, '', $res);
     }
 
 //{
@@ -231,19 +231,19 @@ class PublicController extends BaseController
             ];
 
             $id = $member->create($data);
-            if( $id ){
+            if ($id) {
                 $res = $member->get($id);
-                $this->responseApi(0,'',$res);
+                $this->responseApi(0, '', $res);
             }
 
-            $this->responseApi(80001,'qq注册失败');
+            $this->responseApi(80001, 'qq注册失败');
 
         }
 
         $res = $member->getForOpenID($param['opend']);
 
 
-        $this->responseApi(0,'',$res);
+        $this->responseApi(0, '', $res);
     }
 
     /**

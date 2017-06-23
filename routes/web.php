@@ -61,6 +61,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('add', 'UserController@add');
         Route::any('edit/{id}', 'UserController@edit');
         Route::any('del', 'UserController@del');
+        Route::any('project-img/{id}', 'UserController@projectImg');
         Route::any('get-sub-user/{pid}', 'UserController@getSubSelect');
     });
 

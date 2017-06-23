@@ -99,4 +99,12 @@ class UserController extends BaseController
         $result ? $this->responseApi(0) : $this->responseApi(9000);
     }
 
+    /**
+     * 经营项目图片
+     */
+    public function projectImg($id)
+    {
+
+    }
+
 }
