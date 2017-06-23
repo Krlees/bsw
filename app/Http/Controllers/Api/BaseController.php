@@ -51,7 +51,7 @@ class BaseController extends Controller
             $msg = custom_config($code);
         }
 
-        echo response()->json(compact('code', 'msg', 'data', 'href'));
+        echo \GuzzleHttp\json_encode(compact('code', 'msg', 'data', 'href'));
         exit;
     }
 
