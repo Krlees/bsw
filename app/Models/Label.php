@@ -9,11 +9,14 @@
 namespace App\Models;
 
 
+use App\Traits\BaseModelTraits;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Label extends BaseModel
+class Label extends Model
 {
+    use BaseModelTraits;
+
     /**
      * 与模型关联的数据表
      *

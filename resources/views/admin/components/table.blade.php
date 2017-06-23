@@ -225,7 +225,7 @@
     window.operateEvents = {
         'click .edit': function (e, value, row, index) {
             var url = "{{array_get($action,'editUrl','')}}/" + row[uniqueId];
-            dislog(url,'编辑');
+            dislog(url, '编辑');
 //            alert('You click like action, row: ' + JSON.stringify(row));
         },
         'click .remove': function (e, value, row, index) {
@@ -256,7 +256,7 @@
     }
 
     // 弹窗
-    function dislog(url,$title='标题') {
+    function dislog(url, $title = '标题') {
         layer.open({
             type: 2,
             anim: 2,
@@ -265,6 +265,39 @@
             shade: 0.5,
             area: ['800px', '85%'],
             content: url //iframe的url
+        });
+    }
+
+    function dislogConfirm(url, jsonStr) {
+        layer.confirm('确认要操作吗？', {
+            title: '确认信息',
+            icon: 7,
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                data: jsonStr,
+                success: function(result) {
+                    layer.msg(result.msg);
+                    $table.bootstrapTable('refresh');
+                },
+            })
+                .done(function () {
+                    console.log("success");
+                })
+                .fail(function () {
+                    console.log("error");
+                })
+                .always(function () {
+                    console.log("complete");
+                });
+        }, function () {
+
         });
     }
 

@@ -13,6 +13,7 @@
                 {!! $tablePresenter->jsColums('名称','name') !!}
                 {!! $tablePresenter->jsColums('价格','price') !!}
                 {!! $tablePresenter->jsColums('属于','category') !!}
+                {!! $tablePresenter->jsColums('参数','attrs') !!}
                 {!! $tablePresenter->jsEvents() !!}
         ];
 

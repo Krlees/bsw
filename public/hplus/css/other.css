@@ -1,3 +1,18 @@
-#searchFrom{}
-#searchFrom .row{padding-top: 20px;}
+#searchFrom {
+}
 
+#searchFrom .row {
+    padding-top: 20px;
+}
+
+.ok {
+    color: #009688
+}
+
+.warn {
+    color: #f8ac59
+}
+
+.hand {
+    cursor: pointer;
+}

@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Traits\Admin\FormTraits;
+use App\Traits\BaseModelTraits;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Auth;
@@ -135,6 +136,27 @@ class BaseController extends Controller
         }
 
         return explode(",", $ids);
+    }
+
+    public function getRegisterType($key)
+    {
+        $typeArr = ['wx' => '微信', 'mobile' => '手机', 'qq' => 'QQ'];
+
+        return array_get($typeArr, $key, '');
+    }
+
+    public function getStatusType($key)
+    {
+        $typeArr = ['0' => '停用', '1' => '正常'];
+
+        return array_get($typeArr, $key, '');
+    }
+
+    public function getOrderStatusType($key)
+    {
+        $typeArr = ['0' => '已取消', '1' => '未付款', '已付款'];
+
+        return array_get($typeArr, $key, '');
     }
 
 }

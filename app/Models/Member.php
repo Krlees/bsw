@@ -9,11 +9,14 @@
 namespace App\Models;
 
 
+use App\Traits\BaseModelTraits;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
 class Member extends Model
 {
+    use BaseModelTraits;
+
     /**
      * 与模型关联的数据表
      *
@@ -76,17 +79,6 @@ class Member extends Model
             return false;
         }
 
-    }
-
-    public function updateData($id, $data)
-    {
-        try {
-            $result = DB::table($this->table)->where('id', $id)->update($data);
-
-            return $result !== false ? true : false;
-        } catch (\Exception $e) {
-            return false;
-        }
     }
 
     public function oauthCreate($data)

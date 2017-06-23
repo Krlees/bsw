@@ -19,12 +19,19 @@ Route::get('/', function () {
 Route::get('/admin', function () {
     return redirect('admin/index');
 });
+
 // 后台路由
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'auth.admin']], function () {
 
 
     Route::get('index', 'IndexController@index');
     Route::get('dashboard', 'IndexController@dashboard');
+
+    Route::group(['prefix' => 'backup'], function () {
+        Route::any('product', 'BackupController@product');
+        Route::any('user', 'BackupController@user');
+        Route::any('comment', 'BackupController@comment');
+    });
 
     // 权限管理
     Route::group(['prefix' => 'product'], function () {
@@ -49,12 +56,12 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     });
 
     // 管理员
-    Route::group(['prefix' => 'user'], function () {
-        Route::any('index', 'UsersController@index');
-        Route::any('add', 'UsersController@add');
-        Route::any('edit/{id}', 'UsersController@edit');
-        Route::any('del', 'UsersController@del');
-        Route::any('get-sub-user/{pid}', 'UsersController@getSubSelect');
+    Route::group(['prefix' => 'member'], function () {
+        Route::any('index', 'UserController@index');
+        Route::any('add', 'UserController@add');
+        Route::any('edit/{id}', 'UserController@edit');
+        Route::any('del', 'UserController@del');
+        Route::any('get-sub-user/{pid}', 'UserController@getSubSelect');
     });
 
     // 菜单管理

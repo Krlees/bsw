@@ -1,18 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: liguanke
- * Date: 17/6/20
- * Time: 下午3:22
- */
 
-namespace App\Models;
+namespace App\Traits;
 
-
-use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class BaseModel extends Model
+trait BaseModelTraits
 {
     public function ajaxData($tableName, $param, $where = false, $searchField = 'name', $fields = ['*'])
     {
@@ -84,5 +76,9 @@ class BaseModel extends Model
         return $res->{$field};
     }
 
+    public function dbWhere($tbName)
+    {
+        return DB::table($tbName)->where();
+    }
 
 }

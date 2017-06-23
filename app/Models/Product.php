@@ -1,19 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: liguanke
- * Date: 17/6/15
- * Time: 下午1:22
- */
 
 namespace App\Models;
 
 
-use App\Models\BaseModel;
+use App\Traits\BaseModelTraits;
 use DB;
+use Illuminate\Database\Eloquent\Model;
 
-class Product extends BaseModel
+class Product extends Model
 {
+    use BaseModelTraits;
+
     /**
      * 与模型关联的数据表
      *

@@ -112,9 +112,9 @@ class Transaction extends Model
         return $count ? true : false;
     }
 
-    public function getCitys()
+    public function getCitys($labelId)
     {
-        $result = DB::table($this->table)->groupBy('city')->get(['city']);
+        $result = DB::table($this->table)->where('label_id', $labelId)->where(['city' => ""])->groupBy('city')->get(['city']);
 
         return obj2arr($result);
     }

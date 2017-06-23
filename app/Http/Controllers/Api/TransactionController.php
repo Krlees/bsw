@@ -84,6 +84,26 @@ class TransactionController extends BaseController
         if (empty($result)) {
             $this->responseApi(0, '', $result);
         }
+        foreach ($result as $k => $v) {
+            $label = DB::table('label')->find($v['label_id'], ['name']);
+            $result[$k]['label_name'] = $label->name;
+            $result[$k]['city'] = $this->getByCity($v['city']);
+
+            $imgs = $this->getImg($v['id']);
+            if ($imgs) {
+                foreach ($imgs as $img) {
+                    if ($img->is_cover == 1)
+                        $result[$k]['cover'] = $img->img;
+
+                    $result[$k]['imgs'][] = $img->img;
+                }
+            }
+
+
+            $avatars = DB::table('user')->find($v['user_id'], ['avatar']);
+            $result[$k]['head_img'] = picture_url($avatars->avatar);
+
+        }
 
         $result = $this->_helpVip($result, $userVip, $transaction);
 
@@ -193,6 +213,12 @@ class TransactionController extends BaseController
 
     }
 
+    public function getCitys($labelId, Transaction $transaction)
+    {
+        $results = $transaction->getCitys($labelId);
+        return array_column($results,'city');
+    }
+
     private function _helpJobList()
     {
 //        $result[$k]['dueTime'] = $lockTime; //剩余时间
@@ -203,14 +229,14 @@ class TransactionController extends BaseController
     /**
      * 检测用户是否已购买
      */
-    private function checkUserPay($transId, $transaction)
+    private function _checkUserPay($transId, $transaction)
     {
         $user_id = $this->user_ses ? $this->user_ses->id : false;
         if (!$user_id) {
             return false;
         }
 
-        return $transaction->checkUserPay($transId, $user_id);
+        return $transaction->_checkUserPay($transId, $user_id);
 
     }
 
@@ -241,7 +267,7 @@ class TransactionController extends BaseController
             }
 
             // 2. 检测用户是否购买
-            if ($this->checkUserPay($v['id'], $transaction)) {
+            if ($this->_checkUserPay($v['id'], $transaction)) {
                 unset($result[$k]);
                 continue;
             }
@@ -307,7 +333,7 @@ class TransactionController extends BaseController
             }
 
             // 2. 检测用户是否购买
-            if ($this->checkUserPay($v['id'], $transaction)) {
+            if ($this->_checkUserPay($v['id'], $transaction)) {
                 unset($result[$k]);
                 continue;
             }

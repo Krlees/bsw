@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\BaseController;
 use App\Models\Product;
@@ -87,9 +87,9 @@ class ProductController extends BaseController
             $this->createField('text', '有效期', 'data[times]', $info->times, ['placeholder' => '填写天数,0则不限期']);
             $this->createField('textarea', '参数', 'data[attrs]', $info->attrs);
 
-            $reponse = $this->responseForm('添加产品分类', $this->getFormField());
+            $reponse = $this->responseForm('编辑产品', $this->getFormField());
 
-            return view('admin/product/add', compact('reponse'));
+            return view('admin/product/edit', compact('reponse'));
 
         }
     }
@@ -97,7 +97,8 @@ class ProductController extends BaseController
     public function del()
     {
         $ids = $this->getDelIds();
-
+        $result = $this->product->delData($this->product->getTable(), $ids);
+        $result ? $this->responseApi(0) : $this->responseApi(9000);
     }
 
     public function category(Request $request)
@@ -134,7 +135,7 @@ class ProductController extends BaseController
 
         } else {
 
-            $this->createField('text', '名称', 'data[name]');
+            $this->createField('text', '名称', 'data[name]','',['dataType'=>'*']);
             $this->createField('textarea', '描述', 'data[desc]');
 
             $reponse = $this->responseForm('添加产品分类', $this->getFormField());
@@ -161,7 +162,7 @@ class ProductController extends BaseController
 
             $reponse = $this->responseForm('添加产品分类', $this->getFormField());
 
-            return view('admin/product/categoryAdd', compact('reponse'));
+            return view('admin/product/categoryEdit', compact('reponse'));
 
         }
     }
