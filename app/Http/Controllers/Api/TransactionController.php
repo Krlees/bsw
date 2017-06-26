@@ -95,7 +95,7 @@ class TransactionController extends BaseController
             $result[$k]['city'] = $this->getByCity($v['city']);
 
             $avatars = DB::table('user')->find($v['user_id'], ['avatar']);
-            $result[$k]['head_img'] = picture_url($avatars->avatar);
+            $result[$k]['head_img'] = $avatars ? picture_url($avatars->avatar) : '';
 
         }
 
@@ -212,7 +212,10 @@ class TransactionController extends BaseController
     public function getCitys($labelId, Transaction $transaction)
     {
         $results = $transaction->getCitys($labelId);
-        return array_column($results, 'city');
+        $arr = array_column($results, 'city');
+        array_unshift($arr,'全部');
+
+        return $arr;
     }
 
     private function _helpJobList()
