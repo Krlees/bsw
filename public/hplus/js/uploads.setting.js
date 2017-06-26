@@ -79,7 +79,7 @@ uploader = WebUploader.create({
 
     chunked: true,
     // server: 'http://webuploader.duapp.com/server/fileupload.php',
-    server: '/uploads',
+    server: '/components/uploads',
     fileNumLimit: 10,
     fileSizeLimit: 50 * 1024 * 1024,    // 50 M
     fileSingleSizeLimit: 5 * 1024 * 1024   // 5 M

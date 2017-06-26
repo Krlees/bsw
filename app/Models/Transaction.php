@@ -64,8 +64,7 @@ class Transaction extends Model
 
         $avatars = DB::table('user')->find($trans->user_id, ['avatar']);
 
-
-        $trans->avatar = picture_url($avatars->avatar);
+        $trans->avatar = $avatars ? picture_url($avatars->avatar) : '';
 
 
         return obj2arr($trans);

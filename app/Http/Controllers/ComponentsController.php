@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Traits\DistrictTraits;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Storage;
 
 class ComponentsController extends Controller
 {
+
+    use DistrictTraits;
 
     /**
      * 图片上传
@@ -46,6 +49,13 @@ class ComponentsController extends Controller
 
         return $filename;
 
+    }
+
+    public function getDistrict($id)
+    {
+        $result = $this->getByList($id);
+
+        return $result;
     }
 
 }

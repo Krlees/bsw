@@ -11,6 +11,7 @@ use App\Models\UserLevel;
 use App\Models\UserLoginRecord;
 use App\Models\UserOauth;
 use App\Models\UserToken;
+use App\Traits\DistrictTraits;
 use App\Traits\GaodemapTraits;
 use App\Traits\NetEaseTraits;
 use App\Traits\SmsTraits;
@@ -394,6 +395,8 @@ district: "霞浦县",
         // 跳转到支付页面。
         return redirect()->to($alipay->getPayLink());
     }
+
+
 
     public function clearCache()
     {

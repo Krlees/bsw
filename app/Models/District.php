@@ -34,5 +34,11 @@ class District extends Model
         $district = DB::table('district')->find($id);
         return $district ? $district->name : '';
     }
+
+    public function getList($pid)
+    {
+        $district = DB::table('district')->where('upid',$pid)->get(['id','name']);
+        return obj2arr($district);
+    }
     
 }

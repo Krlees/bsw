@@ -87,6 +87,21 @@ class FormPresenter
                 return Form::password($name, $options);
                 break;
 
+            case 'area':
+                $options = array_merge($options, $opt);
+                return <<<EOT
+<select class="chosen-select areas" id="province">
+    <option value="0">请选择</option>
+</select>
+<select class="chosen-select areas" id="city">
+    <option value="0">请选择</option>
+</select>
+<select class="chosen-select areas" id="area">
+    <option value="0">请选择</option>
+</select>
+EOT;
+                break;
+
             case 'image':
                 $str = <<<EOT
 <div class="page-container">

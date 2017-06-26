@@ -35,6 +35,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::any('alipay', 'PublicController@alipay'); // 支付宝支付
         Route::any('wxpay', 'PublicController@wxpay'); // 微信支付
         Route::any('get-user-level', 'PublicController@getUserLevel'); // 用户等级
+        Route::any('get-district/{id}', 'PublicController@getDistrict'); // 获取省市区
         Route::any('clear-cache', 'PublicController@clearCache'); // 清除缓存
     });
 
@@ -110,8 +111,6 @@ Route::group(['namespace' => 'Api'], function () {
 
 });
 
-Route::get('get-district/{upid?}', 'Api\BaseController@getDistrict');
-Route::any('uploads', 'UploadsController@index');
 
 
 

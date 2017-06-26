@@ -20,7 +20,12 @@ Route::get('/admin', function () {
     return redirect('admin/index');
 });
 
-Route::group(['prefix' => 'backup','namespace' => 'Admin'], function () {
+Route::group(['prefix' => 'components'], function () {
+    Route::get('get-district/{upid?}', 'ComponentsController@getDistrict');
+    Route::post('upload', 'ComponentsController@upload');
+});
+
+Route::group(['prefix' => 'backup', 'namespace' => 'Admin'], function () {
     Route::any('product', 'BackupController@product');
     Route::any('user', 'BackupController@user');
     Route::any('comment', 'BackupController@comment');
@@ -34,7 +39,6 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
 
     Route::get('index', 'IndexController@index');
     Route::get('dashboard', 'IndexController@dashboard');
-
 
 
 //    // 权限管理

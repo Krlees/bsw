@@ -8,20 +8,50 @@ $(function () {
     if (!areaEle.val()) {
         $('#area_chosen').hide();
     }
+
+    getSubDistrict('/components/get-district', 0, 'province', false);
     $(document).on('change', '#province', function () {
         var Value = $(this).val();
-        if (Value == '0') {
-            return false;
-        }
+        //$('#area_chosen').chosen("destroy").empty().chosen({width: "150px"});
 
-        getSub('/Api/get-district', $(this).val(), 'city', false);
+        getSubDistrict('/components/get-district', $(this).val(), 'city', false);
     });
     $(document).on('change', '#city', function () {
         var Value = $(this).val();
-        if (Value == '0') {
-            return false;
+
+        getSubDistrict('/components/get-district', $(this).val(), 'area', false);
+    });
+
+});
+
+function getSubDistrict(url, id, sub, init=true) {
+    var initHtml = "";
+    var chird = '#' + sub;
+    var chirdChosen = '#' + sub + '_chosen';
+
+    $(chird).chosen("destroy");
+    $(chird).empty().chosen({width: "150px"});
+
+    $.getJSON(url + "/" + id, {}, function (result) {
+        if(init)
+            initHtml = "<option value='" + id + "'>-请选择-</option>";
+
+        var selectHtmls = "";
+        if (result) {
+            $.each(result, function (i, v) {
+                selectHtmls += "<option value='" + v.id + "'>" + v.name + "</option>";
+            });
         }
 
-        getSub('/Api/get-district', $(this).val(), 'area', false);
+        if (selectHtmls != "") {
+            $(chird).chosen("destroy");
+            $(chird).html(initHtml + selectHtmls).chosen({width: "150px"});
+            $(chirdChosen).show();
+        }
+        else {
+            $(chirdChosen).hide();
+        }
+
     });
-});
+
+}
