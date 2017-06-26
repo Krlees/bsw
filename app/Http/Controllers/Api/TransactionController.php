@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\UserVip;
 use App\Traits\DistrictTraits;
 use Illuminate\Http\Request;
+use DB;
 
 class TransactionController extends BaseController
 {
