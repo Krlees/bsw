@@ -79,12 +79,12 @@ class Transaction extends Model
         }
 
 
-        $result = $db->orderBy('created_at','desc')->offset($page * $limit)->limit($limit)->get(['id', 'user_id', 'title', 'content', 'label_id', 'created_at', 'city', 'ext1', 'is_must_pay', 'is_normal_pay', 'is_wallet_pay', 'is_juan_pay', 'days', 'user_id']);
+        $result = $db->orderBy('created_at', 'desc')->offset($page * $limit)->limit($limit)->get(['id', 'user_id', 'title', 'content', 'label_id', 'created_at', 'city', 'ext1', 'is_must_pay', 'is_normal_pay', 'is_wallet_pay', 'is_juan_pay', 'days', 'user_id']);
         $result = obj2arr($result);
         foreach ($result as $k => $v) {
             $label = DB::table('label')->find($v['label_id'], ['name']);
             $result[$k]['label_name'] = $label->name;
-            $result[$k]['created_at'] = date('Y-m-d H:i:s',$v['created_at']);
+            $result[$k]['created_at'] = date('Y-m-d H:i:s', $v['created_at']);
 
             $result[$k]['imgs'] = [];
             $result[$k]['cover'] = '';
@@ -113,9 +113,9 @@ class Transaction extends Model
         return $count ? true : false;
     }
 
-    public function getCitys($labelId)
+    public function getCitys($labelId, $channelId)
     {
-        $result = DB::table($this->table)->where('label_id', $labelId)->where('city','<>','')->groupBy('city')->orderByRaw('count(city) desc')->get(['city']);
+        $result = DB::table($this->table)->where('label_id', $labelId)->where('channel_id', $channelId)->where('city', '<>', '')->groupBy('city')->orderByRaw('count(city) desc')->get(['city']);
 
         return obj2arr($result);
     }
