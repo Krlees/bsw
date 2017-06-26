@@ -301,6 +301,7 @@ class TransactionController extends BaseController
             $result[$k]['lock'] = $lock;
             $result[$k]['isVip'] = $isVip;
 
+            unset($result[$k]['imgs']);
 
         }
 
@@ -362,7 +363,7 @@ class TransactionController extends BaseController
             $result[$k]['lock'] = $lock;
             $result[$k]['isVip'] = $isVip;
 
-
+            unset($result[$k]['imgs']);
         }
 
         return $result;
