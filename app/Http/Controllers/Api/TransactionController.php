@@ -33,7 +33,7 @@ class TransactionController extends BaseController
      */
     public function getVipList(Request $request, Label $label, Transaction $transaction, UserVip $userVip)
     {
-        $this->responseApi(0, '', ['kk' => '123213', 'aa' => 123]);
+        $this->responseApi(0, '', ['kk' => '123213', 'aa' => "123"]);
 
         $pages = $this->pageInit();
         $channelId = 1;
