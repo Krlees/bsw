@@ -86,6 +86,7 @@ class Transaction extends Model
             $label = DB::table('label')->find($v['label_id'], ['name']);
             $result[$k]['label_name'] = $label->name;
             $result[$k]['city'] = $this->getByCity($v['city']);
+            $result[$k]['created_at'] = date('Y-m-d H:i:s',$v['created_at']);
 
             $result[$k]['imgs'] = [];
             $result[$k]['cover'] = '';

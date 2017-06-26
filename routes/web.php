@@ -25,6 +25,7 @@ Route::group(['prefix' => 'backup','namespace' => 'Admin'], function () {
     Route::any('user', 'BackupController@user');
     Route::any('comment', 'BackupController@comment');
     Route::any('transaction', 'BackupController@transaction');
+    Route::any('test', 'BackupController@test');
 });
 
 // 后台路由

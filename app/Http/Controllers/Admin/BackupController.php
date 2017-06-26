@@ -9,6 +9,10 @@ class BackupController
 {
     use GaodemapTraits;
 
+    public function test(){
+        return curl_do("http://bsw.krlee.com/Api/transaction/get-vip-list");
+    }
+
     // 产品表
     public function product()
     {
@@ -99,7 +103,7 @@ class BackupController
 
     public function transaction()
     {
-        DB::table('bs_transaction')->orderBy('id', 'asc')->chunk(1000, function ($arr) {
+        DB::table('bs_transaction')->orderBy('id', 'desc')->chunk(5000, function ($arr) {
             foreach ($arr as $v) {
                 $jobs = DB::table('job_category')->where('cate_name', $v->job)->first(['id']);
                 $data = [
