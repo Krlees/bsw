@@ -5,12 +5,14 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Controllers\Api\PublicController;
 use App\Models\Member;
+use App\Traits\ImageTraits;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
 
 class UserController extends BaseController
 {
+    use ImageTraits;
     private $user;
 
     public function __construct(Member $user)
@@ -51,8 +53,10 @@ class UserController extends BaseController
         if ($request->ajax()) {
 
             $data = $request->input('data');
+            $imgs = $request->input('imgs');
+            $data['avatar'] = $this->thumbImg($imgs[0], 'Head');
 
-            $b = $this->user->createData($this->user->getTable(), $data);
+            $id = $this->user->createData($this->user->getTable(), $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {

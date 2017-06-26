@@ -1,3 +1,4 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="{{asset('hplus/css/bootstrap.min.css?v=3.3.6')}}" rel="stylesheet">
 <link href="{{asset('hplus/css/font-awesome.min.css?v=4.4.0')}}" rel="stylesheet">
 <link href="{{asset('hplus/css/animate.css')}}" rel="stylesheet">

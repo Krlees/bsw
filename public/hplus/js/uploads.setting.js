@@ -433,3 +433,9 @@ $info.on('click', '.ignore', function () {
 
 $upload.addClass('state-' + state);
 updateTotalProgress();
+
+uploader.on('uploadSuccess', function (file, response) {
+    var pictrueVal = JSON.parse(response._raw);
+
+    $(".success").append('<input type="hidden" name="imgs[]" value="' + pictrueVal.data + '">');
+});

@@ -22,7 +22,7 @@ Route::get('/admin', function () {
 
 Route::group(['prefix' => 'components'], function () {
     Route::get('get-district/{upid?}', 'ComponentsController@getDistrict');
-    Route::post('upload', 'ComponentsController@upload');
+    Route::any('uploads', 'ComponentsController@upload');
 });
 
 Route::group(['prefix' => 'backup', 'namespace' => 'Admin'], function () {

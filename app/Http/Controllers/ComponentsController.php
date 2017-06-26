@@ -39,7 +39,7 @@ class ComponentsController extends Controller
         $filename = date('Ymd') . '-' . uniqid() . '.' . $ext;
         $bool = Storage::disk('local')->put($filename, file_get_contents($realPath));
         if (!$bool)
-            return 0;
+            return ['code' => 80001, 'msg' => '上传失败'];
 
 //        if (!is_dir(storage_path('uploads/s')) || !is_dir(storage_path('uploads/l'))) {
 //            mkdir(storage_path('uploads/s'));
@@ -47,7 +47,7 @@ class ComponentsController extends Controller
 
 //        Image::make(storage_path('uploads/' . $filename))->resize(180, 180)->save(storage_path('uploads/s/' . $filename));
 
-        return $filename;
+        return ['code' => 0, 'msg' => '上传成功', 'data' => $filename];
 
     }
 
