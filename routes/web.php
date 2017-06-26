@@ -24,6 +24,7 @@ Route::group(['prefix' => 'backup','namespace' => 'Admin'], function () {
     Route::any('product', 'BackupController@product');
     Route::any('user', 'BackupController@user');
     Route::any('comment', 'BackupController@comment');
+    Route::any('transaction', 'BackupController@transaction');
 });
 
 // 后台路由
@@ -35,17 +36,17 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
 
 
 
-    // 权限管理
-    Route::group(['prefix' => 'product'], function () {
-        Route::any('index', 'ProductController@index');
-        Route::any('add', 'ProductController@add');
-        Route::any('edit/{id}', 'ProductController@edit');
-        Route::any('del', 'ProductController@del');
-        Route::any('category', 'ProductController@category');
-        Route::any('category-add', 'ProductController@categoryAdd');
-        Route::any('category-edit/{id}', 'ProductController@categoryEdit');
-        Route::any('category-del', 'ProductController@categoryDel');
-    });
+//    // 权限管理
+//    Route::group(['prefix' => 'product'], function () {
+//        Route::any('index', 'ProductController@index');
+//        Route::any('add', 'ProductController@add');
+//        Route::any('edit/{id}', 'ProductController@edit');
+//        Route::any('del', 'ProductController@del');
+//        Route::any('category', 'ProductController@category');
+//        Route::any('category-add', 'ProductController@categoryAdd');
+//        Route::any('category-edit/{id}', 'ProductController@categoryEdit');
+//        Route::any('category-del', 'ProductController@categoryDel');
+//    });
 
     // 角色管理
     Route::group(['prefix' => 'role'], function () {

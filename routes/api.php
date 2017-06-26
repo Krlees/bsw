@@ -29,12 +29,13 @@ Route::group(['namespace' => 'Api'], function () {
         Route::any('about', 'PublicController@about'); // 关于我们
         Route::any('jpush', 'PublicController@jpush'); // 推送消息
         Route::get('adv', 'PublicController@adv'); // 获取广告位的信息
-        Route::get('point-get-address/{lng},{lat}', 'PublicController@pointGetAddress'); // 获取广告位的信息
-        Route::get('address-get-point', 'PublicController@addressGetPoint'); // 获取广告位的信息
+        Route::get('point-get-address/{lng},{lat}', 'PublicController@pointGetAddress'); // 根据定位获取城市
+        Route::get('address-get-point', 'PublicController@addressGetPoint'); // 根据地址获取定位
         Route::get('get-new-user', 'PublicController@getNewUser'); // 获取新用户
         Route::any('alipay', 'PublicController@alipay'); // 支付宝支付
         Route::any('wxpay', 'PublicController@wxpay'); // 微信支付
-        Route::any('clear-cache', 'PublicController@clearCache'); // 微信支付
+        Route::any('get-user-level', 'PublicController@getUserLevel'); // 用户等级
+        Route::any('clear-cache', 'PublicController@clearCache'); // 清除缓存
     });
 
     // 信息接口
@@ -47,7 +48,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('get-order-info', 'TransactionController@getOrderInfo');
         Route::get('get-job-resume/{id}', 'TransactionController@getJobResume'); //获取求职信息的简历库
         Route::get('collect/{id}', 'TransactionController@collect'); // 收藏
-        Route::get('get-city/{labelId}', 'TransactionController@getCitys'); // 收藏
+        Route::get('get-city/{labelId}', 'TransactionController@getCitys'); // 获取城市
     });
 
     // 产品

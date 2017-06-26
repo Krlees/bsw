@@ -175,10 +175,12 @@ if (!function_exists('picture')) {
 if (!function_exists('picture_url')) {
     function picture_url($name)
     {
-        if(empty($name))
+        if (empty($name))
             return '';
+        elseif (strpos($name,"http") !== false)
+            return $name;
 
-        return 'http://' . $_SERVER['HTTP_HOST'];
+        return 'http://121.41.44.7' . $name;
     }
 }
 
@@ -406,7 +408,7 @@ if (!function_exists('check_valid')) {
     function check_valid($mobile, $type, $valid)
     {
         $oldValid = cache($type . '_' . $mobile);
-        if( empty($oldValid) || $oldValid != $valid){
+        if (empty($oldValid) || $oldValid != $valid) {
             return false;
         }
 
@@ -447,9 +449,25 @@ if (!function_exists('random')) {
 /**
  * 创建订单
  */
-function create_order_sn($type,$product_id)
+function create_order_sn($type, $product_id)
 {
-    return date('md').sprintf('%02d',$type).sprintf('%02d',$product_id).random(7);
+    return date('md') . sprintf('%02d', $type) . sprintf('%02d', $product_id) . random(7);
+}
+
+/**
+ * 去除省市区后缀
+ * @param $val
+ * @param int $level
+ */
+function clean_area($val, $level = 1)
+{
+    if ($level == 1)
+        return str_replace("省", "", $val);
+    elseif ($level == 2)
+        return str_replace("市", "", $val);
+    elseif ($level == 3)
+        return str_replace("区", "", $val);
+    return str_replace("区", "", $val);
 }
 
 

@@ -36,11 +36,13 @@ class TransactionController extends BaseController
         $pages = $this->pageInit();
         $channelId = 1;
 
-        $where[] = ['channel_id', '=', $channelId];
         $return = [];
         $labelData = $label->getList($label->getTable());
         foreach ($labelData as $key => $val) {
-            $where[] = ['label_id', '=', $val['id']];
+            $where = [
+                ['channel_id', '=', $channelId],
+                ['label_id', '=', $val['id']]
+            ];
             $result = $transaction->getList($pages['page'], 4, $where);
             if (empty($result)) {
                 continue;
@@ -54,6 +56,7 @@ class TransactionController extends BaseController
             $return[$key]['list'] = $result;
 
         }
+        sort($return);
 
 
         $this->responseApi(0, '', $return);
@@ -110,11 +113,12 @@ class TransactionController extends BaseController
         $pages = $this->pageInit();
         $channelId = 2; //订单频道
 
-        $where[] = ['channel_id', '=', $channelId];
         $return = [];
         $labelData = $label->getList($label->getTable());
         foreach ($labelData as $key => $val) {
-            $where[] = ['label_id', '=', $val['id']];
+            $where = [
+                ['channel_id', '=', $channelId], ['label_id', '=', $val['id']]
+            ];
             $result = $transaction->getList($pages['page'], 4, $where);
             if (empty($result)) {
                 continue;
@@ -128,6 +132,7 @@ class TransactionController extends BaseController
             $return[$key]['list'] = $result;
 
         }
+        sort($return);
 
         $this->responseApi(0, '', $return);
     }

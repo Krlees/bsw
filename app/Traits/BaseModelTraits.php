@@ -82,4 +82,11 @@ trait BaseModelTraits
         return DB::table($tbName)->where();
     }
 
+    public function getAll($tbName,$where=null,$field=['*'])
+    {
+        $where = $where ?: [];
+        $result = DB::table($tbName)->where($where)->get($field);
+        return obj2arr($result);
+    }
+
 }

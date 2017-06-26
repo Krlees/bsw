@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Menu;
 use App\Models\Order;
 use App\Models\Setting;
+use App\Models\UserLevel;
 use App\Models\UserLoginRecord;
 use App\Models\UserOauth;
 use App\Models\UserToken;
@@ -292,6 +293,11 @@ class PublicController extends BaseController
         $data = $setting->get('base', 'about');
 
         return $data;
+    }
+
+    public function getUserlevel(UserLevel $userLevel)
+    {
+        return $userLevel->getAll($userLevel->getTable());
     }
 
     /**
