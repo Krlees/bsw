@@ -33,7 +33,7 @@ class UserVip extends Model
         }
 
         $count = DB::table($this->table)->where('label_id',$labelId)->where('user_id',$userId)->where('created_at','>=',$nowTime)->where('expires_at','<=',$nowTime)->count();
-        return bool($count);
+        return $count ? true : false;
     }
 
     public function get($userId)
