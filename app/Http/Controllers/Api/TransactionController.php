@@ -301,7 +301,6 @@ class TransactionController extends BaseController
             $result[$k]['lock'] = $lock;
             $result[$k]['isVip'] = $isVip;
 
-            unset($result[$k]['label_id']);
 
         }
 
@@ -363,7 +362,6 @@ class TransactionController extends BaseController
             $result[$k]['lock'] = $lock;
             $result[$k]['isVip'] = $isVip;
 
-            unset($result[$k]['label_id']);
 
         }
 
