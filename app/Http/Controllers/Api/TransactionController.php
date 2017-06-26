@@ -211,8 +211,8 @@ class TransactionController extends BaseController
 
     public function getCitys(Request $request, Transaction $transaction)
     {
-        $labelId = $request->input('label_id');
-        $channelId = $request->input('channel_id');
+        $labelId = $request->input('label_id') or $this->responseApi(1004);
+        $channelId = $request->input('channel_id') or $this->responseApi(1004);
         $results = $transaction->getCitys($labelId, $channelId);
         $arr = array_column($results, 'city');
         array_unshift($arr, '全部');
