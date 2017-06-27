@@ -152,4 +152,14 @@ class UserController extends BaseController
 
         $this->responseApi(9000);
     }
+
+    public function set(Request $request, Member $member)
+    {
+        $field = $request->input('key');
+        $value = $request->input('value');
+
+
+        $result = $member->updateData($this->user_ses->id, [$field => $value]);
+        $result ? $this->responseApi(0) : $this->responseApi(9000);
+    }
 }

@@ -486,6 +486,15 @@ district: "霞浦县",
         return redirect()->to($alipay->getPayLink());
     }
 
+    /**
+     * 获取导航栏下的标签用户
+     */
+    public function getNavUser(Request $request)
+    {
+        $labelName = $request->input('label_name');
+
+    }
+
 
     public function clearCache()
     {

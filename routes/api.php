@@ -84,6 +84,7 @@ Route::group(['namespace' => 'Api'], function () {
     // 用户
     Route::group(['prefix' => 'user'], function () {
         Route::get('get', 'UserController@get'); //获取用户基本信息
+        Route::any('set', 'UserController@set'); //设置用户基本信息
         Route::get('get-wallet', 'UserController@getWallet'); //获取用户财务信息，余额和记录等
         Route::get('get-setting', 'UserController@getSetting'); //获取用户个人设置
         Route::post('post-verify', 'UserController@postVerify'); // 提交认证资料
