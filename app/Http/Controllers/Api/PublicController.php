@@ -211,10 +211,6 @@ class PublicController extends BaseController
     {
 
         $param = $request->all();
-        if (!isset($param['ret'])) {
-            $this->responseApi(80001, '数据有误');
-        }
-
         if (!$member->checkOpenID($param['openid'])) {
 
             $data = [
