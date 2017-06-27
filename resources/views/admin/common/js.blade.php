@@ -3,4 +3,5 @@
 <script src="{{asset('hplus/js/content.js?v=1.0.0')}}"></script>
 <script src="{{asset('hplus/js/plugins/layer/layer.js')}}"></script>
 <script src="{{asset('hplus/js/plugins/chosen/chosen.jquery.js')}}"></script>
+<script src="{{asset('js/common.js')}}"></script>
 

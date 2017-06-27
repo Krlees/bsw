@@ -106,8 +106,6 @@ class PublicController extends BaseController
                 $member->updateData($user->id, ['netease_token' => $res['info']['token']]);
                 $user->netease_token = $res['info']['token'];
                 $user->accid = $res['info']['accid'];
-
-                cache()->forever($request->input('token'), $this->user_ses);
             }
         }
 
@@ -122,7 +120,6 @@ class PublicController extends BaseController
         } elseif (!cache()->has($token)) {
             cache()->forever($token, $user);
         }
-
 
         // 记录用户登录
         $userLoginRecord->create($user->id, $lng, $lat);
@@ -171,6 +168,7 @@ class PublicController extends BaseController
             $id = $member->create($data);
             if ($id) {
                 $res = $member->get($id);
+
                 $this->responseApi(0, '', $res);
             }
 
@@ -209,7 +207,7 @@ class PublicController extends BaseController
      * @param Request $request
      * @param UserOauth $userOauth
      */
-    public function qqLogin(Request $request, Member $member)
+    public function qqLogin(Request $request, Member $member, UserToken $userToken)
     {
         $param = $request->all();
         if ($param['ret'] != 0) {
@@ -234,8 +232,32 @@ class PublicController extends BaseController
 
             $id = $member->create($data);
             if ($id) {
-                $res = $member->get($id);
-                $this->responseApi(0, '', $res);
+                $user = $member->get($id);
+
+                // 网易云通讯token
+                $user->netease_token = "";
+                if (empty($user->netease_token)) {
+                    $res = $this->getNetToken($user->id, $user->nickname, picture_url($user->avatar));
+                    if ($res) {
+                        $member->updateData($user->id, ['netease_token' => $res['info']['token']]);
+                        $user->netease_token = $res['info']['token'];
+                        $user->accid = $res['info']['accid'];
+                    }
+                }
+
+                // 查询出token
+                $token = $userToken->getForUserId($user->id);
+                if (!$token) {
+                    // 生成token
+                    $token = create_token($user->id, uniqid());
+                    $userToken->create($user->id, $token);
+
+                    cache()->forever($token, $user);
+                } elseif (!cache()->has($token)) {
+                    cache()->forever($token, $user);
+                }
+
+                $this->responseApi(0, '', $user);
             }
 
             $this->responseApi(80001, 'qq注册失败');
@@ -395,7 +417,6 @@ district: "霞浦县",
         // 跳转到支付页面。
         return redirect()->to($alipay->getPayLink());
     }
-
 
 
     public function clearCache()

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Controllers\Api\PublicController;
+use App\Models\District;
 use App\Models\Member;
 use App\Traits\DistrictTraits;
 use App\Traits\GaodemapTraits;
@@ -56,7 +57,6 @@ class UserController extends BaseController
 
     public function add(Request $request)
     {
-        $res = $this->getNetToken(1, 'krlee', picture_url('Uploads/Head/2017-06-27/20170627-5951b1d635ede.png'));
         if ($request->ajax()) {
 
             $data = $this->_helpAddEdit();
@@ -66,7 +66,7 @@ class UserController extends BaseController
             // 网易云通讯
             $id = $this->user->createData($this->user->getTable(), $data);
             if ($id) {
-                $res = $this->getToken($id, $data['username'], picture_url($data['avatar']));
+                $res = $this->getNetToken($id, $data['username'], picture_url($data['avatar']));
                 if (array_get($res, 'code') == 200) {
                     $this->user->updateData($id, ['netease_token' => $res['info']['token']]);
                 }
@@ -77,12 +77,13 @@ class UserController extends BaseController
         } else {
             $levelData = curl_do(url('Api/public/get-user-level'));
             $levelData = \GuzzleHttp\json_decode($levelData, true);
+            $provinces = curl_do(url('components/get-district/0'));
+            $provinces = \GuzzleHttp\json_decode($provinces);
 
             $this->createField('select', '用户等级', 'data[user_level_id]', $this->cleanSelect($levelData));
             $this->createField('text', '用户名', 'data[username]');
             $this->createField('text', '密码', 'data[password]');
             $this->createField('text', '昵称', 'data[nickname]');
-            $this->createField('image', '头像', 'data[times]');
             $this->createField('date', '出生年月', 'data[birthday]');
             $this->createField('radio', '性别', 'data[sex]', [
                 [
@@ -94,27 +95,33 @@ class UserController extends BaseController
                 ]
             ]);
             $this->createField('text', '签名', 'data[intro]');
-            $this->createField('area', '省市区', '');
             $this->createField('text', '详细地址', 'data[address]');
 
             $reponse = $this->responseForm('添加用户', $this->getFormField());
 
-            return view('admin/User/add', compact('reponse'));
+            return view('admin/User/add', compact('reponse', 'provinces'));
 
         }
     }
 
-    public function edit($id, Request $request)
+    public function edit($id, Request $request, District $district)
     {
         if ($request->ajax()) {
 
-            $data = $request->input('data');
+            $data = $this->_helpAddEdit();
 
             $b = $this->user->updateData($id, $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
             $info = $this->user->get($id);
+            $province_id = DB::table($district->getTable())->where('name', $info['province'])->where('level', 1)->first(['id']);
+            $city_id = DB::table($district->getTable())->where('name', 'like', '%' . $info['city'] . '%')->where('level', 2)->first(['id']);
+            $info['province_id'] = $province_id ? $province_id->id : 0;
+            $info['city_id'] = $city_id ? $city_id->id : 0;
+            $provinces = curl_do(url('components/get-district/0'));
+            $provinces = \GuzzleHttp\json_decode($provinces);
+
 
             $levelData = curl_do(url('Api/public/get-user-level'));
             $levelData = \GuzzleHttp\json_decode($levelData, true);
@@ -123,7 +130,6 @@ class UserController extends BaseController
             $this->createField('text', '用户名', 'data[username]', $info['username']);
             $this->createField('text', '密码', 'data[password]', '', ['placeholder' => '不修改密码请为空']);
             $this->createField('text', '昵称', 'data[nickname]', $info['nickname']);
-            $this->createField('image', '头像', 'data[avatar]', $info['avatar']);
             $this->createField('date', '出生年月', 'data[birthday]', $info['birthday']);
             $this->createField('radio', '性别', 'data[sex]', [
                 [
@@ -136,13 +142,12 @@ class UserController extends BaseController
                     'checked' => $info['sex'] == '女' ? true : false
                 ]
             ]);
-            $this->createField('text', '签名', 'data[intro]',$info['intro']);
-            $this->createField('area', '省市区', '');
-            $this->createField('text', '详细地址', 'data[address]',$info['address']);
+            $this->createField('text', '签名', 'data[intro]', $info['intro']);
+            $this->createField('text', '详细地址', 'data[address]', $info['address']);
 
             $reponse = $this->responseForm('编辑用户', $this->getFormField());
 
-            return view('admin/User/edit', compact('reponse', 'info'));
+            return view('admin/User/edit', compact('reponse', 'info', 'provinces'));
 
 
         }
@@ -170,17 +175,21 @@ class UserController extends BaseController
         $request = request();
         $data = $request->input('data');
         $imgs = $request->input('imgs');
-        $data['avatar'] = $this->thumbImg($imgs[0], 'Head');
-        $data['origin_img'] = $this->getOriginImg($imgs[0]);
-        $data['province'] = $this->getByCity($request->input('province'));
-        $data['city'] = $this->getByCity($request->input('city'));
-        $data['area'] = $this->getByCity($request->input('area'));
+        if ($imgs) {
+            $data['avatar'] = $this->thumbImg($imgs[0], 'Head');
+            $data['origin_img'] = $data['avatar'];
+        }
+        $data['province'] = $this->getByCity($data['province']);
+        $data['city'] = $this->getByCity($data['city']);
+        //$data['area'] = $this->getByCity($request->input($data['area']));
         if (array_get($data, 'password'))
             $data['password'] = password($data['password']);
+        else
+            unset($data['password']);
 
-        $location = $this->address_get_point($data['province'] . $data['city'] . $data['area'] . $data['address']);
+        $location = $this->address_get_point($data['province'] . $data['city'] . $data['address']);
         $location = \GuzzleHttp\json_decode($location, true);
-        if ($location['info'] == 'OK') {
+        if ($location['info'] == 'OK' && $location['geocodes']) {
             list($data['lng'], $data['lat']) = explode(",", $location['geocodes'][0]['location']);
         }
 
