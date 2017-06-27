@@ -214,6 +214,7 @@ class PublicController extends BaseController
             $this->responseApi(80001, '数据有误');
         }
 
+
         if (!$member->checkOpenID($param['openid'])) {
             $data = [
                 'avatar' => $param['figureurl_qq_2'],
@@ -264,10 +265,10 @@ class PublicController extends BaseController
 
         }
 
-        $res = $member->getForOpenID($param['opend']);
+        $user = $member->getForOpenID($param['opend']);
+        $userToken->getForUserId($user->id);
+        $this->responseApi(0, '', $user);
 
-
-        $this->responseApi(0, '', $res);
     }
 
     /**
