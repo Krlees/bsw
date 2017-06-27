@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 Route::group(['namespace' => 'Api'], function () {
     // 公用接口
     Route::group(['prefix' => 'public'], function () {
-        Route::post('register', 'PublicController@register'); //普通手机注册
+        Route::any('register', 'PublicController@register'); //普通手机注册
         Route::any('login', 'PublicController@login');
         Route::any('qq-login', 'PublicController@qqlogin');
         Route::any('wx-login', 'PublicController@wxlogin');
@@ -28,10 +28,10 @@ Route::group(['namespace' => 'Api'], function () {
         Route::any('check-valid', 'PublicController@checkValid'); // 检测验证码
         Route::any('about', 'PublicController@about'); // 关于我们
         Route::any('jpush', 'PublicController@jpush'); // 推送消息
-        Route::get('adv', 'PublicController@adv'); // 获取广告位的信息
-        Route::get('point-get-address/{lng},{lat}', 'PublicController@pointGetAddress'); // 根据定位获取城市
-        Route::get('address-get-point', 'PublicController@addressGetPoint'); // 根据地址获取定位
-        Route::get('get-new-user', 'PublicController@getNewUser'); // 获取新用户
+        Route::any('adv', 'PublicController@adv'); // 获取广告位的信息
+        Route::any('point-get-address/{lng},{lat}', 'PublicController@pointGetAddress'); // 根据定位获取城市
+        Route::any('address-get-point', 'PublicController@addressGetPoint'); // 根据地址获取定位
+        Route::any('get-new-user', 'PublicController@getNewUser'); // 获取新用户
         Route::any('alipay', 'PublicController@alipay'); // 支付宝支付
         Route::any('wxpay', 'PublicController@wxpay'); // 微信支付
         Route::any('get-user-level', 'PublicController@getUserLevel'); // 用户等级
@@ -42,74 +42,74 @@ Route::group(['namespace' => 'Api'], function () {
 
     // 信息接口
     Route::group(['prefix' => 'transaction'], function () {
-        Route::get('get/{id}', 'TransactionController@get');
-        Route::get('get-list', 'TransactionController@getList');
-        Route::get('get-vip-list', 'TransactionController@getVipList');
-        Route::get('get-vip-info', 'TransactionController@getVipInfo');
-        Route::get('get-order-list', 'TransactionController@getOrderList');
-        Route::get('get-order-info', 'TransactionController@getOrderInfo');
-        Route::get('get-job-resume/{id}', 'TransactionController@getJobResume'); //获取求职信息的简历库
-        Route::get('collect/{id}', 'TransactionController@collect'); // 收藏
-        Route::get('get-city', 'TransactionController@getCitys'); // 获取城市
+        Route::any('get/{id}', 'TransactionController@get');
+        Route::any('get-list', 'TransactionController@getList');
+        Route::any('get-vip-list', 'TransactionController@getVipList');
+        Route::any('get-vip-info', 'TransactionController@getVipInfo');
+        Route::any('get-order-list', 'TransactionController@getOrderList');
+        Route::any('get-order-info', 'TransactionController@getOrderInfo');
+        Route::any('get-job-resume/{id}', 'TransactionController@getJobResume'); //获取求职信息的简历库
+        Route::any('collect/{id}', 'TransactionController@collect'); // 收藏
+        Route::any('get-city', 'TransactionController@getCitys'); // 获取城市
         Route::any('post-click', 'TransactionController@postClick'); // 获取城市
         Route::any('post-follow', 'TransactionController@postFollow'); // 获取城市
     });
 
     // 产品
     Route::group(['prefix' => 'product'], function () {
-        Route::get('get-list', 'ProductController@getList');
+        Route::any('get-list', 'ProductController@getList');
     });
 
     // 标签
     Route::group(['prefix' => 'label'], function () {
-        Route::get('get-list', 'LabelController@getList');
-        Route::get('get-user/{id?}', 'LabelController@getUser');
+        Route::any('get-list', 'LabelController@getList');
+        Route::any('get-user/{id?}', 'LabelController@getUser');
     });
 
     // 订单
     Route::group(['prefix' => 'order'], function () {
-        Route::post('create', 'OrderController@create');
-        Route::get('get/{id}', 'OrderController@get');
-        Route::get('get-list', 'OrderController@getList');
+        Route::any('create', 'OrderController@create');
+        Route::any('get/{id}', 'OrderController@get');
+        Route::any('get-list', 'OrderController@getList');
     });
 
     // 评论
     Route::group(['prefix' => 'comment'], function () {
-        Route::get('get/{id}', 'CommentController@get'); // 根据评论ID，获取评论详情
-        Route::get('get-list', 'CommentController@getList'); //根据信息ID，获取信息下的评论列表
+        Route::any('get/{id}', 'CommentController@get'); // 根据评论ID，获取评论详情
+        Route::any('get-list', 'CommentController@getList'); //根据信息ID，获取信息下的评论列表
     });
 
     // 首页
 //    Route::group(['prefix' => 'adv'], function(){
-//        Route::get('get-list', 'AdvController@getList');
+//        Route::any('get-list', 'AdvController@getList');
 //    });
 
     // 用户
     Route::group(['prefix' => 'user'], function () {
-        Route::get('get', 'UserController@get'); //获取用户基本信息
+        Route::any('get', 'UserController@get'); //获取用户基本信息
         Route::any('set', 'UserController@set'); //设置用户基本信息
-        Route::get('get-wallet', 'UserController@getWallet'); //获取用户财务信息，余额和记录等
-        Route::get('get-setting', 'UserController@getSetting'); //获取用户个人设置
-        Route::post('post-verify', 'UserController@postVerify'); // 提交认证资料
-        Route::get('get-verify', 'UserController@getVerify'); // 获取认证资料
-        Route::post('add-friend/{followId}', 'UserController@addFriend'); // 加好友
-        Route::get('delete-friend/{followId}', 'UserController@deleteFriend'); // 删除好友
-        Route::get('my-friend', 'UserController@myFriend'); // 我的好友
-        Route::get('my-fans', 'UserController@myFans'); // 我的粉丝
+        Route::any('get-wallet', 'UserController@getWallet'); //获取用户财务信息，余额和记录等
+        Route::any('get-setting', 'UserController@getSetting'); //获取用户个人设置
+        Route::any('post-verify', 'UserController@postVerify'); // 提交认证资料
+        Route::any('get-verify', 'UserController@getVerify'); // 获取认证资料
+        Route::any('add-friend/{followId}', 'UserController@addFriend'); // 加好友
+        Route::any('delete-friend/{followId}', 'UserController@deleteFriend'); // 删除好友
+        Route::any('my-friend', 'UserController@myFriend'); // 我的好友
+        Route::any('my-fans', 'UserController@myFans'); // 我的粉丝
         Route::any('check-token', 'UserController@checkToken'); //
     });
 
     Route::group(['prefix' => 'pay'], function () {
-        Route::post('wallet', 'PayController@wallet');
+        Route::any('wallet', 'PayController@wallet');
     });
 
     // 红包
     Route::group(['prefix' => 'red-packet'], function () {
-        Route::get('get/{id}', 'PacketController@get'); // 获取红包详情
-        Route::get('get-list', 'PacketController@getList');
-        Route::get('get-user-packet', 'PacketController@getUserPacket'); // 获取用户抢到的红包
-        Route::get('get-send', 'PacketController@getSend'); // 获取用户发出去的红包
-        Route::post('create', 'PacketController@create'); // 创建新的红包
+        Route::any('get/{id}', 'PacketController@get'); // 获取红包详情
+        Route::any('get-list', 'PacketController@getList');
+        Route::any('get-user-packet', 'PacketController@getUserPacket'); // 获取用户抢到的红包
+        Route::any('get-send', 'PacketController@getSend'); // 获取用户发出去的红包
+        Route::any('create', 'PacketController@create'); // 创建新的红包
     });
 
 
