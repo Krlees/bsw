@@ -147,7 +147,7 @@ class PublicController extends BaseController
      * @param Request $request
      * @param UserOauth $userOauth
      */
-    public function wxLogin(Request $request, Member $member)
+    public function wxLogin(Request $request, Member $member, UserToken $userToken)
     {
         $param = $request->all();
 
@@ -160,26 +160,73 @@ class PublicController extends BaseController
                 "province" => $param['Hubei'],
                 "avatar" => $param['headimgurl'],
                 'created_at' => date('Y-m-d H:i:s'),
+                'address'=> $param['company_area'],
                 'password' => '',
-                'register_type' => 'qq',
+                'register_type' => 'wx',
                 'username' => substr($param['unionid'], 0, 11)
             ];
 
-            $id = $member->create($data);
-            if ($id) {
-                $res = $member->get($id);
-
-                $this->responseApi(0, '', $res);
+            $location = $this->address_get_point($param['company_area']);
+            $location = json_decode($location);
+            if ($location->info == 'OK' && $location->geocodes) {
+                list($data['lng'], $data['lat']) = explode(",", $location->geocodes[0]->location);
             }
 
-            $this->responseApi(80001, '微信注册失败');
+            $id = $member->create($data);
+            if ($id) {
+                $user = $member->get($id);
+
+                // 网易云通讯token
+                $user['netease_token'] = "";
+                if (empty($user['netease_token'])) {
+                    $res = $this->getNetToken($user['id'], $user['nickname'], picture_url($user['avatar']));
+                    if ($res) {
+                        $member->updateData($user['id'], ['netease_token' => $res['info']['token']]);
+                        $user['netease_token'] = $res['info']['token'];
+                        $user['accid'] = $res['info']['accid'];
+                    }
+                }
+                $user['accid'] = (string)$user['id'];
+                $user['user_id'] = (string)$user['id'];
+
+                // 查询出token
+                $token = $userToken->getForUserId($user['id']);
+                if (!$token) {
+                    // 生成token
+                    $token = create_token($user['id'], uniqid());
+                    $userToken->create($user['id'], $token);
+
+                    cache()->forever($token, $user);
+                } elseif (!cache()->has($token)) {
+                    cache()->forever($token, $user);
+                }
+
+                $this->responseApi(0, '', $user);
+            }
+
+            $this->responseApi(80001, 'qq注册失败');
 
         }
 
-        $res = $member->getForOpenID($param['opend']);
+        $user = $member->getForOpenID($param['openid']);
+        $token = $userToken->getForUserId($user->id);
+        if (!$token) {
+            // 生成token
+            $token = create_token($user->id, uniqid());
+            $userToken->create($user->id, $token);
+
+            cache()->forever($token, $user);
+        } elseif (!cache()->has($token)) {
+            cache()->forever($token, $user);
+        }
+        $user->token = $token;
+        $user->accid = (string)$user->id;
+        $user->user_id = (string)$user->id;
+
+        $this->responseApi(0, '', $user);
 
 
-        $this->responseApi(0, '', $res);
+        $this->responseApi(0, '', $user);
     }
 
 //{
