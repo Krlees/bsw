@@ -242,22 +242,22 @@ class PublicController extends BaseController
                 $user = $member->get($id);
 
                 // 网易云通讯token
-                $user->netease_token = "";
-                if (empty($user->netease_token)) {
-                    $res = $this->getNetToken($user->id, $user->nickname, picture_url($user->avatar));
+                $user['netease_token'] = "";
+                if (empty($user['netease_token'])) {
+                    $res = $this->getNetToken($user['id'], $user['nickname'], picture_url($user['avatar']));
                     if ($res) {
-                        $member->updateData($user->id, ['netease_token' => $res['info']['token']]);
-                        $user->netease_token = $res['info']['token'];
-                        $user->accid = $res['info']['accid'];
+                        $member->updateData($user['id'], ['netease_token' => $res['info']['token']]);
+                        $user['netease_token'] = $res['info']['token'];
+                        $user['accid'] = $res['info']['accid'];
                     }
                 }
 
                 // 查询出token
-                $token = $userToken->getForUserId($user->id);
+                $token = $userToken->getForUserId($user['id']);
                 if (!$token) {
                     // 生成token
-                    $token = create_token($user->id, uniqid());
-                    $userToken->create($user->id, $token);
+                    $token = create_token($user['id'], uniqid());
+                    $userToken->create($user['id'], $token);
 
                     cache()->forever($token, $user);
                 } elseif (!cache()->has($token)) {
