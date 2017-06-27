@@ -154,7 +154,7 @@ class PublicController extends BaseController
         if (!$member->checkOpenID($param['unionid'])) {
             $data = [
                 'sex' => $param['sex'] == '1' ? '男' : '女',
-                'openid' => $param['unionid'] ?: $param['openid'],
+                'openid' => $param['unionid'],
                 'nickname' => $param['nickname'],
                 "city" => $param['Wuhan'],
                 "province" => $param['Hubei'],
@@ -208,7 +208,7 @@ class PublicController extends BaseController
 
         }
 
-        $user = $member->getForOpenID($param['openid']);
+        $user = $member->getForOpenID($param['unionid']);
         $token = $userToken->getForUserId($user->id);
         if (!$token) {
             // 生成token
