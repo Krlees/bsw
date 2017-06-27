@@ -63,7 +63,22 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('{id}', 'RoleController@getInfo');
     });
 
-    // 管理员
+    // 超级管理员
+    Route::group(['prefix' => 'admin'], function () {
+        Route::any('index', 'AdminController@index');
+        Route::any('add', 'AdminController@add');
+        Route::any('del', 'AdminController@del');
+    });
+
+    // 案例
+    Route::group(['prefix' => 'case'], function () {
+        Route::any('index', 'CaseController@index');
+        Route::any('add', 'CaseController@add');
+        Route::any('edit/{id}', 'CaseController@edit');
+        Route::any('del', 'CaseController@del');
+    });
+
+    // 用户
     Route::group(['prefix' => 'member'], function () {
         Route::any('index', 'UserController@index');
         Route::any('add', 'UserController@add');
@@ -71,6 +86,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('del', 'UserController@del');
         Route::any('project-img/{id}', 'UserController@projectImg');
         Route::any('get-sub-user/{pid}', 'UserController@getSubSelect');
+        Route::any('entre/', 'EntreController@entre');
+        Route::any('entre-add', 'EntreController@entreAdd');
+        Route::any('entre-edit/{id}', 'EntreController@entreEdit');
+        Route::any('entre-del', 'EntreController@entreDel');
     });
 
     // 菜单管理
@@ -89,6 +108,11 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('edit/{id}', 'ProductController@edit');
         Route::any('del', 'ProductController@del');
         Route::any('get-sub-class/{id}', 'ProductController@getSubClass');
+        Route::any('category', 'ProductController@category');
+        Route::any('category-add', 'ProductController@categoryAdd');
+        Route::any('category-edit/{id}', 'ProductController@categoryEdit');
+        Route::any('category-del', 'ProductController@categoryDel');
+
     });
 
     // 订单

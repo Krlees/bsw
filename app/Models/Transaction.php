@@ -84,7 +84,8 @@ class Transaction extends Model
         foreach ($result as $k => $v) {
             $label = DB::table('label')->find($v['label_id'], ['name']);
             $result[$k]['label_name'] = $label->name;
-            $result[$k]['created_at'] = date('Y-m-d H:i:s', $v['created_at']);
+            $result[$k]['addtime'] = ($v['created_at'] - time() - 24 * 2 * 3600 < 0) ? mdate($v['created_at']) : date('Y-m-d H:i:s', $v['created_at']);
+
 
             $result[$k]['imgs'] = [];
             $result[$k]['cover'] = '';

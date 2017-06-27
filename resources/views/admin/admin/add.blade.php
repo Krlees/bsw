@@ -8,12 +8,7 @@
 <body class="gray-bg">
 @component('admin.components.form',$reponse)
 @endcomponent
-@include('admin.common.modal')
-
-<script src="{{asset('js/components/district.js')}}"></script>
-<script type="text/javascript">
 
 
-</script>
 </body>
 </html>

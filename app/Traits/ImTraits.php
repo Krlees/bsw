@@ -31,13 +31,14 @@ trait ImTraits{
      * @return json|xml
      */
     public function getToken($userId, $name, $portraitUri) {
+        if(empty($userId))
+            return '用户 Id 不能为空';
+        if(empty($name))
+            return '用户名称 不能为空';
+        if(empty($portraitUri))
+            return '用户头像 URI 不能为空';
+
         try{
-            if(empty($userId))
-                return '用户 Id 不能为空';
-            if(empty($name))
-                return '用户名称 不能为空';
-            if(empty($portraitUri))
-                return '用户头像 URI 不能为空';
 
             $ret = $this->curl('/user/getToken',array('userId'=>$userId,'name'=>$name,'portraitUri'=>$portraitUri));
             if(empty($ret))

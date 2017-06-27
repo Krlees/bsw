@@ -1,15 +1,8 @@
-$(function () {
 
     var cityEle = $("#city");
     var areaEle = $("#area");
-    if (!cityEle.val()) {
-        $('#city_chosen').hide();
-    }
-    if (!areaEle.val()) {
-        $('#area_chosen').hide();
-    }
 
-    getSubDistrict('/components/get-district', 0, 'province', false);
+    getSubDistrict('/components/get-district', 0, 'province', true);
     $(document).on('change', '#province', function () {
         var Value = $(this).val();
         //$('#area_chosen').chosen("destroy").empty().chosen({width: "150px"});
@@ -22,7 +15,6 @@ $(function () {
         getSubDistrict('/components/get-district', $(this).val(), 'area', false);
     });
 
-});
 
 function getSubDistrict(url, id, sub, init=true) {
     var initHtml = "";

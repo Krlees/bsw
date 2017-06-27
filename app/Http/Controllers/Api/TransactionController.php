@@ -92,7 +92,6 @@ class TransactionController extends BaseController
         foreach ($result as $k => $v) {
             $label = DB::table('label')->find($v['label_id'], ['name']);
             $result[$k]['label_name'] = $label->name;
-            $result[$k]['city'] = $this->getByCity($v['city']);
 
             $avatars = DB::table('user')->find($v['user_id'], ['avatar']);
             $result[$k]['head_img'] = $avatars ? picture_url($avatars->avatar) : '';

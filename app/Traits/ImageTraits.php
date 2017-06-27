@@ -17,9 +17,14 @@ trait ImageTraits
 
         \Image::make(storage_path('uploads/' . $originName))->resize(320, 240)->save($savePath . '/' . $originName);
 
-        return 'Uploads/' . $path . '/' . date('Y-m-d') . '/' . $originName;
+        return '/Uploads/' . $path . '/' . date('Y-m-d') . '/' . $originName;
 //        return file_exists($savePath . '/' . $originName)
 //            ? 'Uploads/' . $path . '/' . date('Y-m-d') . '/' . $originName
 //            : '';
+    }
+
+    public function getOriginImg($originName)
+    {
+        return storage_path('uploads/' . $originName);
     }
 }

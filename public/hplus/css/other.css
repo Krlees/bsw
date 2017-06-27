@@ -16,3 +16,46 @@
 .hand {
     cursor: pointer;
 }
+
+#image-list {
+    float: left;
+    display: block;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#image-list li {
+    float: left;
+    display: block;
+    width: 80px;
+    height: 80px;
+    margin: 0;
+    padding: 0;
+    margin-right: 10px;
+    list-style: none;
+    cursor: pointer;
+}
+
+#image-list li.cover {
+    box-shadow: 0 0 5px #f60;
+}
+
+#image-list img {
+    width: 100%;
+    height: 100%;
+}
+
+#upload-image {
+    float: left;
+    display: block;
+    width: 80px;
+    height: 80px;
+    background-image: url(/img/addbtn.jpg);
+    background-size: cover;
+    cursor: pointer;
+}
+
+#image {
+    display: none;
+}
