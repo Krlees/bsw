@@ -236,7 +236,7 @@ class TransactionController extends BaseController
             return false;
         }
 
-        return $transaction->_checkUserPay($transId, $user_id);
+        return $transaction->checkUserPay($transId, $user_id);
 
     }
 
