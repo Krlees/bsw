@@ -247,8 +247,8 @@ class PublicController extends BaseController
                         $user['accid'] = $res['info']['accid'];
                     }
                 }
-                $user['accid'] = $user['id'];
-                $user['user_id'] = $user['id'];
+                $user['accid'] = (string)$user['id'];
+                $user['user_id'] = (string)$user['id'];
 
                 // 查询出token
                 $token = $userToken->getForUserId($user['id']);
@@ -281,8 +281,8 @@ class PublicController extends BaseController
             cache()->forever($token, $user);
         }
         $user->token = $token;
-        $user->accid = $user->id;
-        $user->user_id = $user->id;
+        $user->accid = (string)$user->id;
+        $user->user_id = (string)$user->id;
 
         $this->responseApi(0, '', $user);
 
