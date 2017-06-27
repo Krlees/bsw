@@ -201,6 +201,7 @@ class PublicController extends BaseController
                 } elseif (!cache()->has($token)) {
                     cache()->forever($token, $user);
                 }
+                $user['token'] = $token;
 
                 $this->responseApi(0, '', $user);
             }
