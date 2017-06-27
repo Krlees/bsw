@@ -210,7 +210,7 @@ class PublicController extends BaseController
     public function qqLogin(Request $request, Member $member, UserToken $userToken)
     {
         $param = $request->all();
-        if ($param['ret'] != 0) {
+        if (!array_get($param,'ret')) {
             $this->responseApi(80001, '数据有误');
         }
 
