@@ -37,6 +37,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::any('get-user-level', 'PublicController@getUserLevel'); // 用户等级
         Route::any('get-district/{id}', 'PublicController@getDistrict'); // 获取省市区
         Route::any('clear-cache', 'PublicController@clearCache'); // 清除缓存
+        Route::any('get-nav-user', 'PublicController@getNavUser'); // 清除缓存
     });
 
     // 信息接口

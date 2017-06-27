@@ -160,7 +160,7 @@ class PublicController extends BaseController
                 "province" => $param['province'],
                 "avatar" => $param['headimgurl'],
                 'created_at' => date('Y-m-d H:i:s'),
-                'address'=> $param['company_area'],
+                'address' => $param['company_area'],
                 'password' => '',
                 'register_type' => 'wx',
                 'username' => substr($param['unionid'], 0, 11)
@@ -489,10 +489,14 @@ district: "霞浦县",
     /**
      * 获取导航栏下的标签用户
      */
-    public function getNavUser(Request $request)
+    public function getNavUser(Request $request, Member $member)
     {
-        $labelName = $request->input('label_name');
+        $labelName = $request->input('label_name') or $this->responseApi(1004);
+        $pages = $this->pageInit();
 
+        $result = \DB::table($member->getTable())->where('status', 1)->where('desc', 'like', '%' . $labelName . '%')->offset($pages['page']*$pages['limit'])->limit($pages['limit'])->get(['id','username','nickname','desc','avatar','city']);
+
+        $this->responseApi(0, '', $result);
     }
 
 
