@@ -209,27 +209,34 @@ class PublicController extends BaseController
      */
     public function qqLogin(Request $request, Member $member, UserToken $userToken)
     {
+
         $param = $request->all();
-        if (!array_get($param,'ret')) {
+        if (!isset($param['ret'])) {
             $this->responseApi(80001, '数据有误');
         }
 
-
         if (!$member->checkOpenID($param['openid'])) {
+
             $data = [
                 'avatar' => $param['figureurl_qq_2'],
                 'sex' => $param['gender'],
                 'nickname' => $param['nickname'],
                 'province' => $param['province'],
                 'city' => $param['city'],
+                'address' => $param['company_area'],
                 'username' => 'qq' . substr($param['openid'], 0, 9),
                 'openid' => $param['openid'],
                 'password' => '',
                 'register_type' => 'qq',
-                'lng' => $param['lng'],
-                'lat' => $param['lat'],
                 'created_at' => date('Y-m-d H:i:s')
             ];
+
+            $location = $this->address_get_point($param['company_area']);
+            $location = json_decode($location);
+            if ($location->info == 'OK' && $location->geocodes) {
+                list($data['lng'], $data['lat']) = explode(",", $location->geocodes[0]->location);
+            }
+            $this->responseApi(0,'',$data);
 
             $id = $member->create($data);
             if ($id) {
@@ -265,9 +272,21 @@ class PublicController extends BaseController
 
         }
 
-        $user = $member->getForOpenID($param['opend']);
-        $userToken->getForUserId($user->id);
+        $user = $member->getForOpenID($param['openid']);
+        $token = $userToken->getForUserId($user->id);
+        if (!$token) {
+            // 生成token
+            $token = create_token($user->id, uniqid());
+            $userToken->create($user->id, $token);
+
+            cache()->forever($token, $user);
+        } elseif (!cache()->has($token)) {
+            cache()->forever($token, $user);
+        }
+        $user->token = $token;
+
         $this->responseApi(0, '', $user);
+
 
     }
 

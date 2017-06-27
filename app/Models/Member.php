@@ -148,7 +148,7 @@ class Member extends Model
 
     public function getForOpenID($openid)
     {
-        $result = DB::table($this->table)->where('openid', $openid)->get();
+        $result = DB::table($this->table)->where('openid', $openid)->first();
 
         return $result;
     }
