@@ -248,6 +248,7 @@ class PublicController extends BaseController
                     }
                 }
                 $user['accid'] = $user['id'];
+                $user['user_id'] = $user['id'];
 
                 // 查询出token
                 $token = $userToken->getForUserId($user['id']);
@@ -281,6 +282,7 @@ class PublicController extends BaseController
         }
         $user->token = $token;
         $user->accid = $user->id;
+        $user->user_id = $user->id;
 
         $this->responseApi(0, '', $user);
 
