@@ -51,6 +51,8 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('get-job-resume/{id}', 'TransactionController@getJobResume'); //获取求职信息的简历库
         Route::get('collect/{id}', 'TransactionController@collect'); // 收藏
         Route::get('get-city', 'TransactionController@getCitys'); // 获取城市
+        Route::any('post-click', 'TransactionController@postClick'); // 获取城市
+        Route::any('post-follow', 'TransactionController@postFollow'); // 获取城市
     });
 
     // 产品

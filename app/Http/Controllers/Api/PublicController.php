@@ -494,7 +494,7 @@ district: "霞浦县",
         $labelName = $request->input('label_name') or $this->responseApi(1004);
         $pages = $this->pageInit();
 
-        $result = \DB::table($member->getTable())->where('status', 1)->where('desc', 'like', '%' . $labelName . '%')->offset($pages['page']*$pages['limit'])->limit($pages['limit'])->get(['id','username','nickname','desc','avatar','city']);
+        $result = \DB::table($member->getTable())->where('status', 1)->where('mark', 'like', '%' . $labelName . '%')->offset($pages['page']*$pages['limit'])->limit($pages['limit'])->get(['id','username','nickname','desc','avatar','city','mark']);
 
         $this->responseApi(0, '', $result);
     }

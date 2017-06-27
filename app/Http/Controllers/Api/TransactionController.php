@@ -219,6 +219,34 @@ class TransactionController extends BaseController
         return $arr;
     }
 
+    public function postFollow(Request $request, Transaction $transaction)
+    {
+        $id = $request->input('id') or $this->responseApi(1004);
+        if (empty($this->user_ses))
+            $this->responseApi(80001, '用户未登录');
+
+        $count = DB::table('transaction_follow')->where('transaction_id',$id)->where('user_id',$this->user_ses->id)->count();
+        if($count){
+            $result = DB::table('transaction_follow')->where(['transaction_id' => $id, 'user_id' => $this->user_ses->id])->delete();
+        }
+        else {
+            $result = DB::table('transaction_follow')->insert(['transaction_id' => $id, 'user_id' => $this->user_ses->id, 'created_at' => time()]);
+        }
+
+        $result ? $this->responseApi(0) : $this->responseApi(9000);
+    }
+
+    public function postClick(Request $request, Transaction $transaction)
+    {
+        $id = $request->input('id') or $this->responseApi(1004);
+        if (empty($this->user_ses))
+            $this->responseApi(80001, '用户未登录');
+
+
+        $result = DB::table($transaction->transactionClickRecordTb())->insert(['transaction_id'=>$id,'user_id'=>$this->user_ses->id,'created_at'=>time()]);
+        $result ? $this->responseApi(0) : $this->responseApi(9000);
+    }
+
     private function _helpJobList()
     {
 //        $result[$k]['dueTime'] = $lockTime; //剩余时间
