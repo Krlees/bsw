@@ -156,8 +156,8 @@ class PublicController extends BaseController
                 'sex' => $param['sex'] == '1' ? '男' : '女',
                 'openid' => $param['unionid'],
                 'nickname' => $param['nickname'],
-                "city" => $param['Wuhan'],
-                "province" => $param['Hubei'],
+                "city" => $param['city'],
+                "province" => $param['province'],
                 "avatar" => $param['headimgurl'],
                 'created_at' => date('Y-m-d H:i:s'),
                 'address'=> $param['company_area'],
@@ -173,6 +173,7 @@ class PublicController extends BaseController
             }
 
             $id = $member->create($data);
+
             if ($id) {
                 $user = $member->get($id);
 
@@ -204,7 +205,7 @@ class PublicController extends BaseController
                 $this->responseApi(0, '', $user);
             }
 
-            $this->responseApi(80001, 'qq注册失败');
+            $this->responseApi(80001, '微信注册失败');
 
         }
 

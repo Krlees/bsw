@@ -58,15 +58,13 @@ class CaseController extends BaseController
             $this->createField('text', '成本下降', 'data[chengben]');
             $this->createField('text', '销量提升', 'data[sales]');
             $this->createField('text', '排序', 'data[sort]');
-            $this->createField('image', 'logo', 'data[logo]');
-            $this->createField('image', '内容图片', 'data[cphoto]');
             $this->createField('textarea', '推广需求', 'data[demand]');
             $this->createField('textarea', '执行方案', 'data[plan]');
             $this->createField('textarea', '运营指导', 'data[guidance]');
             $this->createField('textarea', '客户资料', 'data[information]');
 
             $reponse = $this->responseForm('添加管理员', $this->formField);
-            return view('admin/admin/add', compact('reponse'));
+            return view('admin/case/add', compact('reponse'));
         }
     }
 
@@ -88,15 +86,13 @@ class CaseController extends BaseController
             $this->createField('text', '成本下降', 'data[chengben]');
             $this->createField('text', '销量提升', 'data[sales]');
             $this->createField('text', '排序', 'data[sort]');
-            $this->createField('image', 'logo', 'data[logo]');
-            $this->createField('image', '内容图片', 'data[cphoto]');
             $this->createField('textarea', '推广需求', 'data[demand]');
             $this->createField('textarea', '执行方案', 'data[plan]');
             $this->createField('textarea', '运营指导', 'data[guidance]');
             $this->createField('textarea', '客户资料', 'data[information]');
 
             $reponse = $this->responseForm('添加管理员', $this->formField);
-            return view('admin/admin/add', compact('reponse'));
+            return view('admin/case/add', compact('reponse'));
         }
     }
 

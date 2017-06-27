@@ -45,9 +45,9 @@
                         <div class="control-group">
                             <label class="col-sm-2 control-label">头像</label>
                             <div class="col-sm-10">
-                                <ul id="image-list"></ul>
-                                <div id="upload-image"></div>
-                                <input id="image" type="file" accept="image/*">
+                                <ul class="image-list" id="image-list"></ul>
+                                <div class="upload-image" id="upload-image"></div>
+                                <input class="image" id="image" type="file" accept="image/*">
                                 <div class="clearfix"></div>
                                 <p class="help-block">单击图片可指定封面图片，双击图片可删除，最多可上传1张图片</p>
                             </div>

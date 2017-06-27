@@ -52,14 +52,16 @@ class Member extends Model
     }
 
     /**
-     * 手机创建用户
+     * 创建用户
      */
     public function create($data)
     {
         if (!array_has($data, 'nickname')) {
             $data['nickname'] = $data['username'];
         }
-        $data['tel'] = $data['username'];
+        $data['tel'] = "";
+        if(!array_has($data, 'tel'))
+            $data['tel'] = $data['username'];
 
         try {
             $id = DB::table($this->table)->insertGetId($data);
@@ -68,7 +70,6 @@ class Member extends Model
                     'user_id' => $id,
                     'pwd' => '',
                     'money' => 0,
-                    'cashout' => 0
                 ]);
                 return $id;
             }
