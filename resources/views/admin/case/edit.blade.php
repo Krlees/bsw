@@ -15,7 +15,7 @@
             <div class="col-sm-12">
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h5>添加案例</h5>
+                        <h5>编辑案例</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -31,7 +31,9 @@
                         <div class="control-group">
                             <label class="col-sm-2 control-label">头像</label>
                             <div class="col-sm-10">
-                                <ul class="image-list" id="image-list"></ul>
+                                <ul class="image-list" id="image-list">
+                                    <li><img src="{{$info->logo}}" alt=""></li>
+                                </ul>
                                 <div class="upload-image" id="upload-image"></div>
                                 <input class="image" id="image" type="file" accept="image/*">
                                 <div class="clearfix"></div>
@@ -41,7 +43,9 @@
                         <div class="control-group">
                             <label class="col-sm-2 control-label">内容图片</label>
                             <div class="col-sm-10">
-                                <ul class="image-list" id="image-list2"></ul>
+                                <ul class="image-list" id="image-list2">
+                                    <li><img src="{{$info->cphoto}}" alt=""></li>
+                                </ul>
                                 <div class="upload-image" id="upload-image2"></div>
                                 <input class="image" id="image2" type="file" accept="image/*">
                                 <div class="clearfix"></div>
