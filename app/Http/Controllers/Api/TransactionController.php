@@ -280,7 +280,7 @@ class TransactionController extends BaseController
             }
 
             // 超过72小时，归为0
-            $lockTime = time() - strtotime($v['created_at']); //剩余时间
+            $lockTime = time() - $v['created_at']; //剩余时间
             if ($lockTime > 72 * 60 * 60) {
                 $lockTime = 0;
             }
@@ -342,7 +342,7 @@ class TransactionController extends BaseController
             }
 
             // 超过72小时，归为0
-            $lockTime = time() - strtotime($v['created_at']); //剩余时间
+            $lockTime = time() - $v['created_at']; //剩余时间
             if ($lockTime > 72 * 60 * 60) {
                 $lockTime = 0;
             }
