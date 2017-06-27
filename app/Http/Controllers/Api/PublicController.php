@@ -236,7 +236,6 @@ class PublicController extends BaseController
             if ($location->info == 'OK' && $location->geocodes) {
                 list($data['lng'], $data['lat']) = explode(",", $location->geocodes[0]->location);
             }
-            $this->responseApi(0,'',$data);
 
             $id = $member->create($data);
             if ($id) {
