@@ -163,6 +163,7 @@ class PayController extends BaseController
         if (!$id)
             $this->responseApi(80001, '订单创建失败');
 
+        $time = time();
         $attributes = [
             'trade_type' => 'APP', // JSAPI，NATIVE，APP...
             'body' => $proInfo->name,
@@ -171,6 +172,7 @@ class PayController extends BaseController
             'total_fee' => ceil($data['price'] * 100), // 单位：分
             'notify_url' => url('Api/callback/wx-notify'), // 支付结果通知网址，如果不设置则会使用配置里的默认地址
             'openid' => '', // trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识，
+            'timestamp' => $time
             // ...
         ];
 
@@ -182,7 +184,7 @@ class PayController extends BaseController
         if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
 //            $prepayId = $result->prepay_id;
             $result->partner_id = $result->mch_id;
-            $result->timestamp = time();
+            $result->timestamp = $time;
             $this->responseApi(0, '', $result);
         }
 
