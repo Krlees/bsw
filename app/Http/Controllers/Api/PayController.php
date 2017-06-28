@@ -117,10 +117,10 @@ class PayController extends BaseController
 
         // 创建支付单。
         $alipay = app('alipay.mobile');
-        $alipay->setOutTradeNo('order_id');
-        $alipay->setTotalFee('order_price');
-        $alipay->setSubject('goods_name');
-        $alipay->setBody('goods_description');
+        $alipay->setOutTradeNo($data['order_sn']);
+        $alipay->setTotalFee($data['price']);
+        $alipay->setSubject($proInfo->title);
+        $alipay->setBody($proInfo->desc);
 
         // 返回签名后的支付参数给支付宝移动端的SDK。
         $result = $alipay->getPayPara();
