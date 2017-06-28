@@ -132,7 +132,6 @@ class PayController extends BaseController
         elseif (!isset($data['order_sn']))
             $this->responseApi(1004);
 
-        return $this->user_ses;exit;
 
         $proInfo = $product->get($data['product_id']);
         if (empty($proInfo))
@@ -140,7 +139,7 @@ class PayController extends BaseController
 
         $data['price'] = $proInfo->price;
         $data['created_at'] = date('Y-m-d H:i:s');
-        $data['user_id'] = $this->user_ses->id;
+        $data['user_id'] = isset($this->user_ses) ? $this->user_ses->id : 0;
         unset($data['token']);
         $id = $order->create($data);
         if (!$id)
