@@ -225,11 +225,10 @@ class TransactionController extends BaseController
         if (empty($this->user_ses))
             $this->responseApi(80001, '用户未登录');
 
-        $count = DB::table('transaction_follow')->where('transaction_id',$id)->where('user_id',$this->user_ses->id)->count();
-        if($count){
+        $count = DB::table('transaction_follow')->where('transaction_id', $id)->where('user_id', $this->user_ses->id)->count();
+        if ($count) {
             $result = DB::table('transaction_follow')->where(['transaction_id' => $id, 'user_id' => $this->user_ses->id])->delete();
-        }
-        else {
+        } else {
             $result = DB::table('transaction_follow')->insert(['transaction_id' => $id, 'user_id' => $this->user_ses->id, 'created_at' => time()]);
         }
 
@@ -243,7 +242,7 @@ class TransactionController extends BaseController
             $this->responseApi(80001, '用户未登录');
 
 
-        $result = DB::table($transaction->transactionClickRecordTb())->insert(['transaction_id'=>$id,'user_id'=>$this->user_ses->id,'created_at'=>time()]);
+        $result = DB::table($transaction->transactionClickRecordTb())->insert(['transaction_id' => $id, 'user_id' => $this->user_ses->id, 'created_at' => time()]);
         $result ? $this->responseApi(0) : $this->responseApi(9000);
     }
 
@@ -308,10 +307,11 @@ class TransactionController extends BaseController
             }
 
             // 超过72小时，归为0
-            $lockTime = $lockTime = time() + 3600 * 2 - $v['created_at']; //剩余时间
-            if ($lockTime > 72 * 60 * 60) {
+            $lockTime = $lockTime = time() + 3600 * 72 - $v['created_at']; //剩余时间
+            if ($lockTime > 0) {
                 $lockTime = 0;
             }
+
 
             // 4. 判断是否需要正常购买，【VIP】有效
             if ($v['is_normal_pay']) {
@@ -370,8 +370,8 @@ class TransactionController extends BaseController
             }
 
             // 超过72小时，归为0
-            $lockTime = time() + 3600 * 2 - $v['created_at']; //剩余时间
-            if ($lockTime > 72 * 60 * 60) {
+            $lockTime = time() + 3600 * 72 - $v['created_at']; //剩余时间
+            if ($lockTime > 0) {
                 $lockTime = 0;
             }
 
