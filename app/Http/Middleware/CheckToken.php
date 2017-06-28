@@ -44,7 +44,7 @@ class CheckToken
         }
 
         // 查询用户基本信息
-        $userData = \DB::table('user')->where('id', $userToken->user_id)->where('is_del', 0)->count();
+        $userData = \DB::table('user')->where('id', $userToken->user_id)->where('is_del', 0)->find();
         if (!$userData) {
             return false;
         }
