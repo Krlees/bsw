@@ -22,7 +22,7 @@ class CheckToken
     {
         $token = $request->input('token');
         if (!$this->checkToken($token)) {
-            return response()->json(['code'=>1000,'msg'=>'Token不正确']);
+            return false;
         }
 
         return $next($request);
