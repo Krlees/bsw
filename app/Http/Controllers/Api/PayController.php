@@ -17,12 +17,12 @@ class PayController extends BaseController
 {
     public function __construct(Request $request)
     {
+
         $this->middleware('api.token') or $this->responseApi(1000);
         parent::__construct();
         if(empty($this->user_ses))
             $this->responseApi(1000);
 
-        return $this->user_ses;
     }
 
     /**
