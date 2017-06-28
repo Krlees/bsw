@@ -20,6 +20,7 @@ class CheckToken
      */
     public function handle($request, Closure $next)
     {
+        dd(1);
         $token = $request->input('token');
         if (!$this->checkToken($token)) {
             return false;
@@ -34,8 +35,8 @@ class CheckToken
             return false;
 
         // 查询缓存中有没有存储token
-        if (cache()->has($token)) {
-            return true;
+        if (!cache()->has($token)) {
+            return false;
         }
 
         $userToken = \DB::table('user_token')->where('token', $token)->first();
