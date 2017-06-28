@@ -131,7 +131,7 @@ class UserController extends BaseController
     {
         $registration_id = $request->input('RegistrationID') or $this->responseApi(1004);
 
-        $this->user_ses = \GuzzleHttp\json_encode($this->user_ses);
+        $this->user_ses = (object)$this->user_ses;
         // 判断网易云通讯token
         $res = $this->getNetToken($this->user_ses->id, $this->user_ses->nickname, picture_url($this->user_ses->avatar));
         if ($res) {
