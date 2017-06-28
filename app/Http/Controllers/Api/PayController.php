@@ -132,7 +132,7 @@ class PayController extends BaseController
         elseif (!isset($data['order_sn']))
             $this->responseApi(1004);
 
-        dd(1);
+        return $this->user_ses;exit;
 
         $proInfo = $product->get($data['product_id']);
         if (empty($proInfo))
