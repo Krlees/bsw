@@ -18,7 +18,7 @@ class UserController extends BaseController
         $this->middleware('api.token') or $this->responseApi(1000);
         parent::__construct();
         if (empty($this->user_ses)) {
-            $this->responseApi(80001, "用户未登录");
+            $this->responseApi(1000)
         }
     }
 
@@ -131,18 +131,15 @@ class UserController extends BaseController
     {
         $registration_id = $request->input('RegistrationID') or $this->responseApi(1004);
 
-        $this->user_ses->netease_token = "";
-        $this->user_ses->accid = 1;
-
         // 判断网易云通讯token
-        if (!$this->user_ses->netease_token) {
-            $res = $this->getNetToken($this->user_ses->id, $this->user_ses->nickname, picture_url($this->user_ses->avatar));
-            if ($res) {
-                $member->updateData($this->user_ses->id, ['netease_token' => $res['info']['token']]);
-                $this->user_ses->netease_token = $res['info']['token'];
-                $this->user_ses->accid = $res['info']['accid'];
-                cache()->forever($request->input('token'), $this->user_ses);
-            }
+        $this->user_ses->netease_token = "";
+        $this->user_ses->accid = 0;
+        $res = $this->getNetToken($this->user_ses->id, $this->user_ses->nickname, picture_url($this->user_ses->avatar));
+        if ($res) {
+            $member->updateData($this->user_ses->id, ['netease_token' => $res['info']['token']]);
+            $this->user_ses->netease_token = $res['info']['token'];
+            $this->user_ses->accid = $res['info']['accid'];
+            cache()->forever($request->input('token'), $this->user_ses);
         }
 
         $result = $member->updateData($this->user_ses->id, compact('registration_id'));
