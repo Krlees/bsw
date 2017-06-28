@@ -308,7 +308,7 @@ class TransactionController extends BaseController
 
             // 超过72小时，归为0
             $lockTime = $lockTime = time() + 3600 * 72 - $v['created_at']; //剩余时间
-            if ($lockTime > 0) {
+            if ($lockTime <= 0) {
                 $lockTime = 0;
             }
 
@@ -371,9 +371,10 @@ class TransactionController extends BaseController
 
             // 超过72小时，归为0
             $lockTime = time() + 3600 * 72 - $v['created_at']; //剩余时间
-            if ($lockTime > 0) {
+            if ($lockTime <= 0) {
                 $lockTime = 0;
             }
+
 
             // 3. 判断是否需要正常购买，【VIP】有效
             if ($v['is_normal_pay']) {
