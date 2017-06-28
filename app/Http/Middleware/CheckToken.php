@@ -52,7 +52,7 @@ class CheckToken
         $userData = obj2arr($userData);
         unset($userToken->password);
 
-        Cache::forever($token,$userData);
+        cache()->forever($token,$userData);
 
         return true;
 
