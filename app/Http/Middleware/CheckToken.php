@@ -39,12 +39,12 @@ class CheckToken
         }
 
         $userToken = \DB::table('user_token')->where('token', $token)->first();
-        if (empty($userToken)) {
+        if (!$userToken) {
             return false;
         }
 
         // 查询用户基本信息
-        $userData = \DB::table('user')->where('id', $userToken->user_id)->where('is_del', 0)->find();
+        $userData = \DB::table('user')->where('id', $userToken->user_id)->where('is_del', 0)->first();
         if (!$userData) {
             return false;
         }
