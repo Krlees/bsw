@@ -132,6 +132,8 @@ class PayController extends BaseController
         elseif (!isset($data['order_sn']))
             $this->responseApi(1004);
 
+        dd(1);
+
         $proInfo = $product->get($data['product_id']);
         if (empty($proInfo))
             $this->responseApi(80001, '产品不存在');
