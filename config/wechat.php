@@ -21,6 +21,10 @@ return [
     'token'   => env('WECHAT_TOKEN', 'krlee'),          // Token
     'aes_key' => env('WECHAT_AES_KEY', ''),                    // EncodingAESKey
 
+    // app下的配置
+    'app_app_id' => 'wx06a9ceef6a0738d2',
+    'app_merchant_id' => '1310729701',
+
     /**
      * 开放平台第三方平台配置信息
      */
@@ -75,7 +79,7 @@ return [
      *
      * 当 enable_mock 为 true 则会启用模拟微信授权，用于开发时使用，开发完成请删除或者改为 false 即可
      */
-     'enable_mock' => env('WECHAT_ENABLE_MOCK', true),
+     'enable_mock' => env('WECHAT_ENABLE_MOCK', false),
      'mock_user' => [
          "openid" =>"odh7zsgI75iT8FRh0fGlSojc9PWM",
          // 以下字段为 scope 为 snsapi_userinfo 时需要

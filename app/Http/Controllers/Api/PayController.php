@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\UserWallet;
 use Illuminate\Http\Request;
 use DB;
+use EasyWeChat\Foundation\Application;
+use EasyWeChat\Payment\Order as wxOrder;
+use wechat;
+
 
 class PayController extends BaseController
 {
@@ -22,7 +27,7 @@ class PayController extends BaseController
      * @param Order $order
      * @param UserWallet $userWallet
      */
-    public function wallet(Request $request, UserWallet $userWallet)
+    public function wallet(Request $request, UserWallet $userWallet, Order $order)
     {
         $order_id = $request->input('order_id') or $this->responseApi(1004);
         $orderData = $this->getOrderData($order_id);
@@ -115,8 +120,49 @@ class PayController extends BaseController
 
     }
 
-    public function wxpayApp(Request $request, Order $order)
+    public function wxpayApp(Request $request, Order $order, Product $product)
     {
+        $data = $request->all();
+        if (!isset($data['product_id']))
+            $this->responseApi(1004);
+        elseif (!isset($data['order_sn']))
+            $this->responseApi(1004);
+
+        $proInfo = $product->get($data['product_id']);
+        if (empty($proInfo))
+            $this->responseApi(80001, '产品不存在');
+
+        $data['price'] = $proInfo->price;
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['user_id'] = $this->user_ses->id;
+        unset($data['token']);
+        $id = $order->create($data);
+        if (!$id)
+            $this->responseApi(80001, '订单创建失败');
+
+        $attributes = [
+            'trade_type' => 'APP', // JSAPI，NATIVE，APP...
+            'body' => $proInfo->name,
+            'detail' => $proInfo->desc,
+            'out_trade_no' => $data['order_sn'],
+            'total_fee' => ceil($data['price'] * 100), // 单位：分
+            'notify_url' => url('Api/callback/wx-notify'), // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+            'openid' => '', // trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识，
+            // ...
+        ];
+
+        config(['wechat.app_id' => 'wx06a9ceef6a0738d2', 'wechat.payment.merchant_id' => '1310729701']);
+        $app = new Application(config('wechat'));
+        $order = new wxOrder($attributes);
+
+        $result = $app->payment->prepare($order);
+        if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
+//            $prepayId = $result->prepay_id;
+            $this->responseApi(0, '', $result);
+        }
+
+        $this->responseApi(80001, '支付失败', $result);
+
 
     }
 

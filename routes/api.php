@@ -101,6 +101,7 @@ Route::group(['namespace' => 'Api'], function () {
 
     Route::group(['prefix' => 'pay'], function () {
         Route::any('wallet', 'PayController@wallet');
+        Route::any('wxpay-app', 'PayController@wxpayApp');
     });
 
     // 红包

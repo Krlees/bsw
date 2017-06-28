@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Log;
+use EasyWeChat\Foundation\Application;
+
+
 class CallbackController extends BaseController
 {
     public function __construct()
@@ -97,5 +100,17 @@ class CallbackController extends BaseController
         }
 
         return 'success';
+    }
+
+    public function wxNotify()
+    {
+        $app = new Application(config('wechat'));
+        $response = $app->payment->handleNotify(function($notify, $successful){
+            if ($successful) {
+                $order_arr=json_decode($notify,true);
+                $order_guid=$order_arr['out_trade_no'];//订单号
+                //回调成功的逻辑
+            }
+        });
     }
 }
