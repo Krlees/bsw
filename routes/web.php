@@ -25,7 +25,7 @@ Route::group(['prefix' => 'components'], function () {
     Route::any('uploads', 'ComponentsController@upload');
 });
 
-Route::group(['prefix' => 'backup', 'namespace' => 'Admin'], function () {
+Route::group(['prefix' => 'backup', 'namespace' => 'admin'], function () {
     Route::any('product', 'BackupController@product');
     Route::any('user', 'BackupController@user');
     Route::any('comment', 'BackupController@comment');
@@ -34,7 +34,7 @@ Route::group(['prefix' => 'backup', 'namespace' => 'Admin'], function () {
 });
 
 // 后台路由
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'auth.admin']], function () {
+Route::group(['namespace' => 'admin', 'prefix' => 'admin', 'middleware' => ['auth', 'auth.admin']], function () {
 
 
     Route::get('index', 'IndexController@index');
@@ -115,10 +115,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     });
 
     Route::group(['prefix' => 'transaction'], function () {
-        Route::any('index/{channel_id}', 'Transaction@index');
-        Route::any('add', 'Transaction@add');
-        Route::any('edit/{id}', 'Transaction@edit');
-        Route::any('del', 'Transaction@del');
+        Route::any('index/{channel_id}', 'TransactionController@index');
+        Route::any('add', 'TransactionController@add');
+        Route::any('edit/{id}', 'TransactionController@edit');
+        Route::any('del', 'TransactionController@del');
     });
 
     // 订单

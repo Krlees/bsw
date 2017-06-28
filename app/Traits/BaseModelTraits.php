@@ -21,6 +21,10 @@ trait BaseModelTraits
         $sort = array_get($param, 'sort') ?: $this->getKeyName();
         $order = array_get($param, 'order', 'desc');
         $rows = DB::table($tableName)->where($where)->orderBy($sort, $order)->offset(array_get($param, 'offset', 0))->limit(array_get($param, 'limit', 10))->get($fields);
+        foreach ($rows as $v) {
+            $v->click = DB::table('transaction_click_record')->where('user_id', $v->user_id)->where('transaction_id', $v->id)->count();
+        }
+
         $rows = obj2arr($rows);
         $total = DB::table($tableName)->where($where)->count();
 

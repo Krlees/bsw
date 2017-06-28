@@ -38,7 +38,7 @@ class CaseController extends BaseController
                 'autoSearch' => true
             ]);
 
-            return view('admin/case/index', compact('reponse'));
+            return view('admin/Case/index', compact('reponse'));
         }
 
     }
@@ -69,7 +69,7 @@ class CaseController extends BaseController
             $this->createField('textarea', '客户资料', 'data[information]');
 
             $reponse = $this->responseForm('添加管理员', $this->formField);
-            return view('admin/case/add', compact('reponse'));
+            return view('admin/Case/add', compact('reponse'));
         }
     }
 
@@ -106,7 +106,7 @@ class CaseController extends BaseController
             $this->createField('textarea', '客户资料', 'data[information]', $info->information);
 
             $reponse = $this->responseForm('添加管理员', $this->formField);
-            return view('admin/case/edit', compact('reponse', 'info'));
+            return view('admin/Case/edit', compact('reponse', 'info'));
         }
 
     }

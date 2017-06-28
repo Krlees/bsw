@@ -34,7 +34,7 @@ class AdminController extends BaseController
                 'autoSearch' => true
             ]);
 
-            return view('admin/admin/index', compact('reponse'));
+            return view('admin/Admin/index', compact('reponse'));
         }
 
         return view('admin/index', compact('menus'));
@@ -55,7 +55,7 @@ class AdminController extends BaseController
             $this->createField('text', '登录密码', 'data[password]', '', ['dataType' => 's1-30']);
 
             $reponse = $this->responseForm('添加管理员', $this->formField);
-            return view('admin/admin/add', compact('reponse'));
+            return view('admin/Admin/add', compact('reponse'));
         }
     }
 

@@ -28,26 +28,28 @@ class TransactionController extends BaseController
             $where[] = ['channel_id', '=', $channel_id];
 
             // 过滤参数
-            dd($this->transaction->getTable());
             $param = $this->cleanAjaxPageParam();
             $result = $this->transaction->ajaxData($this->transaction->getTable(), $param, $where, 'title');
+            foreach ($result['rows'] as &$v) {
+                $v['created_at'] = date('Y-m-d H:i:s', $v['created_at']);
+            }
 
             return $this->responseAjaxTable($result['total'], $result['rows']);
 
         } else {
-            $reponse = $this->responseTable(url('admin/case/index'), [
-                'addUrl' => url('admin/case/add'),
-                'editUrl' => url('admin/case/edit'),
-                'removeUrl' => url('admin/case/del'),
+            $reponse = $this->responseTable(url('admin/transaction/index/' . $channel_id), [
+                'addUrl' => null,
+                'editUrl' => url('admin/transaction/edit'),
+                'removeUrl' => url('admin/transaction/del'),
                 'autoSearch' => true
             ]);
 
-            return view('admin/case/index', compact('reponse'));
+            return view('admin/Transaction/index', compact('reponse'));
         }
 
     }
 
-    public function add(Request $request)
+    public function add($userId, Request $request)
     {
         if ($request->ajax()) {
             $data = $request->input('data');
@@ -63,18 +65,18 @@ class TransactionController extends BaseController
 
             $this->createField('select', '频道', 'data[cate_id]', $this->cleanSelect(obj2arr($cates)));
             $this->createField('text', '标题', 'data[title]', '', ['dataType' => 's1-64']);
+            $this->createField('text', '电话', 'data[tel]', '', ['dataType' => 's1-64']);
             $this->createField('text', '描述', 'data[description]', '', ['dataType' => 's1-200']);
-            $this->createField('text', '引入流量', 'data[yingliu]');
-            $this->createField('text', '成本下降', 'data[chengben]');
-            $this->createField('text', '销量提升', 'data[sales]');
-            $this->createField('text', '排序', 'data[sort]');
-            $this->createField('textarea', '推广需求', 'data[demand]');
-            $this->createField('textarea', '执行方案', 'data[plan]');
-            $this->createField('textarea', '运营指导', 'data[guidance]');
-            $this->createField('textarea', '客户资料', 'data[information]');
+            $this->createField('text', '频道类型', 'data[yingliu]');
+            $this->createField('text', '职位', 'data[chengben]');
+            $this->createField('text', '状态', 'data[sort]');
+            $this->createField('textarea', '天数', 'data[demand]');
+            $this->createField('textarea', '额外参数1', 'data[plan]');
+            $this->createField('textarea', '额外参数2', 'data[guidance]');
+            $this->createField('textarea', '标签', 'data[information]');
 
-            $reponse = $this->responseForm('添加管理员', $this->formField);
-            return view('admin/case/add', compact('reponse'));
+            $reponse = $this->responseForm('添加信息', $this->formField);
+            return view('admin/transaction/add/' . $userId, compact('reponse'));
         }
     }
 
