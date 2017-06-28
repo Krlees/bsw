@@ -94,10 +94,26 @@ class PayController extends BaseController
         return redirect()->to($alipay->getPayLink());
     }
 
-    public function alipayWap(Request $request)
+    public function alipayWap(Request $request, Order $order, Product $product)
     {
-        $order_id = 2;
-        $orderData = $this->getOrderData($order_id);
+        $data = $request->all();
+        if (!isset($data['product_id']))
+            $this->responseApi(1004);
+        elseif (!isset($data['order_sn']))
+            $this->responseApi(1004);
+
+
+        $proInfo = $product->get($data['product_id']);
+        if (empty($proInfo))
+            $this->responseApi(80001, '产品不存在');
+
+        $data['price'] = $proInfo->price;
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['user_id'] = 1;
+        unset($data['token']);
+        $id = $order->create($data);
+        if (!$id)
+            $this->responseApi(80001, '订单创建失败');
 
         // 创建支付单。
         $alipay = app('alipay.mobile');
