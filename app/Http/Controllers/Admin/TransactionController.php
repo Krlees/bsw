@@ -21,13 +21,16 @@ class TransactionController extends BaseController
         $this->transaction = $transaction;
     }
 
-    public function index(Request $request)
+    public function index($channel_id, Request $request)
     {
         if ($request->ajax()) {
 
+            $where[] = ['channel_id', '=', $channel_id];
+
             // 过滤参数
+            dd($this->transaction->getTable());
             $param = $this->cleanAjaxPageParam();
-            $result = $this->transaction->ajaxData($this->transaction->getTable(), $param, false, 'title');
+            $result = $this->transaction->ajaxData($this->transaction->getTable(), $param, $where, 'title');
 
             return $this->responseAjaxTable($result['total'], $result['rows']);
 
@@ -81,10 +84,10 @@ class TransactionController extends BaseController
             $data = $request->input('data');
             $logo = $request->input(['imgs']);
             $cphoto = $request->input(['imgs2']);
-            if($logo){
+            if ($logo) {
                 $data['logo'] = $this->thumbImg($logo[0], 'Head');
             }
-            if($cphoto) {
+            if ($cphoto) {
                 $data['cphoto'] = $this->thumbImg($cphoto[0], 'Head');
             }
 

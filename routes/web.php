@@ -112,7 +112,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('category-add', 'ProductController@categoryAdd');
         Route::any('category-edit/{id}', 'ProductController@categoryEdit');
         Route::any('category-del', 'ProductController@categoryDel');
+    });
 
+    Route::group(['prefix' => 'transaction'], function () {
+        Route::any('index/{channel_id}', 'Transaction@index');
+        Route::any('add', 'Transaction@add');
+        Route::any('edit/{id}', 'Transaction@edit');
+        Route::any('del', 'Transaction@del');
     });
 
     // 订单

@@ -9,6 +9,7 @@
 namespace App\Models;
 
 
+use App\Traits\BaseModelTraits;
 use App\Traits\DistrictTraits;
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -16,6 +17,7 @@ use DB;
 class Transaction extends Model
 {
     use DistrictTraits;
+    use BaseModelTraits;
 
     /**
      * 与模型关联的数据表
