@@ -20,7 +20,7 @@ class PayController extends BaseController
 
         $this->middleware('api.token') or $this->responseApi(1000);
         parent::__construct();
-        if(empty($this->user_ses))
+        if (empty($this->user_ses))
             $this->responseApi(1000);
 
 
@@ -107,7 +107,8 @@ class PayController extends BaseController
         $alipay->setBody('goods_description');
 
         // 返回签名后的支付参数给支付宝移动端的SDK。
-        return $alipay->getPayPara();
+        $result = $alipay->getPayPara();
+        $this->responseApi(0, '', $result);
     }
 
     public function alipayApp(Request $request, Order $order)
