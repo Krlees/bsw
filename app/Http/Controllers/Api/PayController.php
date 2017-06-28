@@ -139,7 +139,7 @@ class PayController extends BaseController
 
         $data['price'] = $proInfo->price;
         $data['created_at'] = date('Y-m-d H:i:s');
-        $data['user_id'] = isset($this->user_ses) ? $this->user_ses->id : 0;
+        $data['user_id'] = 1;
         unset($data['token']);
         $id = $order->create($data);
         if (!$id)
