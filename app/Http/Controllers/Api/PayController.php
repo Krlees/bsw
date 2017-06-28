@@ -21,6 +21,8 @@ class PayController extends BaseController
         parent::__construct();
         if(empty($this->user_ses))
             $this->responseApi(1000);
+
+        return $this->user_ses;
     }
 
     /**
