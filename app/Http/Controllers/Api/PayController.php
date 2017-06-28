@@ -163,7 +163,7 @@ class PayController extends BaseController
         if (!$id)
             $this->responseApi(80001, '订单创建失败');
 
-        $time = time();
+        $time = (string)time();
         $attributes = [
             'trade_type' => 'APP', // JSAPI，NATIVE，APP...
             'body' => $proInfo->name,
