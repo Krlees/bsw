@@ -69,7 +69,7 @@
                             @foreach ($menu->sub as $subMenu)
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a class="J_menuItem1" href="{{url($subMenu->url)}}">{{$subMenu->name}}</a>
+                                        <a class="J_menuItem" href="{{url($subMenu->url)}}">{{$subMenu->name}}</a>
                                     </li>
                                 </ul>
                             @endforeach
