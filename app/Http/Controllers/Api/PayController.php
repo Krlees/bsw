@@ -23,7 +23,6 @@ class PayController extends BaseController
         if(empty($this->user_ses))
             $this->responseApi(1000);
 
-        $this->responseApi(0,'',obj2arr($this->user_ses));
 
     }
 

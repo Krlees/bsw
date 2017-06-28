@@ -39,7 +39,7 @@ class CheckToken
         }
 
         $userToken = \DB::table('user_token')->where('token', $token)->first();
-        if (empty($userToken) || !$userToken->user_id) {
+        if (empty($userToken)) {
             return false;
         }
 
