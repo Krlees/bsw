@@ -28,6 +28,7 @@ class ProductController extends BaseController
             $v['product_attr'] = $v['attrs'];
             $v['type'] = '';
             $v['ordid'] = create_order_sn(1, $id);
+            $v['click'] = true;
         }
         $return['data'] = $list;
         $return['data2'] = $result;
