@@ -18,7 +18,7 @@ class UserController extends BaseController
         $this->middleware('api.token') or $this->responseApi(1000);
         parent::__construct();
         if (empty($this->user_ses)) {
-            $this->responseApi(1000)
+            $this->responseApi(1000);
         }
     }
 
