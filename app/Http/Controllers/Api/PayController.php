@@ -181,6 +181,8 @@ class PayController extends BaseController
         $result = $app->payment->prepare($order);
         if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
 //            $prepayId = $result->prepay_id;
+            $result->partner_id = $result->mch_id;
+            $result->timestamp = time();
             $this->responseApi(0, '', $result);
         }
 
