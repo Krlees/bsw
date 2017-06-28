@@ -20,7 +20,6 @@ class CheckToken
      */
     public function handle($request, Closure $next)
     {
-        dd(1);
         $token = $request->input('token');
         if (!$this->checkToken($token)) {
             return false;
