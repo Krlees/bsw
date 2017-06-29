@@ -122,6 +122,7 @@ class PayController extends BaseController
         $alipay->setSubject($proInfo->name);
         $alipay->setBody($proInfo->desc);
 
+
         // 返回签名后的支付参数给支付宝移动端的SDK。
         $result = $alipay->getPayPara();
         $this->responseApi(0, '', $result);
