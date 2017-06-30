@@ -94,4 +94,10 @@ trait BaseModelTraits
         return obj2arr($result);
     }
 
+    public function getCount($tbName, $where = null)
+    {
+        $where = $where ?: [];
+        $result = DB::table($tbName)->where($where)->count();
+    }
+
 }

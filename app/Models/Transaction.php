@@ -43,6 +43,11 @@ class Transaction extends Model
         return 'transaction_pay_record';
     }
 
+    public function transctionFollowTb()
+    {
+        return 'transaction_follow';
+    }
+
     public function getImg($transId)
     {
         return DB::table($this->transactionImg())->where('transaction_id', $transId)->get();

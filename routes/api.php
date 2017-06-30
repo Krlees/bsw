@@ -96,7 +96,10 @@ Route::group(['namespace' => 'Api'], function () {
         Route::any('delete-friend/{followId}', 'UserController@deleteFriend'); // 删除好友
         Route::any('my-friend', 'UserController@myFriend'); // 我的好友
         Route::any('my-fans', 'UserController@myFans'); // 我的粉丝
-        Route::any('check-token', 'UserController@checkToken'); //
+        Route::any('check-token', 'UserController@checkToken');
+        Route::any('get-vip', 'UserController@getVip'); //获取开通的vip
+        Route::any('get-adv', 'UserController@getAdv'); //获取广告信息
+        Route::any('post-adv', 'UserController@postAdv'); //获取广告信息
     });
 
     Route::group(['prefix' => 'pay'], function () {
