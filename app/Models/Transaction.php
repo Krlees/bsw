@@ -121,9 +121,13 @@ class Transaction extends Model
         return $count ? true : false;
     }
 
-    public function getCitys($labelId, $channelId)
+    public function getCitys($labelId = false, $channelId)
     {
-        $result = DB::table($this->table)->where('label_id', $labelId)->where('channel_id', $channelId)->where('city', '<>', '')->groupBy('city')->orderByRaw('count(city) desc')->get(['city']);
+        $db = DB::table($this->table)->where('channel_id', $channelId)->where('city', '<>', '');
+        if ($labelId)
+            $db->where('label_id', $labelId);
+
+        $result = $db->groupBy('city')->orderByRaw('count(city) desc')->get(['city']);
 
         return obj2arr($result);
     }

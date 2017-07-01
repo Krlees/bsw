@@ -184,11 +184,13 @@ class TransactionController extends BaseController
         $where[] = ['channel_id', '=', $channelId];
         $pages = $this->pageInit();
 
+        $result = [];
+
         // 判断是否是职位下的求职频道
         if ($channelId == 5 && $channelType == '求职') {
 
             // 职位下的求职频道格式不一样
-            $citys = $transaction->getCitys();
+            $citys = $transaction->getCitys(false, $channelId);
             foreach ($citys as $k => $v) {
                 $where[] = ['city', '=', $v['city']];
                 $arr = $transaction->getList($pages['page'], 4, $where);

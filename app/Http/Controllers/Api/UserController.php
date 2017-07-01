@@ -315,7 +315,9 @@ class UserController extends BaseController
 
     public function getAdv(Request $request, UserAdv $adv)
     {
-        $result = DB::table($adv->getTable())->where('user_id', $this->user_ses->id)->first();
+        $position_id = $request->input('position_id') or $this->responseApi(1004);
+        $result = DB::table($adv->getTable())->where('position_id', $position_id)->where('user_id', $this->user_ses->id)->first();
+
         return $result;
     }
 

@@ -99,7 +99,8 @@ Route::group(['namespace' => 'Api'], function () {
         Route::any('check-token', 'UserController@checkToken');
         Route::any('get-vip', 'UserController@getVip'); //获取开通的vip
         Route::any('get-adv', 'UserController@getAdv'); //获取广告信息
-        Route::any('post-adv', 'UserController@postAdv'); //获取广告信息
+        Route::any('post-adv', 'UserController@postAdv'); //提交广告信息
+        Route::any('get-transaction', 'UserController@getTransaction'); //我的订单信息
     });
 
     Route::group(['prefix' => 'pay'], function () {
