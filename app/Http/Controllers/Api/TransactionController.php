@@ -7,12 +7,18 @@ use App\Models\Label;
 use App\Models\Transaction;
 use App\Models\UserVip;
 use App\Traits\DistrictTraits;
+use App\Traits\GaodemapTraits;
+use App\Traits\ImageTraits;
+use App\Traits\JpushTraits;
 use Illuminate\Http\Request;
 use DB;
 
 class TransactionController extends BaseController
 {
     use DistrictTraits;
+    use GaodemapTraits;
+    use ImageTraits;
+    use JpushTraits;
 
     /**
      * 获取消息详情
@@ -219,6 +225,55 @@ class TransactionController extends BaseController
         array_unshift($arr, '全部');
 
         return $arr;
+    }
+
+    public function create(Request $request, Transaction $transaction)
+    {
+        $title = $request->input('title') or $this->responseApi(1004);
+        $content = $request->input('content') or $this->responseApi(1004);
+        $ext1 = $request->input('ext1', '');
+        $imgs = $request->input('imgs') or $this->responseApi(1004);
+        $created_at = $request->input('created_at');
+        $address = $request->input('address') or $this->responseApi(1004);
+        $days = $request->input('days', '');
+        $channel_id = $request->input('channel_id') or $this->responseApi(1004);
+        $channel_type = $request->input('channel_type', '');
+        $created_at = $created_at ? strtotime($created_at) : time();
+        $send_type = 1;
+        $user_id = $this->user_ses ? $this->user_ses->id : $this->responseApi(1000);
+        $data = compact('user_id', 'title', 'content', 'ext1', 'created_at', 'days', 'address', 'send_type', 'channel_id', 'channel_type');
+
+
+        // 高德定位
+        $res = $this->address_get_point($address);
+        $res = \GuzzleHttp\json_decode($res, true);
+        if ($res['info'] == 'OK' && $res['geocodes']) {
+            $data['province'] = $res['geocodes'][0]['province'];
+            $data['city'] = $res['geocodes'][0]['city'];
+            list($data['lng'], $data['lat']) = explode(",", $res['geocodes'][0]['location']);
+        }
+
+        $id = $transaction->createData($transaction->getTable(), $data);
+        if ($id) {
+            $check = $transaction->checkTransImg($id); //检测有木有默认封面图片
+            foreach ($imgs as $k => $v) {
+                $imgData = [];
+                if ($k == 0 && !$check)
+                    $imgData['is_cover'] = 1;
+
+                $imgData['img_thumb'] = $this->thumbImg($v, 'transaction');
+                $imgData['transaction_id'] = $id;
+
+                $b = $transaction->createData($transaction->transactionImg(), $imgData);
+            }
+
+            // 发送极光推送
+            $this->push('all', $title);
+
+        }
+
+        $this->responseApi(9000);
+
     }
 
     public function postFollow(Request $request, Transaction $transaction)

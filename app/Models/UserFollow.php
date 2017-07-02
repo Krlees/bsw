@@ -9,11 +9,15 @@
 namespace App\Models;
 
 
+use App\Traits\BaseModelTraits;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
 class UserFollow extends Model
 {
+
+    use BaseModelTraits;
+
     /**
      * 与模型关联的数据表
      *

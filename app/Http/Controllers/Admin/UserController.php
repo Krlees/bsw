@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\BaseController;
 use App\Http\Controllers\Api\PublicController;
 use App\Models\District;
 use App\Models\Member;
+use App\Models\UserFollow;
 use App\Traits\DistrictTraits;
 use App\Traits\GaodemapTraits;
 use App\Traits\ImageTraits;
@@ -168,6 +169,34 @@ class UserController extends BaseController
         $result = DB::table('user_project_img')->where('user_id', $id)->get();
 
         return view('admin.user.project_img', compact('result'));
+    }
+
+    public function follow(Request $request, UserFollow $userFollow)
+    {
+        if ($request->ajax()) {
+
+            // 过滤参数
+            $param = $this->cleanAjaxPageParam();
+            $results = $userFollow->ajaxData($userFollow->getTable(), $param);
+            foreach ($results['rows'] as $k => &$v) {
+                $username = $this->user->get($v['user_id']);
+                $follow_name = $this->user->get($v['follow_id']);
+                $v['username'] = $username['username'];
+                $v['follow_name'] = $follow_name['username'];
+            }
+
+            return $this->responseAjaxTable($results['total'], $results['rows']);
+
+        } else {
+            $reponse = $this->responseTable(url('admin/member/follow'), [
+                'addUrl' => null,
+                'editUrl' => null,
+                'removeUrl' => null,
+                'autoSearch' => false
+            ]);
+
+            return view('admin/User/follow', compact('reponse'));
+        }
     }
 
     private function _helpAddEdit()

@@ -36,32 +36,8 @@ Route::group(['prefix' => 'backup', 'namespace' => 'admin'], function () {
 // 后台路由
 Route::group(['namespace' => 'admin', 'prefix' => 'admin', 'middleware' => ['auth', 'auth.admin']], function () {
 
-
     Route::get('index', 'IndexController@index');
     Route::get('dashboard', 'IndexController@dashboard');
-
-
-//    // 权限管理
-//    Route::group(['prefix' => 'product'], function () {
-//        Route::any('index', 'ProductController@index');
-//        Route::any('add', 'ProductController@add');
-//        Route::any('edit/{id}', 'ProductController@edit');
-//        Route::any('del', 'ProductController@del');
-//        Route::any('category', 'ProductController@category');
-//        Route::any('category-add', 'ProductController@categoryAdd');
-//        Route::any('category-edit/{id}', 'ProductController@categoryEdit');
-//        Route::any('category-del', 'ProductController@categoryDel');
-//    });
-
-    // 角色管理
-    Route::group(['prefix' => 'role'], function () {
-        Route::any('index', 'RoleController@index');
-        Route::any('show/{id}', 'RoleController@show');
-        Route::any('add', 'RoleController@add');
-        Route::any('edit/{id}', 'RoleController@edit');
-        Route::any('del', 'RoleController@del');
-        Route::any('{id}', 'RoleController@getInfo');
-    });
 
     // 超级管理员
     Route::group(['prefix' => 'admin'], function () {
@@ -86,10 +62,32 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('del', 'UserController@del');
         Route::any('project-img/{id}', 'UserController@projectImg');
         Route::any('get-sub-user/{pid}', 'UserController@getSubSelect');
-        Route::any('entre/', 'EntreController@entre');
-        Route::any('entre-add', 'EntreController@entreAdd');
-        Route::any('entre-edit/{id}', 'EntreController@entreEdit');
-        Route::any('entre-del', 'EntreController@entreDel');
+
+        Route::any('follow', 'UserController@follow'); // 用户关注
+    });
+
+    // 创业邦
+    Route::group(['prefix' => 'entre'], function () {
+        Route::any('index/', 'EntreController@index');
+        Route::any('add', 'EntreController@add');
+        Route::any('edit/{id}', 'EntreController@edit');
+        Route::any('del', 'EntreController@del');
+    });
+
+    // 标签
+    Route::group(['prefix' => 'label'], function () {
+        Route::any('index/', 'LabelController@index');
+        Route::any('add', 'LabelController@add');
+        Route::any('edit/{id}', 'LabelController@edit');
+        Route::any('del', 'LabelController@del');
+        Route::any('job', 'LabelController@job');
+        Route::any('job-add', 'LabelController@jobAdd');
+        Route::any('job-edit/{id}', 'LabelController@jobEdit');
+        Route::any('job-del', 'LabelController@jobDel');
+        Route::any('industry', 'LabelController@industry');
+        Route::any('industry-add', 'LabelController@industryAdd');
+        Route::any('industry-edit/{id}', 'LabelController@industryEdit');
+        Route::any('industry-del', 'LabelController@industryDel');
     });
 
     // 菜单管理
@@ -114,6 +112,7 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('category-del', 'ProductController@categoryDel');
     });
 
+    // 信息
     Route::group(['prefix' => 'transaction'], function () {
         Route::any('index/{channel_id}', 'TransactionController@index');
         Route::any('add', 'TransactionController@add');
@@ -123,13 +122,14 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin', 'middleware' => ['aut
 
     // 订单
     Route::group(['prefix' => 'order'], function () {
-        Route::any('index', 'OrderController@index');
-        Route::any('detail/{id}', 'OrderController@detail');
+        Route::any('index/{type}', 'OrderController@index');
+        Route::any('edit/{id}', 'OrderController@edit');
     });
 
     // 文章
-    Route::group(['prefix' => 'news'], function () {
-        Route::any('index', 'NewsController@index');
+    Route::group(['prefix' => 'setting'], function () {
+        Route::any('about', 'SettingController@about');
+        Route::any('base', 'SettingController@base');
     });
 
 });

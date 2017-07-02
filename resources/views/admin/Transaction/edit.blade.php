@@ -15,7 +15,7 @@
             <div class="col-sm-12">
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h5>发布信息</h5>
+                        <h5>编辑信息</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -31,14 +31,19 @@
                         <div class="control-group">
                             <label class="col-sm-2 control-label">内容图片</label>
                             <div class="col-sm-10">
-                                <ul class="image-list" id="image-list"></ul>
+                                <ul class="image-list" id="image-list">
+                                    @foreach($info['imgs'] as $k=>$img)
+                                        <li>
+                                            <img src="{{$img}}" alt="">
+                                        </li>
+                                    @endforeach
+                                </ul>
                                 <div class="upload-image" id="upload-image"></div>
                                 <input class="image" id="image" type="file" accept="image/*">
                                 <div class="clearfix"></div>
                                 <p class="help-block">单击图片可指定封面图片，双击图片可删除，最多可上传1张图片</p>
                             </div>
                         </div>
-
 
 
                         <div class="form-group">
@@ -58,37 +63,37 @@
     <script src="{{asset('hplus/js/uploadpic.js')}}"></script>
     <script>
         $(".chosen-select").chosen({width: "150px"})
-        $("#image-list").delegate("li", "dblclick", function() {
+        $("#image-list").delegate("li", "dblclick", function () {
             $(this).remove();
-        }).delegate("li", "click", function() {
+        }).delegate("li", "click", function () {
             $(this).addClass("cover").siblings().removeClass("cover");
             $("input[name='cover']").val($(this).index());
         });
 
-        $("#upload-image").click(function() {
+        $("#upload-image").click(function () {
             $("#image").click();
         });
 
-        if(typeof UploadPic != 'undefined') {
+        if (typeof UploadPic != 'undefined') {
             var u = new UploadPic();
             u.init({
                 maxWidth: 720,
                 maxHeight: 720,
                 quality: 1,
                 input: document.querySelector("#image"),
-                before: function() {
+                before: function () {
                     this.li = $('<li><img src="/hplus/img/loading.gif"><input name="imgs[]" type="hidden"></li>').appendTo("#image-list");
                 },
                 callback: function (base64) {
                     var _li = this.li;
-                    if(base64.substr(22).length > 2097152) {
+                    if (base64.substr(22).length > 2097152) {
                         $.noty.closeAll();
-                        noty({ text: "图片不能大于2M", type: "error" });
+                        noty({text: "图片不能大于2M", type: "error"});
                         _li.remove();
                     } else {
-                        if($("#image-list img").length >= 2) {
+                        if ($("#image-list img").length >= 2) {
                             $.noty.closeAll();
-                            noty({ text: "图片不能超过10个", type: "error" });
+                            noty({text: "图片不能超过10个", type: "error"});
                             _li.remove();
                         } else {
                             _li.find("input[name='imgs[]']").val(base64.substr(22)).end().find("img").attr("src", base64);
@@ -102,9 +107,6 @@
     </script>
 
 @endsection
-
-
-
 
 
 </body>

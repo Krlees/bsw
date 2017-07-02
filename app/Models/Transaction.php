@@ -53,9 +53,9 @@ class Transaction extends Model
         return DB::table($this->transactionImg())->where('transaction_id', $transId)->get();
     }
 
-    public function get($id)
+    public function get($id,$field=['id', 'user_id', 'title', 'content', 'ext1', 'province', 'city', 'address', 'days'])
     {
-        $trans = DB::table($this->table)->find($id, ['id', 'user_id', 'title', 'content', 'ext1', 'province', 'city', 'address', 'days']);
+        $trans = DB::table($this->table)->find($id,$field);
         if (empty($trans))
             return [];
 
@@ -63,9 +63,9 @@ class Transaction extends Model
         if ($imgs) {
             foreach ($imgs as $img) {
                 if ($img->is_cover == 1)
-                    $trans->cover = $img->img;
+                    $trans->cover = $img->img_thumb;
 
-                $trans->imgs[] = $img->img;
+                $trans->imgs[] = $img->img_thumb;
             }
         }
 
@@ -100,9 +100,9 @@ class Transaction extends Model
             if ($imgs) {
                 foreach ($imgs as $img) {
                     if ($img->is_cover == 1)
-                        $result[$k]['cover'] = picture_url($img->img);
+                        $result[$k]['cover'] = picture_url($img->img_thumb);
 
-                    $result[$k]['imgs'][] = picture_url($img->img);
+                    $result[$k]['imgs'][] = picture_url($img->img_thumb);
                 }
             }
 
@@ -130,5 +130,10 @@ class Transaction extends Model
         $result = $db->groupBy('city')->orderByRaw('count(city) desc')->get(['city']);
 
         return obj2arr($result);
+    }
+
+    public function checkTransImg($id)
+    {
+        return DB::table($this->transactionImg())->where('transaction_id',$id)->where('is_cover',1)->count();
     }
 }

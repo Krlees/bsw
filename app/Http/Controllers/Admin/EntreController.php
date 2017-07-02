@@ -23,6 +23,9 @@ class EntreController extends BaseController
             // 过滤参数
             $param = $this->cleanAjaxPageParam();
             $result = $this->entre->ajaxData($this->entre->getTable(), $param, false, 'title');
+            foreach ($result['rows'] as &$v) {
+                $v['addtime'] = date('Y-m-d H:i:s', $v['addtime']);
+            }
 
             return $this->responseAjaxTable($result['total'], $result['rows']);
 
@@ -34,7 +37,7 @@ class EntreController extends BaseController
                 'autoSearch' => true
             ]);
 
-            return view('admin/entre/index', compact('reponse'));
+            return view('admin/Entre/index', compact('reponse'));
         }
 
     }
@@ -65,7 +68,7 @@ class EntreController extends BaseController
             $this->createField('textarea', '客户资料', 'data[information]');
 
             $reponse = $this->responseForm('添加管理员', $this->formField);
-            return view('admin/admin/add', compact('reponse'));
+            return view('admin/Entre/add', compact('reponse'));
         }
     }
 
@@ -95,17 +98,13 @@ class EntreController extends BaseController
             $this->createField('textarea', '客户资料', 'data[information]');
 
             $reponse = $this->responseForm('添加管理员', $this->formField);
-            return view('admin/admin/add', compact('reponse'));
+            return view('admin/Entre/edit', compact('reponse'));
         }
     }
 
     public function del()
     {
         $ids = $this->getDelIds();
-        foreach ($ids as $v) {
-            if ($v == 1)
-                $this->responseApi(80001, "不可以删除超级管理员");
-        }
 
         $result = DB::table($this->entre->getTable())->whereIn('id', $ids)->delete();
         $result ? $this->responseApi(0) : $this->responseApi(9000);

@@ -13,7 +13,7 @@ use App\Traits\BaseModelTraits;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Channel extends Model
+class IndustryCate extends Model
 {
     use BaseModelTraits;
 
@@ -22,7 +22,7 @@ class Channel extends Model
      *
      * @var string
      */
-    protected $table = 'channel';
+    protected $table = 'industry_cate';
 
     protected $primaryKey = 'id';
 

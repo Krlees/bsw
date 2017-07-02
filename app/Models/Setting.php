@@ -24,42 +24,41 @@ class Setting extends Model
 
     protected $primaryKey = 'id';
 
-    public function get($classify,$key)
+    public function get($classify, $key)
     {
 
         $setting = cache('setting');
-        if(empty($setting)){
+        if (empty($setting)) {
             $setting = DB::table($this->table)->get();
             $setting = obj2arr($setting);
-            foreach($setting as $item) {
+            foreach ($setting as $item) {
                 $setting[$item['classify']][$item['key']] = $item['value'];
             }
 
-            cache()->forever('setting',$setting);
+            cache()->forever('setting', $setting);
         }
 
         return $classify ? ($key ? $setting[$classify][$key] : $setting[$classify]) : $setting;
 
     }
 
-    public function set($classify,$key,$value)
+    public function set($classify, $key, $value)
     {
         $mod_setting = DB::table($this->table);
-        $count = $mod_setting->where(array('name' => $key, 'classify' => $classify))->count();
-        if($count > 0) {
-            try{
-                $affected = $mod_setting->where(array('name' => $key, 'classify' => $classify))->update(array('value' => $value));
-                return bool($affected);
-            }
-            catch (\Exception $e){
+        $count = $mod_setting->where(array('key' => $key, 'classify' => $classify))->count();
+        if ($count > 0) {
+            try {
+                $affected = $mod_setting->where(array('key' => $key, 'classify' => $classify))->update(array('value' => $value));
+                cache()->forget('setting');
+                return $affected ? true : false;
+            } catch (\Exception $e) {
                 return false;
             }
         }
 
-        try{
-            $mod_setting->insert(array('name' => $key, 'value' => $value, 'classify' => $classify));
-        }
-        catch (\Exception $e){
+        try {
+            $mod_setting->insert(array('key' => $key, 'value' => $value, 'classify' => $classify));
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -70,5 +69,5 @@ class Setting extends Model
         cache()->forget('setting');
         return cache()->has('setting') ? false : true;
     }
-    
+
 }

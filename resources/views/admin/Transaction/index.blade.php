@@ -10,10 +10,80 @@
         var colums = [
                 {!! $tablePresenter->jsCheckbox() !!}
                 {!! $tablePresenter->jsColums('ID','id','true') !!}
+                {!! $tablePresenter->jsColums('发布人','username') !!}
+                {!! $tablePresenter->jsColums('发布位置','send_type') !!}
                 {!! $tablePresenter->jsColums('标题','title') !!}
-                {!! $tablePresenter->jsColums('发布实际','created_at') !!}
-                {!! $tablePresenter->jsColums('点击数','click') !!}
-                {!! $tablePresenter->jsEvents() !!}
+                {!! $tablePresenter->jsColums('发布时间','created_at','true') !!}
+            {
+                'field': 'days',
+                'title': '有效期',
+                'align': 'center',
+                'sortable': false,
+                'formatter': function (value, row, index) {
+                    return value + '天';
+                }
+            },
+            {
+                'field': 'is_must_pay',
+                'title': '是否必须付费',
+                'align': 'center',
+                'sortable': false,
+                'formatter': function (value, row, index) {
+                    var state = row.status == 1 ? 0 : 1;
+                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+
+                    return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_must_pay]\":" + state + "})' class='hand " + classStr + "' ></i>";
+                }
+            },
+            {
+                'field': 'is_normal_pay',
+                'title': '是否正常收费',
+                'align': 'center',
+                'sortable': false,
+                'formatter': function (value, row, index) {
+                    var state = row.status == 1 ? 0 : 1;
+                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+
+                    return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_normal_pay]\":" + state + "})' class='hand " + classStr + "' ></i>";
+                }
+            },
+            {
+                'field': 'is_juan_pay',
+                'title': '是否必须劵支付',
+                'align': 'center',
+                'sortable': false,
+                'formatter': function (value, row, index) {
+                    var state = row.status == 1 ? 0 : 1;
+                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+
+                    return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_juan_pay]\":" + state + "})' class='hand " + classStr + "' ></i>";
+                }
+            },
+            {
+                'field': 'is_wallet_pay',
+                'title': '是否必须余额支付',
+                'align': 'center',
+                'sortable': false,
+                'formatter': function (value, row, index) {
+                    var state = row.status == 1 ? 0 : 1;
+                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+
+                    return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_wallet_pay]\":" + state + "})' class='hand " + classStr + "' ></i>";
+                }
+            },
+            {
+                'field': 'is_show',
+                'title': '是否显示',
+                'align': 'center',
+                'sortable': false,
+                'formatter': function (value, row, index) {
+                    var state = row.status == 1 ? 0 : 1;
+                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+
+                    return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_show]\":" + state + "})' class='hand " + classStr + "' ></i>";
+                }
+            },
+            {!! $tablePresenter->jsEvents() !!}
         ];
 
     </script>
