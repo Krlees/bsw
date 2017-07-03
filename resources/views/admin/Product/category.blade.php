@@ -12,7 +12,7 @@
                 {!! $tablePresenter->jsColums('ID','id','true') !!}
                 {!! $tablePresenter->jsColums('名称','name') !!}
                 {!! $tablePresenter->jsColums('描述','desc') !!}
-                {!! $tablePresenter->jsEvents() !!}
+                {!! $tablePresenter->jsEvents(['edit']) !!}
         ];
 
     </script>

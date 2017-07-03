@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Models\Comment;
 use App\Models\Member;
 use App\Models\Menu;
+use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\UserAdv;
 use App\Models\UserFollow;
+use App\Models\UserFriendLink;
 use App\Models\UserInvite;
 use App\Models\UserJuan;
 use App\Models\UserSign;
@@ -319,6 +321,41 @@ class UserController extends BaseController
         $result = DB::table($adv->getTable())->where('position_id', $position_id)->where('user_id', $this->user_ses->id)->first();
 
         return $result;
+    }
+
+    /**
+     * 编写推广链接
+     */
+    public function postFriendLink(Request $request, UserFriendLink $link)
+    {
+        $product_id = $request->input('product_id') or $this->responseApi(1004);
+        $url = $request->input('url') or $this->responseApi(1004);
+        $created_at = date('Y-m-d H:i:s');
+        $user_id = $this->user_ses->id;
+
+        $where[] = ['product_id', '=', $product_id];
+        $where[] = ['user_id', '=', $user_id];
+        $count = DB::table($link->getTable())->where($where)->count();
+        if ($count) {
+            $result = DB::table($link->getTable())->where($where)->update(['url' => $url]);
+        } else {
+            $result = DB::table($link->getTable())->insert(compact('product_id', 'user_id', 'created_at', 'url'));
+        }
+        $result ? $this->responseApi(0) : $this->responseApi(9000);
+    }
+
+    /**
+     * 获取推广
+     * @param Request $request
+     * @param UserFriendLink $link
+     */
+    public function getFriendLink(Request $request, UserFriendLink $link, Product $product)
+    {
+
+        $info = DB::table($product->getTable() . ' as a')->leftJoin($link->getTable() . ' as b', 'a.id', '=', 'b.product_id')->where('a.category_id', 11)->where('b.user_id', $this->user_ses->id)->get();
+
+        $this->responseApi(0, '', obj2arr($info));
+
     }
 
 
