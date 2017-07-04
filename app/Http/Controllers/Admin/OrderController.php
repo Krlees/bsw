@@ -22,6 +22,7 @@ class orderController extends BaseController
         if ($request->ajax()) {
 
             $where[] = ['type', '=', $type];
+            $where[] = ['status', '>=', 2];
             // 过滤参数
             $param = $this->cleanAjaxPageParam();
             $result = $this->order->ajaxData($this->order->getTable(), $param, $where, 'order_sn');

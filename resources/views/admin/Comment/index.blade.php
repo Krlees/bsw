@@ -10,7 +10,10 @@
         var colums = [
                 {!! $tablePresenter->jsCheckbox() !!}
                 {!! $tablePresenter->jsColums('ID','id','true') !!}
-                {!! $tablePresenter->jsColums('登录账户','email') !!}
+                {!! $tablePresenter->jsColums('留言人','username') !!}
+                {!! $tablePresenter->jsColums('标题信息','title') !!}
+                {!! $tablePresenter->jsColums('评论内容','content') !!}
+                {!! $tablePresenter->jsColums('评论时间','created_at') !!}
                 {!! $tablePresenter->jsEvents(['remove']) !!}
         ];
 

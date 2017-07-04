@@ -22,6 +22,7 @@ trait BaseModelTraits
         $order = array_get($param, 'order', 'desc');
         $rows = DB::table($tableName)->where($where)->orderBy($sort, $order)->offset(array_get($param, 'offset', 0))->limit(array_get($param, 'limit', 10))->get($fields);
         $rows = obj2arr($rows);
+
         $total = DB::table($tableName)->where($where)->count();
 
         return compact('rows', 'total');

@@ -25,11 +25,12 @@ Route::group(['prefix' => 'components'], function () {
     Route::any('uploads', 'ComponentsController@upload');
 });
 
-Route::group(['prefix' => 'backup', 'namespace' => 'admin'], function () {
+Route::group(['prefix' => 'backup', 'namespace' => 'Admin'], function () {
     Route::any('product', 'BackupController@product');
     Route::any('user', 'BackupController@user');
     Route::any('comment', 'BackupController@comment');
     Route::any('transaction', 'BackupController@transaction');
+    Route::any('test', 'BackupController@test');
     Route::any('test', 'BackupController@test');
 });
 
@@ -126,10 +127,21 @@ Route::group(['namespace' => 'admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('edit/{id}', 'OrderController@edit');
     });
 
-    // 文章
+    // 评论
+    Route::group(['prefix' => 'comment'], function () {
+        Route::any('index/{type}', 'CommentController@index');
+        Route::any('del', 'CommentController@del');
+    });
+
+    // 设置
     Route::group(['prefix' => 'setting'], function () {
         Route::any('about', 'SettingController@about');
         Route::any('base', 'SettingController@base');
+    });
+
+    Route::group(['prefix' => 'redpacket'], function () {
+        Route::any('index', 'RedpacketController@index');
+        Route::any('detail/{id}', 'RedpacketController@detail');
     });
 
 });

@@ -9,7 +9,8 @@ class BackupController
 {
     use GaodemapTraits;
 
-    public function test(){
+    public function test()
+    {
         return curl_do("http://bsw.krlee.com/Api/transaction/get-vip-list");
     }
 
@@ -18,7 +19,7 @@ class BackupController
     {
         $arr = DB::table('user_people')->get();
         foreach ($arr as $v) {
-            $cate = DB::table('user')->where('id', $v->user_id)->update(['mark'=>$v->mark]);
+            $cate = DB::table('user')->where('id', $v->user_id)->update(['mark' => $v->mark]);
         }
     }
 
@@ -85,6 +86,24 @@ class BackupController
     // 评论表
     public function comment()
     {
+        DB::table('bs_comment')->orderBy('id', 'asc')->chunk(1000, function ($res) {
+            foreach ($res as $v) {
+                $data = [
+                    'transaction_id' => $v->from_id,
+                    'user_id' => $v->user_send_id,
+                    'content' => $v->comment,
+                    'pid' => 0,
+                    'created_at' => date('Y-m-d H:i:s', $v->addtime)
+                ];
+                $id = DB::table('comment')->insertGetId($data);
+                if($v->commentImgs){
+                    DB::table('comment_img')->insertGetId([
+                        'comment_id' => $id,
+                        'img' => $v->commentImgs,
+                    ]);
+                }
+            }
+        });
 
     }
 
@@ -100,7 +119,7 @@ class BackupController
                     'label_id' => $v->cid,
                     'created_at' => $v->addtime,
                     'updated_at' => $v->endtime,
-                    'channel_id' => ($v->is_agent==1) ? 1 : $v->cate_id,
+                    'channel_id' => ($v->is_agent == 1) ? 1 : $v->cate_id,
                     'city' => $v->city ?: '',
                     'address' => $v->area ?: '',
                     'ext1' => $v->extra_par1 ?: '',
@@ -136,7 +155,6 @@ class BackupController
                 }
 
 
-
                 DB::table('transaction')->insert($data);
 
 
@@ -145,7 +163,7 @@ class BackupController
             sleep(5);
 
         });
-}
+    }
 
 
 }

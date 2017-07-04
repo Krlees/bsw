@@ -341,6 +341,7 @@ class UserController extends BaseController
         } else {
             $result = DB::table($link->getTable())->insert(compact('product_id', 'user_id', 'created_at', 'url'));
         }
+
         $result ? $this->responseApi(0) : $this->responseApi(9000);
     }
 
