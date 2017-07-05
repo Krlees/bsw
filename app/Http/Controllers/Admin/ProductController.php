@@ -31,10 +31,10 @@ class ProductController extends BaseController
             return $this->responseAjaxTable($results['total'], $results['rows']);
 
         } else {
-            $reponse = $this->responseTable(url('admin/Product/index'), [
-                'addUrl' => url('admin/Product/add'),
-                'editUrl' => url('admin/Product/edit'),
-                'removeUrl' => url('admin/Product/del'),
+            $reponse = $this->responseTable(url('admin/product/index'), [
+                'addUrl' => url('admin/product/add'),
+                'editUrl' => url('admin/product/edit'),
+                'removeUrl' => url('admin/product/del'),
                 'autoSearch' => true
             ]);
 
@@ -113,10 +113,10 @@ class ProductController extends BaseController
 
         } else {
 
-            $reponse = $this->responseTable(url('admin/Product/category'), [
-                'addUrl' => url('admin/Product/category-add'),
-                'editUrl' => url('admin/Product/category-edit'),
-                'removeUrl' => url('admin/Product/category-del'),
+            $reponse = $this->responseTable(url('admin/product/category'), [
+                'addUrl' => url('admin/product/category-add'),
+                'editUrl' => url('admin/product/category-edit'),
+                'removeUrl' => url('admin/product/category-del'),
                 'autoSearch' => true
             ]);
 
