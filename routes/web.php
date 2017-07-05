@@ -35,7 +35,7 @@ Route::group(['prefix' => 'backup', 'namespace' => 'Admin'], function () {
 });
 
 // 后台路由
-Route::group(['namespace' => 'admin', 'prefix' => 'admin', 'middleware' => ['auth', 'auth.admin']], function () {
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'auth.admin']], function () {
 
     Route::get('index', 'IndexController@index');
     Route::get('dashboard', 'IndexController@dashboard');
