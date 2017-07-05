@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Models\Menu;
 use App\Traits\Admin\FormTraits;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\BaseController;
 
 class MenuController extends BaseController
 {

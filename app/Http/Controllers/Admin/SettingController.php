@@ -29,7 +29,7 @@ class SettingController extends BaseController
 
             $reponse = $this->responseForm('订单详情', $this->formField);
 
-            return view('admin/setting/about', compact('reponse'));
+            return view('admin/Setting/about', compact('reponse'));
         }
 
     }

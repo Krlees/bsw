@@ -10,11 +10,11 @@ use DB;
 
 class ProductController extends BaseController
 {
-    private $product;
+    private $Product;
 
-    public function __construct(Product $product)
+    public function __construct(Product $Product)
     {
-        $this->product = $product;
+        $this->Product = $Product;
     }
 
     public function index(Request $request)
@@ -23,22 +23,22 @@ class ProductController extends BaseController
 
             // 过滤参数
             $param = $this->cleanAjaxPageParam();
-            $results = $this->product->ajaxData($this->product->getTable(), $param);
+            $results = $this->Product->ajaxData($this->Product->getTable(), $param);
             foreach ($results['rows'] as $k => &$v) {
-                $v['category'] = $this->product->getOnlyField($this->product->productCategoryTb(), $v['category_id'], 'name');
+                $v['category'] = $this->Product->getOnlyField($this->Product->ProductCategoryTb(), $v['category_id'], 'name');
             }
 
             return $this->responseAjaxTable($results['total'], $results['rows']);
 
         } else {
-            $reponse = $this->responseTable(url('admin/product/index'), [
-                'addUrl' => url('admin/product/add'),
-                'editUrl' => url('admin/product/edit'),
-                'removeUrl' => url('admin/product/del'),
+            $reponse = $this->responseTable(url('admin/Product/index'), [
+                'addUrl' => url('admin/Product/add'),
+                'editUrl' => url('admin/Product/edit'),
+                'removeUrl' => url('admin/Product/del'),
                 'autoSearch' => true
             ]);
 
-            return view('admin/product/index', compact('reponse'));
+            return view('admin/Product/index', compact('reponse'));
         }
 
     }
@@ -49,12 +49,12 @@ class ProductController extends BaseController
 
             $data = $request->input('data');
 
-            $b = $this->product->createData($this->product->getTable(), $data);
+            $b = $this->Product->createData($this->Product->getTable(), $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
 
-            $cateData = obj2arr($this->product->getCateList());
+            $cateData = obj2arr($this->Product->getCateList());
             $this->createField('select', '产品分类', 'data[category_id]', $this->cleanSelect($cateData));
             $this->createField('text', '名称', 'data[name]');
             $this->createField('text', '价钱', 'data[price]');
@@ -63,7 +63,7 @@ class ProductController extends BaseController
 
             $reponse = $this->responseForm('添加产品分类', $this->getFormField());
 
-            return view('admin/product/add', compact('reponse'));
+            return view('admin/Product/add', compact('reponse'));
 
         }
     }
@@ -74,13 +74,13 @@ class ProductController extends BaseController
 
             $data = $request->input('data');
 
-            $b = $this->product->updateData($this->product->getTable(), $id, $data);
+            $b = $this->Product->updateData($this->Product->getTable(), $id, $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
-            $info = $this->product->get($id);
+            $info = $this->Product->get($id);
 
-            $cateData = obj2arr($this->product->getCateList());
+            $cateData = obj2arr($this->Product->getCateList());
             $this->createField('select', '产品分类', 'data[category_id]', $this->cleanSelect($cateData, 'name', 'id', $info->category_id));
             $this->createField('text', '名称', 'data[name]', $info->name);
             $this->createField('text', '价钱', 'data[price]', $info->price);
@@ -89,7 +89,7 @@ class ProductController extends BaseController
 
             $reponse = $this->responseForm('编辑产品', $this->getFormField());
 
-            return view('admin/product/edit', compact('reponse'));
+            return view('admin/Product/edit', compact('reponse'));
 
         }
     }
@@ -97,7 +97,7 @@ class ProductController extends BaseController
     public function del()
     {
         $ids = $this->getDelIds();
-        $result = $this->product->delData($this->product->getTable(), $ids);
+        $result = $this->Product->delData($this->Product->getTable(), $ids);
         $result ? $this->responseApi(0) : $this->responseApi(9000);
     }
 
@@ -107,20 +107,20 @@ class ProductController extends BaseController
 
             // 过滤参数
             $param = $this->cleanAjaxPageParam();
-            $results = $this->product->ajaxData($this->product->productCategoryTb(), $param);
+            $results = $this->Product->ajaxData($this->Product->ProductCategoryTb(), $param);
 
             return $this->responseAjaxTable($results['total'], $results['rows']);
 
         } else {
 
-            $reponse = $this->responseTable(url('admin/product/category'), [
-                'addUrl' => url('admin/product/category-add'),
-                'editUrl' => url('admin/product/category-edit'),
-                'removeUrl' => url('admin/product/category-del'),
+            $reponse = $this->responseTable(url('admin/Product/category'), [
+                'addUrl' => url('admin/Product/category-add'),
+                'editUrl' => url('admin/Product/category-edit'),
+                'removeUrl' => url('admin/Product/category-del'),
                 'autoSearch' => true
             ]);
 
-            return view('admin/product/category', compact('reponse'));
+            return view('admin/Product/category', compact('reponse'));
         }
     }
 
@@ -130,7 +130,7 @@ class ProductController extends BaseController
 
             $data = $request->input('data');
 
-            $b = $this->product->createData($this->product->productCategoryTb(), $data);
+            $b = $this->Product->createData($this->Product->ProductCategoryTb(), $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
@@ -140,7 +140,7 @@ class ProductController extends BaseController
 
             $reponse = $this->responseForm('添加产品分类', $this->getFormField());
 
-            return view('admin/product/categoryAdd', compact('reponse'));
+            return view('admin/Product/categoryAdd', compact('reponse'));
 
         }
     }
@@ -151,18 +151,18 @@ class ProductController extends BaseController
 
             $data = $request->input('data');
 
-            $b = $this->product->updateData($this->product->productCategoryTb(), $id, $data);
+            $b = $this->Product->updateData($this->Product->ProductCategoryTb(), $id, $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
-            $info = $this->product->getInfo($this->product->productCategoryTb(), $id);
+            $info = $this->Product->getInfo($this->Product->ProductCategoryTb(), $id);
 
             $this->createField('text', '名称', 'data[name]', $info->name);
             $this->createField('textarea', '描述', 'data[desc]', $info->desc);
 
             $reponse = $this->responseForm('添加产品分类', $this->getFormField());
 
-            return view('admin/product/categoryEdit', compact('reponse'));
+            return view('admin/Product/categoryEdit', compact('reponse'));
 
         }
     }
@@ -171,7 +171,7 @@ class ProductController extends BaseController
     {
         $ids = $this->getDelIds();
 
-        $result = $this->product->delData($this->product->productCategoryTb(), $ids);
+        $result = $this->Product->delData($this->Product->ProductCategoryTb(), $ids);
         $result ? $this->responseApi(0) : $this->responseApi(9000);
     }
 
