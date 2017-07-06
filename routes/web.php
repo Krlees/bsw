@@ -67,6 +67,15 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('follow', 'UserController@follow'); // 用户关注
     });
 
+    // 商铺
+    Route::group(['prefix' => 'shop'], function () {
+        Route::any('index', 'UserShopController@index');
+        Route::any('goods', 'UserShopController@goods');
+        Route::any('goods-add', 'UserShopController@goodsAdd');
+        Route::any('goods-edit/{id}', 'UserShopController@goodsEdit');
+        Route::any('goods-del', 'UserShopController@goodsDel');
+    });
+
     // 创业邦
     Route::group(['prefix' => 'entre'], function () {
         Route::any('index/', 'EntreController@index');
@@ -139,6 +148,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('base', 'SettingController@base');
     });
 
+    // 红包
     Route::group(['prefix' => 'redpacket'], function () {
         Route::any('index', 'RedpacketController@index');
         Route::any('detail/{id}', 'RedpacketController@detail');

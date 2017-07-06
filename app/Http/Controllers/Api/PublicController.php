@@ -158,7 +158,7 @@ class PublicController extends BaseController
                 'nickname' => $param['nickname'],
                 "city" => $param['city'],
                 "province" => $param['province'],
-                "avatar" => $param['headimgurl'],
+                "avatar" => str_replace("\/", "/", $param['headimgurl']),
                 'created_at' => date('Y-m-d H:i:s'),
                 'address' => $param['company_area'],
                 'password' => '',
@@ -263,7 +263,7 @@ class PublicController extends BaseController
         if (!$member->checkOpenID($param['openid'])) {
 
             $data = [
-                'avatar' => $param['figureurl_qq_2'],
+                'avatar' => str_replace("\/", "/", $param['figureurl_qq_2']),
                 'sex' => $param['gender'],
                 'nickname' => $param['nickname'],
                 'province' => $param['province'],
@@ -494,7 +494,7 @@ district: "霞浦县",
         $labelName = $request->input('label_name') or $this->responseApi(1004);
         $pages = $this->pageInit();
 
-        $result = \DB::table($member->getTable())->where('status', 1)->where('mark', 'like', '%' . $labelName . '%')->offset($pages['page']*$pages['limit'])->limit($pages['limit'])->get(['id','username','nickname','desc','avatar','city','mark']);
+        $result = \DB::table($member->getTable())->where('status', 1)->where('mark', 'like', '%' . $labelName . '%')->offset($pages['page'] * $pages['limit'])->limit($pages['limit'])->get(['id', 'username', 'nickname', 'desc', 'avatar', 'city', 'mark']);
 
         $this->responseApi(0, '', $result);
     }
