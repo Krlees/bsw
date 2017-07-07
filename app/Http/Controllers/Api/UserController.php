@@ -215,7 +215,7 @@ class UserController extends BaseController
         $field = $request->input('key');
         $value = $request->input('value');
 
-        dd($this->user_ses->ses);
+        dd($this->user_ses);
         $checkField = DB::table($member->getTable())->where('id', $this->user_ses->id)->where($field, '=', '')->count();
         $result = $member->updateData($this->user_ses->id, [$field => $value]);
         if ($result) {
