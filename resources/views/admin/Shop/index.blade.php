@@ -9,7 +9,7 @@
     <script>
         var colums = [
             {!! $tablePresenter->jsCheckbox() !!}
-            {!! $tablePresenter->jsColums('ID','id','true') !!}
+            {!! $tablePresenter->jsColums('商家id','user_id','true') !!}
             {!! $tablePresenter->jsColums('logo','logo') !!}
             {!! $tablePresenter->jsColums('公司名称','name') !!}
             {!! $tablePresenter->jsColums('地址','address') !!}

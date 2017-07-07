@@ -158,7 +158,7 @@ class PublicController extends BaseController
                 'nickname' => $param['nickname'],
                 "city" => $param['city'],
                 "province" => $param['province'],
-                "avatar" => str_replace("\/", "/", $param['headimgurl']),
+                "avatar" => str_replace("\\/", "/", $param['headimgurl']),
                 'created_at' => date('Y-m-d H:i:s'),
                 'address' => $param['company_area'],
                 'password' => '',
@@ -263,7 +263,7 @@ class PublicController extends BaseController
         if (!$member->checkOpenID($param['openid'])) {
 
             $data = [
-                'avatar' => str_replace("\/", "/", $param['figureurl_qq_2']),
+                'avatar' => str_replace("\\/", "/", $param['figureurl_qq_2']),
                 'sex' => $param['gender'],
                 'nickname' => $param['nickname'],
                 'province' => $param['province'],

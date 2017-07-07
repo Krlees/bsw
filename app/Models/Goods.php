@@ -13,7 +13,7 @@ use App\Traits\BaseModelTraits;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class UserShop extends Model
+class Goods extends Model
 {
     use BaseModelTraits;
 
@@ -22,9 +22,9 @@ class UserShop extends Model
      *
      * @var string
      */
-    protected $table = 'user_shop';
+    protected $table = 'goods';
 
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'id';
 
 
     
