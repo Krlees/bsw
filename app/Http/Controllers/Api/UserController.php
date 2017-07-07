@@ -32,6 +32,9 @@ class UserController extends BaseController
         if (empty($this->user_ses)) {
             $this->responseApi(1000);
         }
+
+        if (is_array($this->user_ses))
+            $this->user_ses = \GuzzleHttp\json_decode(\GuzzleHttp\json_encode($this->user_ses));
     }
 
     /**
@@ -215,8 +218,7 @@ class UserController extends BaseController
         $field = $request->input('key');
         $value = $request->input('value');
 
-        if (is_array($this->user_ses))
-            $this->user_ses = \GuzzleHttp\json_decode(\GuzzleHttp\json_encode($this->user_ses));
+
 
         $checkField = DB::table($member->getTable())->where('id', $this->user_ses->id)->where($field, '=', '')->count();
         $result = $member->updateData($this->user_ses->id, [$field => $value]);
