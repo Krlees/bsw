@@ -29,6 +29,10 @@ class Member extends Model
     public function get($id)
     {
         $result = DB::table($this->table)->find($id);
+        $userLevel = DB::table('user_level')->find($result->user_level_id);
+        if ($userLevel)
+            $result->level = $userLevel->name;
+
         return obj2arr($result);
     }
 
@@ -60,7 +64,7 @@ class Member extends Model
             $data['nickname'] = $data['username'];
         }
         $data['tel'] = "";
-        if(!array_has($data, 'tel'))
+        if (!array_has($data, 'tel'))
             $data['tel'] = $data['username'];
 
         try {
@@ -136,6 +140,10 @@ class Member extends Model
         } elseif ($users->password != password($pwd)) {
             return false;
         }
+
+        $userLevel = DB::table('user_level')->find($users->user_level_id);
+        if ($userLevel)
+            $users->level = $userLevel->name;
 
         return $users;
     }

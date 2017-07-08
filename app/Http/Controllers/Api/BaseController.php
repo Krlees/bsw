@@ -24,6 +24,8 @@ class BaseController extends Controller
     {
         if (request()->has('token')) {
             $this->user_ses = cache(request()->input('token'));
+            if (is_array($this->user_ses))
+                $this->user_ses = \GuzzleHttp\json_decode(\GuzzleHttp\json_encode($this->user_ses));
         }
     }
 

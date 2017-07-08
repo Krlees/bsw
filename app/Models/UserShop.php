@@ -26,6 +26,9 @@ class UserShop extends Model
 
     protected $primaryKey = 'user_id';
 
+    public function get($id)
+    {
+        return DB::table($this->table)->where('user_id', $id)->first();
+    }
 
-    
 }

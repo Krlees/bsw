@@ -53,11 +53,12 @@ class Transaction extends Model
         return DB::table($this->transactionImg())->where('transaction_id', $transId)->get();
     }
 
-    public function get($id,$field=['id', 'user_id', 'title', 'content', 'ext1', 'province', 'city', 'address', 'days'])
+    public function get($id, $field = ['id', 'user_id', 'title', 'content', 'ext1', 'province', 'city', 'address', 'days'])
     {
-        $trans = DB::table($this->table)->find($id,$field);
+        $trans = DB::table($this->table)->find($id, $field);
         if (empty($trans))
             return [];
+
 
         $imgs = $this->getImg($trans->id);
         if ($imgs) {
@@ -134,6 +135,12 @@ class Transaction extends Model
 
     public function checkTransImg($id)
     {
-        return DB::table($this->transactionImg())->where('transaction_id',$id)->where('is_cover',1)->count();
+        return DB::table($this->transactionImg())->where('transaction_id', $id)->where('is_cover', 1)->count();
+    }
+
+    public function checkFollow($id, $userId)
+    {
+        $count = DB::table($this->transctionFollowTb())->where('transaction_id', $id)->where('user_id', $userId)->count();
+        return $count > 0 ? true : false;
     }
 }

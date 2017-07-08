@@ -26,7 +26,12 @@ class UserShopGoods extends Model
 
     protected $primaryKey = 'id';
 
+    public function goodsImgDb()
+    {
+        return 'user_shop_goods_img';
+    }
 
 
-    
+
+
 }

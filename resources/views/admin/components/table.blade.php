@@ -54,8 +54,13 @@
 
     var $table = $('#table'),
         $remove = $('#remove'),
-        selections = [], // 默认选中项
-        uniqueId = 'id'; // 主键key
+        selections = []; // 默认选中项
+//        uniqueId = 'id'; // 主键key
+
+    if (typeof(uniqueId) == "undefined")
+    {
+        var uniqueId = 'id';
+    }
 
     $(function () {
         initTable();

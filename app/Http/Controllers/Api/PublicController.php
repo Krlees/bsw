@@ -59,11 +59,18 @@ class PublicController extends BaseController
             $this->responseApi(1001);
         }
 
-        // 高德地图定位
-
         $created_at = date('Y-m-d H:i:s', $timestamp);
         $password = password($password);
         $data = compact('username', 'password', 'created_at', 'register_type', 'lat', 'lng');
+
+        // 高德地图定位
+        $addr = $this->point_get_address($lng, $lat);
+        $addr = \GuzzleHttp\json_encode($addr, true);
+        if ($addr['info'] == 'OK' && $addr['regeocode']) {
+            $data['province'] = array_get($addr['regeocode']['addressComponent'], 'province', '');
+            $data['city'] = array_get($addr['regeocode']['addressComponent'], 'city', '');
+        }
+
         $result = $member->create($data);
         $result ? $this->responseApi(0) : $this->responseApi(9000);
     }

@@ -70,8 +70,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     // 商铺
     Route::group(['prefix' => 'shop'], function () {
         Route::any('index', 'UserShopController@index');
+        Route::any('edit/{id}', 'UserShopController@edit');
         Route::any('goods', 'UserShopController@goods');
-        Route::any('goods-add', 'UserShopController@goodsAdd');
+        Route::any('goods-add/{user_id}', 'UserShopController@goodsAdd');
         Route::any('goods-edit/{id}', 'UserShopController@goodsEdit');
         Route::any('goods-del', 'UserShopController@goodsDel');
     });

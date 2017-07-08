@@ -28,6 +28,9 @@ class TransactionController extends BaseController
     public function get($id, Transaction $transaction)
     {
         $data = $transaction->get($id);
+        $data['is_collect'] = false;
+        if ($this->user_ses)
+            $data['is_collect'] = $transaction->checkFollow($id, $this->user_ses->id);
 
         $this->responseApi(0, '', $data);
     }

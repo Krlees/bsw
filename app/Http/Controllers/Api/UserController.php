@@ -33,8 +33,7 @@ class UserController extends BaseController
             $this->responseApi(1000);
         }
 
-        if (is_array($this->user_ses))
-            $this->user_ses = \GuzzleHttp\json_decode(\GuzzleHttp\json_encode($this->user_ses));
+
     }
 
     /**

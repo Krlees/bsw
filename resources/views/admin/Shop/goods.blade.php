@@ -11,30 +11,31 @@
                 {!! $tablePresenter->jsCheckbox() !!}
                 {!! $tablePresenter->jsColums('商家id','user_id','true') !!}
             {
-                'field': 'logo',
-                'title': 'Logo',
+                'field': 'cover',
+                'title': '封面',
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
                     return '<img width="110px" src="' + value + '">';
                 }
             },
-                {!! $tablePresenter->jsColums('公司名称','name') !!}
-                {!! $tablePresenter->jsColums('地址','address') !!}
-                {!! $tablePresenter->jsColums('营业执照','sign_img') !!}
-                {!! $tablePresenter->jsColums('状态','status') !!}
-                {!! $tablePresenter->jsColums('加入时间','created_at') !!}
+                {!! $tablePresenter->jsColums('标题','title') !!}
+                {!! $tablePresenter->jsColums('内容','content') !!}
+                {!! $tablePresenter->jsColums('点击数','click') !!}
             {
-                'field': 'user_id',
-                'title': '添加商品',
+                'field': 'status',
+                'title': '状态',
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var str = '<a onclick="dislog(\'/admin/shop/goods-add/' + value + '\')" class="picture btn btn-xs btn-outline btn-warning tooltips" href="javascript:void(0)" title="">添加商品 <i class="fa fa-edit"></i></a>　';
-                    return str;
+                    var state = row.status == 1 ? 0 : 1;
+                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+
+                    return "<i onclick='dislogConfirm(\"/admin/shop/goods-edit/" + row.id + "\",{\"data[status]\":" + state + "})' class='hand " + classStr + "' ></i>";
                 }
             },
-            {!! $tablePresenter->jsEvents(['edit']) !!}
+            {!! $tablePresenter->jsColums('加入时间','created_at') !!}
+            {!! $tablePresenter->jsEvents() !!}
         ];
 
     </script>
