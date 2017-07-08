@@ -32,8 +32,9 @@ class TransactionController extends BaseController
         $data['mobile'] = '';
         if ($this->user_ses) {
             $data['is_collect'] = $transaction->checkFollow($id, $this->user_ses->id);
-            $mobiles = DB::table('user')->find($this->user_ses->id, ['mobile']);
-            $data['mobile'] = $mobiles ? $mobiles->mobile : '';
+            $users = DB::table('user')->find($this->user_ses->id, ['mobile', 'netease_token']);
+            $data['mobile'] = $users ? $users->mobile : '';
+            $data['netease_token'] = $users ? $users->netease_token : '';
         }
 
         $this->responseApi(0, '', $data);
