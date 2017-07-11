@@ -13,7 +13,7 @@ use App\Traits\BaseModelTraits;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class UserFollow extends Model
+class UserFriend extends Model
 {
 
     use BaseModelTraits;
@@ -23,7 +23,7 @@ class UserFollow extends Model
      *
      * @var string
      */
-    protected $table = 'user_follow';
+    protected $table = 'user_friend';
 
     protected $primaryKey = 'id';
 
@@ -62,9 +62,16 @@ class UserFollow extends Model
      * @param $userId
      * @return array
      */
-    public function getFollow($userId)
+    public function getFollow($pages, $userId, $label_name = '')
     {
-        $result = DB::table($this->table)->where('user_id', $userId)->get();
+        $db = DB::table('user_label_card as a')->join($this->table . ' as b', 'a.user_id', '=', 'b.user_id')->where('a.user_id', $userId);
+        if ($label_name)
+            $db->where('nav_label_cate_name', $label_name);
+
+        $result = $db->offset($pages['page'] * $pages['limit'])
+            ->limit($pages['limit'])
+            ->get();
+
         return obj2arr($result);
     }
 

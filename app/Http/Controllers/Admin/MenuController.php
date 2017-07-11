@@ -20,6 +20,7 @@ class MenuController extends BaseController
 
     public function index(Request $request)
     {
+
         if ($request->ajax()) {
 
             // 过滤参数
@@ -71,6 +72,7 @@ class MenuController extends BaseController
                     'value' => 0,
                 ]
             ]);
+
 
             $reponse = $this->responseForm('添加菜单', $this->formField);
             return view('admin/menu/add', compact('reponse'));

@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\BaseController;
 use App\Http\Controllers\Api\PublicController;
 use App\Models\District;
 use App\Models\Member;
-use App\Models\UserFollow;
+use App\Models\UserFriend;
 use App\Traits\DistrictTraits;
 use App\Traits\GaodemapTraits;
 use App\Traits\ImageTraits;
@@ -171,7 +171,7 @@ class UserController extends BaseController
         return view('admin.user.project_img', compact('result'));
     }
 
-    public function follow(Request $request, UserFollow $userFollow)
+    public function follow(Request $request, UserFriend $userFollow)
     {
         if ($request->ajax()) {
 

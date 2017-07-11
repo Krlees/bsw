@@ -121,6 +121,7 @@ class CaseController extends BaseController
 
         $result = DB::table($this->case->getTable())->whereIn('id', $ids)->delete();
         $result ? $this->responseApi(0) : $this->responseApi(9000);
+
     }
 
 

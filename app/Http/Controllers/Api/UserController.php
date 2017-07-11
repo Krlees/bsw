@@ -8,7 +8,7 @@ use App\Models\Menu;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\UserAdv;
-use App\Models\UserFollow;
+use App\Models\UserFriend;
 use App\Models\UserFriendLink;
 use App\Models\UserInvite;
 use App\Models\UserJuan;
@@ -134,7 +134,7 @@ class UserController extends BaseController
      * 加好友【加关注】
      * @param $followId
      */
-    public function addFriend($followId, UserFollow $userFollow)
+    public function addFriend($followId, UserFriend $userFollow)
     {
         if ($userFollow->check($this->user_ses->id, $followId)) {
             return $this->responseApi(80001, '该好友不存在！');
@@ -148,7 +148,7 @@ class UserController extends BaseController
      * 删除好友【取消关注】
      * @param $followId
      */
-    public function deleteFriend($followId, UserFollow $userFollow)
+    public function deleteFriend($followId, UserFriend $userFollow)
     {
         if (!$userFollow->check($this->user_ses->id, $followId)) {
             return $this->responseApi(80001, '该好友不存在！');
@@ -160,19 +160,22 @@ class UserController extends BaseController
 
     /**
      * 我的好友
-     * @param UserFollow $userFollow
+     * @param UserFriend $userFollow
      */
-    public function myFriend(UserFollow $userFollow)
+    public function myFriend(Request $request, UserFriend $userFollow)
     {
-        $result = $userFollow->getFollow($this->user_ses->id);
+        $label_name = $request->input('label_name', '');
+        $pages = $this->pageInit();
+
+        $result = $userFollow->getFollow($pages, $this->user_ses->id);
         $this->responseApi(0, '', $result);
     }
 
     /**
      * 我的粉丝
-     * @param UserFollow $userFollow
+     * @param UserFriend $userFollow
      */
-    public function myFans(UserFollow $userFollow)
+    public function myFans(UserFriend $userFollow)
     {
         $result = $userFollow->getFans($this->user_ses->id);
         $this->responseApi(0, '', $result);
@@ -216,7 +219,6 @@ class UserController extends BaseController
     {
         $field = $request->input('key');
         $value = $request->input('value');
-
 
 
         $checkField = DB::table($member->getTable())->where('id', $this->user_ses->id)->where($field, '=', '')->count();

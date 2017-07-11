@@ -206,7 +206,7 @@ class TransactionController extends BaseController
         $result = [];
 
         // 判断是否是职位下的求职频道
-        if ($channelId == 5 && $channelType == '求职') {
+        if ($channelType == '求职') {
 
             // 职位下的求职频道格式不一样
             $citys = $transaction->getCitys(false, $channelId);
