@@ -37,7 +37,9 @@ Route::group(['namespace' => 'Api'], function () {
         Route::any('get-user-level', 'PublicController@getUserLevel'); // 用户等级
         Route::any('get-district/{id}', 'PublicController@getDistrict'); // 获取省市区
         Route::any('clear-cache', 'PublicController@clearCache'); // 清除缓存
-        Route::any('get-nav-user', 'PublicController@getNavUser'); // 清除缓存
+        Route::any('get-nav-user', 'PublicController@getNavUser'); // 获取导航标签下的用户
+        Route::any('get-nav-label', 'PublicController@getNavLabel'); // 获取所有导航标签
+
     });
 
     // 信息接口
@@ -100,7 +102,9 @@ Route::group(['namespace' => 'Api'], function () {
         Route::any('get-vip', 'UserController@getVip'); //获取开通的vip
         Route::any('get-adv', 'UserController@getAdv'); //获取广告信息
         Route::any('post-adv', 'UserController@postAdv'); //提交广告信息
+        Route::any('post-label-card', 'UserController@postLabelCard'); //提交身份标签信息
         Route::any('get-transaction', 'UserController@getTransaction'); //我的订单信息
+        Route::any('get-nofollow-user', 'UserController@getNofollowUser'); //获取未关注的最新用户
     });
 
     Route::group(['prefix' => 'pay'], function () {

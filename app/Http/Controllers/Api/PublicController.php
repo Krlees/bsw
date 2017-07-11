@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\Adv;
 use App\Models\Member;
 use App\Models\Menu;
+use App\Models\NavLabel;
 use App\Models\Order;
 use App\Models\Setting;
+use App\Models\UserFriend;
 use App\Models\UserLevel;
 use App\Models\UserLoginRecord;
 use App\Models\UserOauth;
@@ -65,7 +67,7 @@ class PublicController extends BaseController
 
         // 高德地图定位
         $addr = $this->point_get_address($lng, $lat);
-        $addr = \GuzzleHttp\json_encode($addr, true);
+        $addr = \GuzzleHttp\json_decode($addr, true);
         if ($addr['info'] == 'OK' && $addr['regeocode']) {
             $data['province'] = array_get($addr['regeocode']['addressComponent'], 'province', '');
             $data['city'] = array_get($addr['regeocode']['addressComponent'], 'city', '');
@@ -473,6 +475,13 @@ district: "霞浦县",
         $this->responseApi(0, '', $data);
     }
 
+    public function getNavLabel(NavLabel $label)
+    {
+        $data = $label->getAll($label->getTable());
+
+        $this->responseApi(0, '', $data);
+    }
+
 
     public function alipay(Order $order)
     {
@@ -496,15 +505,17 @@ district: "霞浦县",
     /**
      * 获取导航栏下的标签用户
      */
-    public function getNavUser(Request $request, Member $member)
+    public function getNavUser(Request $request, Member $member, NavLabel $label)
     {
         $labelName = $request->input('label_name') or $this->responseApi(1004);
         $pages = $this->pageInit();
 
-        $result = \DB::table($member->getTable())->where('status', 1)->where('mark', 'like', '%' . $labelName . '%')->offset($pages['page'] * $pages['limit'])->limit($pages['limit'])->get(['id', 'username', 'nickname', 'desc', 'avatar', 'city', 'mark']);
+        $label_id = $label->nameById($labelName);
+        $result = $member->getNavUser($label_id, $pages);
 
         $this->responseApi(0, '', $result);
     }
+
 
 
     public function clearCache()

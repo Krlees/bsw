@@ -62,11 +62,11 @@ class UserFriend extends Model
      * @param $userId
      * @return array
      */
-    public function getFollow($pages, $userId, $label_name = '')
+    public function getFollow($pages, $userId, $label_id = 0)
     {
-        $db = DB::table('user_label_card as a')->join($this->table . ' as b', 'a.user_id', '=', 'b.user_id')->where('a.user_id', $userId);
-        if ($label_name)
-            $db->where('nav_label_cate_name', $label_name);
+        $db = DB::table($this->table.' as a')->where('a.user_id',$userId)->join('user_label_card as b','a.user_id','=','b.user_id')->groupBy(['b.user_id','b.label_id']);
+        if ($label_id)
+            $db->where('b.label_id', $label_id);
 
         $result = $db->offset($pages['page'] * $pages['limit'])
             ->limit($pages['limit'])

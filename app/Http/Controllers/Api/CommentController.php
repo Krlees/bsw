@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Comment;
+use App\Models\Member;
 use App\Models\Transaction;
 use App\Traits\ImageTraits;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class CommentController extends BaseController
 {
     use ImageTraits;
 
-    public function getList(Request $request, Comment $comment)
+    public function getList(Request $request, Comment $comment, Member $member)
     {
         $where = [];
         $pages = $this->pageInit();
@@ -23,6 +24,12 @@ class CommentController extends BaseController
         }
 
         $result = $comment->getList($pages['page'], $pages['limit'], $where);
+        foreach ($result as &$v) {
+            $users = DB::table($member->getTable())->find($v['user_id'], ['avatar', 'nickname']);
+            $v['avatar'] = $users ? $users->avatar : '';
+            $v['nickname'] = $users ? $users->nickname : '';
+        }
+
         $this->responseApi(0, '', $result);
     }
 

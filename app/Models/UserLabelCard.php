@@ -26,6 +26,33 @@ class UserLabelCard extends Model
 
     protected $primaryKey = 'id';
 
+    public function create($label_id, $user_id, $data)
+    {
+        DB::beginTransaction();
+
+        try {
+            $del = DB::table($this->table)->where('label_id', $label_id)->where('user_id', $user_id)->delete();
+            foreach ($data as $v) {
+                $id = DB::table($this->table)->insert([
+                    'user_id' => $user_id,
+                    'label_id' => $label_id,
+                    'nav_label_cate_id' => $v['nav_label_cate_id'],
+                    'nav_label_cate_name' => $v['nav_label_cate_name'],
+                ]);
+                if (!$id) {
+                    DB::rollBack();
+                    return false;
+                }
+            }
+
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        DB::commit();
+        return true;
+
+    }
 
 
 }

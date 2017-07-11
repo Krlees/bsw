@@ -59,7 +59,8 @@ class Transaction extends Model
         if (empty($trans))
             return [];
 
-
+        $trans->imgs = [];
+        $trans->cover = "";
         $imgs = $this->getImg($trans->id);
         if ($imgs) {
             foreach ($imgs as $img) {
@@ -70,10 +71,18 @@ class Transaction extends Model
             }
         }
 
-        $avatars = DB::table('user')->find($trans->user_id, ['avatar']);
-
-        $trans->avatar = $avatars ? picture_url($avatars->avatar) : '';
-
+        $users = DB::table('user')->find($trans->user_id, ['avatar', 'netease_token', 'mobile']);
+        if ($users) {
+            $trans->mobile = $users->mobile;
+            $trans->avatar = picture_url($users->avatar);
+            $trans->neteasy_token = picture_url($users->neteasy_token);
+            $trans->is_online = $users->netease_token ? true : false;
+        } else {
+            $trans->mobile = "";
+            $trans->avatar = "";
+            $trans->is_online = false;
+            $trans->neteasy_token = "";
+        }
 
         return obj2arr($trans);
 
@@ -110,7 +119,7 @@ class Transaction extends Model
 
             $avatars = DB::table('user')->find($v['user_id'], ['avatar']);
             $result[$k]['head_img'] = $avatars ? picture_url($avatars->avatar) : '';
-
+            $result[$k]['avatar'] = $result[$k]['head_img'];
         }
 
         return $result;

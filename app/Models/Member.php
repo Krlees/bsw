@@ -162,4 +162,42 @@ class Member extends Model
         return $result;
     }
 
+    /**
+     * 获取导航标签下的用户
+     * @param $label_id
+     * @param $pages
+     * @return array
+     */
+    public function getNavUser($label_id, $pages)
+    {
+        if (!$label_id)
+            return [];
+
+        $rows = DB::table('user_label_card as a')->join($this->table . ' as b', 'a.user_id', '=', 'b.id')
+            ->where('a.label_id', $label_id)->groupBy(['a.label_id', 'a.user_id'])
+            ->offset($pages['page'] * $pages['limit'])
+            ->limit($pages['limit'])
+            ->get(['b.id', 'b.nickname', 'b.avatar', 'b.intro', 'b.desc', 'b.city']);
+
+        foreach ($rows as $v) {
+            $link = DB::table('user_friend_link')->where('user_id', $v->id)->get();
+            $link = obj2arr($link);
+            $v->is_link = $link ? true : false;
+            if ($link) {
+                $v->link = $link;
+            }
+        }
+
+        return obj2arr($rows);
+    }
+
+    public function getNoFollowUser($pages, $user_id)
+    {
+        $sql = "select user.id,user.nickname,user.avatar,user.city,user.lng,user.lat from user where 1>(select count(*) from user_friend where user.id=user_friend.follow_id)
+order by user.id desc limit 20";
+        $rows = DB::select($sql);
+
+        return obj2arr($rows);
+    }
+
 }

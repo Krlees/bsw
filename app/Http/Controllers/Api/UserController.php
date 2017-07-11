@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Comment;
+use App\Models\Label;
 use App\Models\Member;
 use App\Models\Menu;
+use App\Models\NavLabel;
 use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Models\UserAdv;
 use App\Models\UserFriend;
 use App\Models\UserFriendLink;
 use App\Models\UserInvite;
 use App\Models\UserJuan;
+use App\Models\UserLabelCard;
 use App\Models\UserSign;
 use App\Models\UserVip;
 use App\Models\UserWallet;
@@ -137,7 +141,7 @@ class UserController extends BaseController
     public function addFriend($followId, UserFriend $userFollow)
     {
         if ($userFollow->check($this->user_ses->id, $followId)) {
-            return $this->responseApi(80001, '该好友不存在！');
+            return $this->responseApi(80001, '该好友已存在！');
         }
 
         $result = $userFollow->create($this->user_ses->id, $followId);
@@ -162,12 +166,22 @@ class UserController extends BaseController
      * 我的好友
      * @param UserFriend $userFollow
      */
-    public function myFriend(Request $request, UserFriend $userFollow)
+    public function myFriend(Request $request, Member $member, UserFriend $userFollow, NavLabel $label)
     {
         $label_name = $request->input('label_name', '');
+        $label_id = $label_name ? $label->nameById($label_name) : 0;
+
         $pages = $this->pageInit();
 
-        $result = $userFollow->getFollow($pages, $this->user_ses->id);
+        $result = $userFollow->getFollow($pages, $this->user_ses->id, $label_id);
+        foreach ($result as &$v) {
+            $v['created_at'] = date('Y-m-d H:i:s', $v['created_at']);
+            $users = DB::table($member->getTable())->find($v['user_id'], ['avatar', 'nickname', 'netease_token']);
+            $v['nickname'] = $users ? $users->nickname : '';
+            $v['avatar'] = $users ? $users->avatar : '';
+            $v['netease_token'] = $users ? $users->netease_token : '';
+        }
+
         $this->responseApi(0, '', $result);
     }
 
@@ -175,9 +189,17 @@ class UserController extends BaseController
      * 我的粉丝
      * @param UserFriend $userFollow
      */
-    public function myFans(UserFriend $userFollow)
+    public function myFans(UserFriend $userFollow, Member $member)
     {
         $result = $userFollow->getFans($this->user_ses->id);
+        foreach ($result as &$v) {
+            $v['created_at'] = date('Y - m - d H:i:s', $v['created_at']);
+            $users = DB::table($member->getTable())->find($v['user_id'], ['avatar', 'nickname', 'netease_token']);
+            $v['nickname'] = $users ? $users->nickname : '';
+            $v['avatar'] = $users ? $users->avatar : '';
+            $v['netease_token'] = $users ? $users->netease_token : '';
+        }
+
         $this->responseApi(0, '', $result);
     }
 
@@ -221,13 +243,13 @@ class UserController extends BaseController
         $value = $request->input('value');
 
 
-        $checkField = DB::table($member->getTable())->where('id', $this->user_ses->id)->where($field, '=', '')->count();
+        $checkField = DB::table($member->getTable())->where('id', $this->user_ses->id)->where($field, ' = ', '')->count();
         $result = $member->updateData($this->user_ses->id, [$field => $value]);
         if ($result) {
             if ($checkField && ($field != 'avatar' || $field != 'nickname' || $field != 'sex')) {
                 // 送劵
-                $where[] = ['user_id', '=', $this->user_ses->id];
-                $where[] = ['juan_id', '=', 1];
+                $where[] = ['user_id', ' = ', $this->user_ses->id];
+                $where[] = ['juan_id', ' = ', 1];
                 $count = $userJuan->getCount($userJuan->getTable(), $where);
                 if ($count > 0) {
                     $r = DB::table($userJuan->getTable())->where($where)->increment('nums');
@@ -235,7 +257,7 @@ class UserController extends BaseController
                     $r = $userJuan->createData($userJuan->getTable(), [
                         'user_id' => $this->user_ses->id,
                         'nums' => 1,
-                        'created_at' => date('Y-m-d H:i:s')
+                        'created_at' => date('Y - m - d H:i:s')
                     ]);
                 }
             }
@@ -262,31 +284,44 @@ class UserController extends BaseController
         $type = (int)$request->input('type') or $this->responseApi(1004);
         switch ($type) {
             case 1: // 已解锁的信息
-                $rows = DB::table($transaction->transactionPayRecordTb() . ' as a')->join($transaction->getTable() . ' as b', 'a.transaction_id', '=', 'b.id')
-                    ->where('a.user_id', '=', $this->user_ses->id)
+                $rows = DB::table($transaction->transactionPayRecordTb() . ' as a')->join($transaction->getTable() . ' as b', 'a . transaction_id', ' = ', 'b . id')
+                    ->where('a . user_id', ' = ', $this->user_ses->id)
                     ->offset($pages['page'] * $pages['limit'])
                     ->limit($pages['limit'])
-                    ->get(['b.*']);
-                $rows = obj2arr($rows);
+                    ->get(['b . id', 'b . title', 'b . content', 'b . user_id', 'b . label_id', 'b . created_at', 'b . city', 'b . ext1']);
                 foreach ($rows as $v) {
                     $coverImg = DB::table($transaction->transactionImg())->where('transaction_id', $v->id)->where('is_cover', 1)->first();
                     $v->cover = $coverImg ? $coverImg->img_thumb : '';
                     $v->collect_count = DB::table($transaction->transctionFollowTb())->where('transaction_id', $v->id)->count();
                     $v->comment_count = DB::table($comment->getTable())->where('transaction_id', $v->id)->count();
+                    $v->addtime = date('Y - m - d H:i:s', $v->created_at);
                 }
+                $rows = obj2arr($rows);
+
                 break;
 
             case 2: // 已发布的信息
-                $where[] = ['user_id', '=', $this->user_ses->id];
+                $where[] = ['user_id', ' = ', $this->user_ses->id];
                 $rows = $transaction->getList($pages['page'], $pages['limit'], $where);
+                foreach ($rows as &$v) {
+                    $v['collect_count'] = DB::table($transaction->transctionFollowTb())->where('transaction_id', $v['id'])->count();
+                    $v['comment_count'] = DB::table($comment->getTable())->where('transaction_id', $v['id'])->count();
+                }
                 break;
 
             case 3:
-                $rows = DB::table($transaction->transctionFollowTb() . ' as a')->join($transaction->getTable() . ' as b', 'a.transaction_id', '=', 'b.id')
-                    ->where('a.user_id', '=', $this->user_ses->id)
+                $rows = DB::table($transaction->transctionFollowTb() . ' as a')->join($transaction->getTable() . ' as b', 'a . transaction_id', ' = ', 'b . id')
+                    ->where('a . user_id', ' = ', $this->user_ses->id)
                     ->offset($pages['page'] * $pages['limit'])
                     ->limit($pages['limit'])
-                    ->get(['b.*']);
+                    ->get(['b . id', 'b . title', 'b . content', 'b . user_id', 'b . label_id', 'b . created_at', 'b . city', 'b . ext1']);
+                foreach ($rows as $v) {
+                    $coverImg = DB::table($transaction->transactionImg())->where('transaction_id', $v->id)->where('is_cover', 1)->first();
+                    $v->cover = $coverImg ? $coverImg->img_thumb : '';
+                    $v->collect_count = DB::table($transaction->transctionFollowTb())->where('transaction_id', $v->id)->count();
+                    $v->comment_count = DB::table($comment->getTable())->where('transaction_id', $v->id)->count();
+                    $v->addtime = date('Y - m - d H:i:s', $v->created_at);
+                }
                 break;
             case 4:
 
@@ -312,7 +347,7 @@ class UserController extends BaseController
         $name = $request->input('name') or $this->responseApi(1004);
         $desc = $request->input('desc') or $this->responseApi(1004);
         $img = $request->input('img') or $this->responseApi(1004);
-        $created_at = date('Y-m-d H:i:s');
+        $created_at = date('Y - m - d H:i:s');
         $user_id = $this->user_ses->id;
 
         $img = $this->thumbImg($img, 'adv');
@@ -329,6 +364,21 @@ class UserController extends BaseController
         return $result;
     }
 
+    public function postLabelCard(Request $request, UserLabelCard $card)
+    {
+        $data = $request->input('data') or $this->responseApi(1004);
+        $label_id = $request->input('label_id') or $this->responseApi(1004);
+
+        $data = \GuzzleHttp\json_decode($data, true);
+        if (!is_array($data)) {
+            $this->responseApi(80001, "data数据格式错误");
+        }
+
+        $card->create($label_id, $this->user_ses->id, $data);
+        $this->responseApi(0);
+
+    }
+
     /**
      * 编写推广链接
      */
@@ -336,11 +386,11 @@ class UserController extends BaseController
     {
         $product_id = $request->input('product_id') or $this->responseApi(1004);
         $url = $request->input('url') or $this->responseApi(1004);
-        $created_at = date('Y-m-d H:i:s');
+        $created_at = date('Y - m - d H:i:s');
         $user_id = $this->user_ses->id;
 
-        $where[] = ['product_id', '=', $product_id];
-        $where[] = ['user_id', '=', $user_id];
+        $where[] = ['product_id', ' = ', $product_id];
+        $where[] = ['user_id', ' = ', $user_id];
         $count = DB::table($link->getTable())->where($where)->count();
         if ($count) {
             $result = DB::table($link->getTable())->where($where)->update(['url' => $url]);
@@ -359,10 +409,21 @@ class UserController extends BaseController
     public function getFriendLink(Request $request, UserFriendLink $link, Product $product)
     {
 
-        $info = DB::table($product->getTable() . ' as a')->leftJoin($link->getTable() . ' as b', 'a.id', '=', 'b.product_id')->where('a.category_id', 11)->where('b.user_id', $this->user_ses->id)->get();
+        $info = DB::table($product->getTable() . ' as a')->leftJoin($link->getTable() . ' as b', 'a . id', ' = ', 'b . product_id')->where('a . category_id', 11)->where('b . user_id', $this->user_ses->id)->get();
 
         $this->responseApi(0, '', obj2arr($info));
 
+    }
+
+    /**
+     * 获取未关注的最新用户
+     */
+    public function getNofollowUser(Member $member)
+    {
+        $pages = $this->pageInit();
+        $result = $member->getNoFollowUser($pages, $this->user_ses->id);
+
+        $this->responseApi(0, '', $result);
     }
 
 

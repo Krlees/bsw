@@ -121,6 +121,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::any('category-add', 'ProductController@categoryAdd');
         Route::any('category-edit/{id}', 'ProductController@categoryEdit');
         Route::any('category-del', 'ProductController@categoryDel');
+
     });
 
     // 信息
