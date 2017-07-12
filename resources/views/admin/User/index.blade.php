@@ -23,10 +23,10 @@
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var state = row.status == 1 ? 0 : 1;
-                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+                    var state = value == 1 ? 0 : 1;
+                    var classStr = value == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
 
-                    return "<i onclick='dislogConfirm(\"/admin/member/edit/" + row.id + "\",{\"data[status]\":" + state + "})' class='hand " + classStr + "' ></i>";
+                    return "<i onclick='dislogConfirm(\"/admin/member/edit/" + row.id + "\",{\"data[status]\":" + state + ",\"tab\":1})' class='hand " + classStr + "' ></i>";
                 }
             },
             {
@@ -35,10 +35,10 @@
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var state = row.tx_status == 1 ? 0 : 1;
-                    var classStr = row.tx_status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+                    var state = value == 1 ? 0 : 1;
+                    var classStr = value == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
 
-                    return "<i onclick='dislogConfirm(\"/admin/member/edit/" + row.id + "\",{\"data[tx_status]\":" + state + "})' class='hand " + classStr + "' ></i>";
+                    return "<i onclick='dislogConfirm(\"/admin/member/edit/" + row.id + "\",{\"data[tx_status]\":" + state + ",\"tab\":1})' class='hand " + classStr + "' ></i>";
                 }
             },
             {
@@ -47,7 +47,7 @@
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var str = '<a onclick="dislog(\'/admin/member/project-img/' + value + '\')" class="picture btn btn-xs btn-outline btn-warning tooltips" href="javascript:void(0)" title="相册">相册 <i class="fa fa-edit"></i></a>　';
+                    var str = '<a onclick="dislog(\'/admin/member/project-img/' + value + '\')" class="picture btn btn-xs btn-outline btn-warning tooltips" href="javascript:void(0)" title="相册">相册 <i class="fa fa-edit"></i></a><br>';
                     str += '<a class="btn btn-xs btn-outline btn-danger tooltips" href="javascript:void(0)" title="红包">红包 <i class="fa fa-edit"></i></a>';
 
                     return str;

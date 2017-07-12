@@ -45,6 +45,7 @@
     width: 100%;
     height: 100%;
 }
+
 .upload-image {
     float: left;
     display: block;
@@ -57,4 +58,14 @@
 
 .image {
     display: none !important;
+}
+
+#upload-avatar {
+    display: block;
+    height: 80px;
+    cursor: pointer;
+}
+
+#avatar {
+    display: none;
 }

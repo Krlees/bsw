@@ -5,16 +5,19 @@ namespace App\Presenters\Admin;
 class ImagePresenter
 {
 
-    public function showImg($imgs,$field='img')
+    public function showImg($imgs, $field = 'img')
     {
+        $coverId = 0;
         $str = '';
         foreach ($imgs as $k => $v) {
             $coverClass = ($v['is_cover'] == 1) ? 'cover' : '';
             $str .= '<li class="' . $coverClass . '" data-id="' . $v['id'] . '" class="cover"><img src="' . $v[$field] . '" alt=""></li>';
             if ($v['is_cover'] == 1) {
-                $str .= '<input type="hidden" name="cover" value="' . $v['id'] . '">';
+                $coverId = $v['id'];
             }
         }
+        $str .= '<input type="hidden" name="cover" value="' . $coverId . '">';
+
         $str .= '<div id="del-ids" style="display: none"></div>';
 
         return $str;

@@ -10,7 +10,7 @@
         var colums = [
                 {!! $tablePresenter->jsCheckbox() !!}
                 {!! $tablePresenter->jsColums('ID','id','true') !!}
-                {!! $tablePresenter->jsColums('发布人','username') !!}
+                {!! $tablePresenter->jsColums('发布人','nickname') !!}
                 {!! $tablePresenter->jsColums('发布位置','send_type') !!}
                 {!! $tablePresenter->jsColums('标题','title') !!}
                 {!! $tablePresenter->jsColums('发布时间','created_at','true') !!}
@@ -29,8 +29,8 @@
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var state = row.status == 1 ? 0 : 1;
-                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+                    var state = value == 1 ? 0 : 1;
+                    var classStr = value == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
 
                     return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_must_pay]\":" + state + "})' class='hand " + classStr + "' ></i>";
                 }
@@ -41,8 +41,8 @@
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var state = row.status == 1 ? 0 : 1;
-                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+                    var state = value == 1 ? 0 : 1;
+                    var classStr = value == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
 
                     return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_normal_pay]\":" + state + "})' class='hand " + classStr + "' ></i>";
                 }
@@ -53,8 +53,8 @@
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var state = row.status == 1 ? 0 : 1;
-                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+                    var state = value == 1 ? 0 : 1;
+                    var classStr = value == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
 
                     return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_juan_pay]\":" + state + "})' class='hand " + classStr + "' ></i>";
                 }
@@ -65,8 +65,8 @@
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var state = row.status == 1 ? 0 : 1;
-                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+                    var state = value == 1 ? 0 : 1;
+                    var classStr = value == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
 
                     return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_wallet_pay]\":" + state + "})' class='hand " + classStr + "' ></i>";
                 }
@@ -77,8 +77,8 @@
                 'align': 'center',
                 'sortable': false,
                 'formatter': function (value, row, index) {
-                    var state = row.status == 1 ? 0 : 1;
-                    var classStr = row.status == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
+                    var state = value == 1 ? 0 : 1;
+                    var classStr = value == 1 ? 'glyphicon glyphicon-ok ok' : 'glyphicon glyphicon-lock warn';
 
                     return "<i onclick='dislogConfirm(\"/admin/transaction/edit/" + row.id + "\",{\"data[is_show]\":" + state + "})' class='hand " + classStr + "' ></i>";
                 }

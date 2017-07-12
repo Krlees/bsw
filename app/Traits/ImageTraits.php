@@ -48,12 +48,13 @@ trait ImageTraits
         return true;
     }
 
-    public function tabCoverImg($tbName)
+    public function tabCoverImg($tbName, $field, $fieldId)
     {
         $coverId = request()->input('cover');
         if ($coverId) {
             try {
-                \DB::table($tbName)->where('id', $coverId)->update(['is_cover' => 1]);
+                \DB::table($tbName)->where($field, $fieldId)->update(['is_cover' => 0]);
+                \DB::table($tbName)->where('id', (int)$coverId)->update(['is_cover' => 1]);
                 return true;
             } catch (\Exception $e) {
                 return false;

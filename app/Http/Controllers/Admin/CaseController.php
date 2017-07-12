@@ -80,8 +80,9 @@ class CaseController extends BaseController
             $logo = $request->input(['imgs']);
             $cphoto = $request->input(['imgs2']);
             if($logo){
-                $data['logo'] = $this->thumbImg($logo[0], 'Head');
+                $data['logo'] = $logo ? $this->thumbImg($logo[0], 'Head') : '';
             }
+
             if($cphoto) {
                 $data['cphoto'] = $this->thumbImg($cphoto[0], 'Head');
             }
@@ -95,7 +96,7 @@ class CaseController extends BaseController
 
             $this->createField('select', '类型', 'data[cate_id]', $this->cleanSelect(obj2arr($cates), 'name', 'id', $info->cate_id));
             $this->createField('text', '标题', 'data[title]', $info->title, ['dataType' => 's1-64']);
-            $this->createField('text', '描述', 'data[description]', $info->description, ['dataType' => 's1-200']);
+            $this->createField('text', '描述', 'data[description]', $info->description, ['dataType' => '*']);
             $this->createField('text', '引入流量', 'data[yingliu]', $info->yingliu);
             $this->createField('text', '成本下降', 'data[chengben]', $info->chengben);
             $this->createField('text', '销量提升', 'data[sales]', $info->sales);

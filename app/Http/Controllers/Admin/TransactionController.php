@@ -39,9 +39,9 @@ class TransactionController extends BaseController
             $param = $this->cleanAjaxPageParam();
             $result = $this->transaction->ajaxData($this->transaction->getTable(), $param, $where, 'title');
             foreach ($result['rows'] as &$v) {
-                $username = DB::table($member->getTable())->find($v['user_id'], ['username']);
+                $username = DB::table($member->getTable())->where('id',$v['user_id'])->value('nickname');
 
-                $v['username'] = $username ? $username->username : '';
+                $v['nickname'] = $username ?: '';
                 $v['send_type'] = $sendTypeArr[$v['send_type']];
                 $v['created_at'] = date('Y-m-d H:i:s', $v['created_at']);
 
@@ -151,27 +151,39 @@ class TransactionController extends BaseController
             $data = $request->input('data');
             $imgs = $request->input(['imgs']);
 
+            // 判断是否删除旧图片
+            $this->delImg($this->transaction->transactionImg());
 
-            DB::beginTransaction();
-            $id = $this->transaction->createData($this->transaction->getTable(), $data);
-            if (!$id) {
-                DB::rollBack();
+            // 判断是否切换封面
+            $this->tabCoverImg($this->transaction->transactionImg(), 'transaction_id', $id);
+
+            $affected = $this->transaction->updateData($this->transaction->getTable(), $id, $data);
+            if(!$affected){
                 $this->responseApi(9000);
             }
+            if (!$imgs) {
+                $this->responseApi(0);
+            }
 
-//            foreach ($imgs as $k=>$img ){
-//                $img = $this->thumbImg($img,'transaction');
-//                $imgData = [
-//                    'transaction_id' => $id,
-//                    'img_thumb' => $img,
-//                    'is_cover' =>
-//                ];
-//            }
-            $this->transaction->createData($this->transaction->transactionImg(),[
+            // 判断是否已有封面
+            $check = DB::table($this->transaction->transactionImg())->where('is_cover', 1)->where('goods_id', $id)->count();
+            foreach ($imgs as $k => $img) {
+                $img = $this->thumbImg($img, 'transaction');
+                $imgData = [
+                    'transaction_id' => $id,
+                    'img_thumb' => $img,
+                    'is_cover' => 0
+                ];
 
-            ]);
+                if (!$check && $k == 0) {
+                    $imgData['is_cover'] = 1;
+                }
 
-            return $b ? $this->responseApi(0) : $this->responseApi(9000);
+                $this->transaction->createData($this->transaction->transactionImg(), $imgData);
+            }
+
+
+            $this->responseApi(0);
 
         } else {
             $info = $this->transaction->get($id, ['*']);

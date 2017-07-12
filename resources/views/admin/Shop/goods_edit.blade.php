@@ -69,7 +69,7 @@
             $(this).remove();
         }).delegate("li", "click", function () {
             $(this).addClass("cover").siblings().removeClass("cover");
-            $("input[name='cover']").val($(this).index());
+            $("input[name='cover']").val($(this).attr('data-id'));
         });
 
         $("#upload-image").click(function () {

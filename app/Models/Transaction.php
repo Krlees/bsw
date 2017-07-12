@@ -75,7 +75,7 @@ class Transaction extends Model
         if ($users) {
             $trans->mobile = $users->mobile;
             $trans->avatar = picture_url($users->avatar);
-            $trans->neteasy_token = picture_url($users->neteasy_token);
+            $trans->neteasy_token = picture_url($users->netease_token);
             $trans->is_online = $users->netease_token ? true : false;
         } else {
             $trans->mobile = "";

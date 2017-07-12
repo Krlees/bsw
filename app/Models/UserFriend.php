@@ -64,7 +64,7 @@ class UserFriend extends Model
      */
     public function getFollow($pages, $userId, $label_id = 0)
     {
-        $db = DB::table($this->table.' as a')->where('a.user_id',$userId)->join('user_label_card as b','a.user_id','=','b.user_id')->groupBy(['b.user_id','b.label_id']);
+        $db = DB::table($this->table.' as a')->where('a.user_id',$userId)->leftjoin('user_label_card as b','a.user_id','=','b.user_id')->groupBy(['b.user_id','b.label_id']);
         if ($label_id)
             $db->where('b.label_id', $label_id);
 

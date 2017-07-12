@@ -109,7 +109,12 @@ class UserController extends BaseController
     {
         if ($request->ajax()) {
 
-            $data = $this->_helpAddEdit();
+            $tab = $request->input('tab'); //判断是否更改切换状态
+            if ($tab) {
+                $data = $request->input('data');
+            } else {
+                $data = $this->_helpAddEdit();
+            }
 
             $b = $this->user->updateData($id, $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
@@ -171,13 +176,13 @@ class UserController extends BaseController
         return view('admin.user.project_img', compact('result'));
     }
 
-    public function follow(Request $request, UserFriend $userFollow)
+    public function follow(Request $request, UserFriend $friend)
     {
         if ($request->ajax()) {
 
             // 过滤参数
             $param = $this->cleanAjaxPageParam();
-            $results = $userFollow->ajaxData($userFollow->getTable(), $param);
+            $results = $friend->ajaxData($friend->getTable(), $param);
             foreach ($results['rows'] as $k => &$v) {
                 $username = $this->user->get($v['user_id']);
                 $follow_name = $this->user->get($v['follow_id']);

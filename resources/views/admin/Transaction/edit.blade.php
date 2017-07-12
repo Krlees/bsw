@@ -1,3 +1,4 @@
+@inject('imagePresenter','App\Presenters\Admin\ImagePresenter')
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,10 +33,7 @@
                             <label class="col-sm-2 control-label">内容图片</label>
                             <div class="col-sm-10">
                                 <ul class="image-list" id="image-list">
-                                    @foreach($info['imgs'] as $k=>$img)
-                                        <li data-id="{{$k}}" class="cover"><img src="{{$img['img']}}" alt=""></li>
-                                    @endforeach
-
+                                    {!! $imagePresenter->showImg($imgs,'img_thumb') !!}
                                 </ul>
                                 <div class="upload-image" id="upload-image"></div>
                                 <input class="image" id="image" type="file" accept="image/*">

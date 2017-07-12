@@ -29,9 +29,10 @@ class Member extends Model
     public function get($id)
     {
         $result = DB::table($this->table)->find($id);
-        $userLevel = DB::table('user_level')->find($result->user_level_id);
-        if ($userLevel)
-            $result->level = $userLevel->name;
+        if($result){
+            $name = DB::table('user_level')->where('id',$result->user_level_id)->value('name');
+            $result->level = $name ?: '';
+        }
 
         return obj2arr($result);
     }

@@ -188,12 +188,10 @@ class UserShopController extends BaseController
             $this->delImg($this->goods->goodsImgDb());
 
             // 判断是否切换封面
-            $this->tabCoverImg($this->goods->goodsImgDb());
+            $this->tabCoverImg($this->goods->goodsImgDb(), 'goods_id', $id);
 
             // 更新数据
-            $id = $this->goods->updateData($this->goods->getTable(), $id, $data);
-            if (!$id)
-                $this->responseApi(9000);
+            $this->goods->updateData($this->goods->getTable(), $id, $data);
 
             // 判断是否新增图片
             if (empty($imgs)) {
