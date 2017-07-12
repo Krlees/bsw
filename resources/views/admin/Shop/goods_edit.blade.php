@@ -1,3 +1,4 @@
+@inject('imagePresenter','App\Presenters\Admin\ImagePresenter')
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +16,7 @@
             <div class="col-sm-12">
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h5>编辑信息</h5>
+                        <h5>编辑商品</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -29,13 +30,10 @@
                         @endcomponent
 
                         <div class="control-group">
-                            <label class="col-sm-2 control-label">内容图片</label>
+                            <label class="col-sm-2 control-label">商品图片</label>
                             <div class="col-sm-10">
                                 <ul class="image-list" id="image-list">
-                                    @foreach($info['imgs'] as $k=>$img)
-                                        <li data-id="{{$k}}" class="cover"><img src="{{$img['img']}}" alt=""></li>
-                                    @endforeach
-
+                                    {!! $imagePresenter->showImg($imgs) !!}
                                 </ul>
                                 <div class="upload-image" id="upload-image"></div>
                                 <input class="image" id="image" type="file" accept="image/*">
@@ -62,6 +60,9 @@
     <script src="{{asset('hplus/js/uploadpic.js')}}"></script>
     <script>
         $(".chosen-select").chosen({width: "150px"})
+        $("#province").change(function () {
+            getSub('/components/get-district', $(this).val(), 'city');
+        })
         $("#image-list").delegate("li", "dblclick", function () {
             var id = $(this).attr('data-id');
             $("#del-ids").append("<input type='hidden' name='dels[]' value='" + id + "'>");
@@ -74,7 +75,16 @@
         $("#upload-image").click(function () {
             $("#image").click();
         });
+        $("#image-list2").delegate("li", "dblclick", function () {
+            $(this).remove();
+        }).delegate("li", "click", function () {
+            $(this).addClass("cover").siblings().removeClass("cover");
+            $("input[name='cover']").val($(this).index());
+        });
 
+        $("#upload-image2").click(function () {
+            $("#image2").click();
+        });
         if (typeof UploadPic != 'undefined') {
             var u = new UploadPic();
             u.init({
@@ -92,7 +102,7 @@
                         noty({text: "图片不能大于2M", type: "error"});
                         _li.remove();
                     } else {
-                        if ($("#image-list img").length >= 2) {
+                        if ($("#image-list img").length >= 4) {
                             $.noty.closeAll();
                             noty({text: "图片不能超过10个", type: "error"});
                             _li.remove();
@@ -103,7 +113,32 @@
                 }
             });
 
-
+            var u2 = new UploadPic();
+            u2.init({
+                maxWidth: 720,
+                maxHeight: 720,
+                quality: 1,
+                input: document.querySelector("#image2"),
+                before: function () {
+                    this.li = $('<li><img src="/hplus/img/loading.gif"><input name="imgs2[]" type="hidden"></li>').appendTo("#image-list2");
+                },
+                callback: function (base64) {
+                    var _li = this.li;
+                    if (base64.substr(22).length > 2097152) {
+                        $.noty.closeAll();
+                        noty({text: "图片不能大于2M", type: "error"});
+                        _li.remove();
+                    } else {
+                        if ($("#image-list2 img").length >= 4) {
+                            $.noty.closeAll();
+                            noty({text: "图片不能超过10个", type: "error"});
+                            _li.remove();
+                        } else {
+                            _li.find("input[name='imgs2[]']").val(base64.substr(22)).end().find("img").attr("src", base64);
+                        }
+                    }
+                }
+            });
         }
     </script>
 

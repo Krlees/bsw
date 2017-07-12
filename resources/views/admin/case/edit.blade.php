@@ -32,6 +32,7 @@
                             <label class="col-sm-2 control-label">头像</label>
                             <div class="col-sm-10">
                                 <ul class="image-list" id="image-list">
+
                                     <li><img src="{{$info->logo}}" alt=""></li>
                                 </ul>
                                 <div class="upload-image" id="upload-image"></div>

@@ -208,6 +208,7 @@ class UserController extends BaseController
             $data['avatar'] = $this->thumbImg($imgs[0], 'Head');
             $data['origin_img'] = $data['avatar'];
         }
+
         $data['province'] = $this->getByCity($request->input('province'));
         $data['city'] = $this->getByCity($request->input('city'));
         //$data['area'] = $this->getByCity($request->input($data['area']));

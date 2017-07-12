@@ -67,7 +67,7 @@ class Transaction extends Model
                 if ($img->is_cover == 1)
                     $trans->cover = $img->img_thumb;
 
-                $trans->imgs[] = $img->img_thumb;
+                $trans->imgs[$img->id] = $img->img_thumb;
             }
         }
 

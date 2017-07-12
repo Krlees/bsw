@@ -32,7 +32,7 @@ class TransactionController extends BaseController
             $where[] = ['channel_id', '=', $channel_id];
 
             if ($request->has('channel_type')) {
-                $where[] = ['channel_type','=','求购'];
+                $where[] = ['channel_type', '=', '求购'];
             }
 
             // 过滤参数
@@ -149,20 +149,33 @@ class TransactionController extends BaseController
     {
         if ($request->ajax()) {
             $data = $request->input('data');
-            $logo = $request->input(['imgs']);
-            $cphoto = $request->input(['imgs2']);
-            if ($logo) {
-                $data['logo'] = $this->thumbImg($logo[0], 'Head');
-            }
-            if ($cphoto) {
-                $data['cphoto'] = $this->thumbImg($cphoto[0], 'Head');
+            $imgs = $request->input(['imgs']);
+
+
+            DB::beginTransaction();
+            $id = $this->transaction->createData($this->transaction->getTable(), $data);
+            if (!$id) {
+                DB::rollBack();
+                $this->responseApi(9000);
             }
 
-            $b = $this->transaction->createData($this->transaction->getTable(), $data);
+//            foreach ($imgs as $k=>$img ){
+//                $img = $this->thumbImg($img,'transaction');
+//                $imgData = [
+//                    'transaction_id' => $id,
+//                    'img_thumb' => $img,
+//                    'is_cover' =>
+//                ];
+//            }
+            $this->transaction->createData($this->transaction->transactionImg(),[
+
+            ]);
+
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
             $info = $this->transaction->get($id, ['*']);
+            $imgs = $this->transaction->getAll($this->transaction->transactionImg(), [['transaction_id', '=', $id]]);
 
             $channelData = $channel->getAll($channel->getTable());
             $labelData = $label->getAll($label->getTable());
@@ -236,7 +249,7 @@ class TransactionController extends BaseController
             ]);
 
             $reponse = $this->responseForm('编辑信息', $this->formField);
-            return view('admin/Transaction/edit', compact('reponse', 'info'));
+            return view('admin/Transaction/edit', compact('reponse', 'info', 'imgs'));
         }
 
     }

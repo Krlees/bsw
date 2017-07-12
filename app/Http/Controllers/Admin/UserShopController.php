@@ -183,31 +183,44 @@ class UserShopController extends BaseController
         if ($request->ajax()) {
             $data = $request->input('data');
             $imgs = $request->input(['imgs']);
-            if (empty($imgs))
-                $this->responseApi(1004);
 
+            // 判断是否删除旧图片
+            $this->delImg($this->goods->goodsImgDb());
+
+            // 判断是否切换封面
+
+
+            // 更新数据
             $id = $this->goods->updateData($this->goods->getTable(), $id, $data);
-            if ($id) {
-                foreach ($imgs as $k => $v) {
+            if (!$id)
+                $this->responseApi(9000);
 
-                    $img = $this->thumbImg($v, 'goods');
-                    $imgData = [
-                        'goods_id' => $id,
-                        'img' => $img,
-                        'created_at' => date('Y-m-d H:i:s')
-                    ];
-                    if ($k == 0) {
-                        $imgData['is_cover'] = 1;
-                    }
-                    DB::table($this->goods->goodsImgDb())->insertGetId($imgData);
+            // 判断是否新增图片
+            if (empty($imgs)) {
+                $this->responseApi(0);
+            }
 
+            // 判断是否已有封面
+            $check = DB::table($this->goods->goodsImgDb())->where('is_cover', 1)->where('goods_id', $id)->count();
+            foreach ($imgs as $k => $v) {
+                $img = $this->thumbImg($v, 'goods');
+                $imgData = [
+                    'goods_id' => $id,
+                    'img' => $img,
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+                if (!$check && $k == 0) {
+                    $imgData['is_cover'] = 1;
                 }
+
+                DB::table($this->goods->goodsImgDb())->insertGetId($imgData);
             }
 
             return $id ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {
             $info = $this->goods->getInfo($this->goods->getTable(), $id);
+            $imgs = $this->goods->getAll($this->goods->goodsImgDb(), [['goods_id', '=', $id]]);
 
             $this->createField('text', '商品名称', 'data[title]', $info->title);
             $this->createField('textarea', '详情', 'data[content]', $info->content);
@@ -225,7 +238,7 @@ class UserShopController extends BaseController
             ]);
 
             $reponse = $this->responseForm('编辑信息', $this->formField);
-            return view('admin/Shop/goods_edit', compact('reponse'));
+            return view('admin/Shop/goods_edit', compact('reponse', 'imgs'));
         }
     }
 

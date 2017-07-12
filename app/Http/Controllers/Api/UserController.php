@@ -284,11 +284,11 @@ class UserController extends BaseController
         $type = (int)$request->input('type') or $this->responseApi(1004);
         switch ($type) {
             case 1: // 已解锁的信息
-                $rows = DB::table($transaction->transactionPayRecordTb() . ' as a')->join($transaction->getTable() . ' as b', 'a . transaction_id', ' = ', 'b . id')
-                    ->where('a . user_id', ' = ', $this->user_ses->id)
+                $rows = DB::table($transaction->transactionPayRecordTb() . ' as a')->join($transaction->getTable() . ' as b', 'a.transaction_id', ' = ', 'b.id')
+                    ->where('a.user_id', ' = ', $this->user_ses->id)
                     ->offset($pages['page'] * $pages['limit'])
                     ->limit($pages['limit'])
-                    ->get(['b . id', 'b . title', 'b . content', 'b . user_id', 'b . label_id', 'b . created_at', 'b . city', 'b . ext1']);
+                    ->get(['b.id', 'b.title', 'b.content', 'b.user_id', 'b.label_id', 'b.created_at', 'b.city', 'b.ext1']);
                 foreach ($rows as $v) {
                     $coverImg = DB::table($transaction->transactionImg())->where('transaction_id', $v->id)->where('is_cover', 1)->first();
                     $v->cover = $coverImg ? $coverImg->img_thumb : '';
@@ -310,11 +310,11 @@ class UserController extends BaseController
                 break;
 
             case 3:
-                $rows = DB::table($transaction->transctionFollowTb() . ' as a')->join($transaction->getTable() . ' as b', 'a . transaction_id', ' = ', 'b . id')
-                    ->where('a . user_id', ' = ', $this->user_ses->id)
+                $rows = DB::table($transaction->transctionFollowTb() . ' as a')->join($transaction->getTable() . ' as b', 'a.transaction_id', ' = ', 'b.id')
+                    ->where('a.user_id', ' = ', $this->user_ses->id)
                     ->offset($pages['page'] * $pages['limit'])
                     ->limit($pages['limit'])
-                    ->get(['b . id', 'b . title', 'b . content', 'b . user_id', 'b . label_id', 'b . created_at', 'b . city', 'b . ext1']);
+                    ->get(['b.id', 'b.title', 'b.content', 'b.user_id', 'b.label_id', 'b.created_at', 'b.city', 'b.ext1']);
                 foreach ($rows as $v) {
                     $coverImg = DB::table($transaction->transactionImg())->where('transaction_id', $v->id)->where('is_cover', 1)->first();
                     $v->cover = $coverImg ? $coverImg->img_thumb : '';
@@ -409,7 +409,7 @@ class UserController extends BaseController
     public function getFriendLink(Request $request, UserFriendLink $link, Product $product)
     {
 
-        $info = DB::table($product->getTable() . ' as a')->leftJoin($link->getTable() . ' as b', 'a . id', ' = ', 'b . product_id')->where('a . category_id', 11)->where('b . user_id', $this->user_ses->id)->get();
+        $info = DB::table($product->getTable() . ' as a')->leftJoin($link->getTable() . ' as b', 'a.id', ' = ', 'b.product_id')->where('a.category_id', 11)->where('b.user_id', $this->user_ses->id)->get();
 
         $this->responseApi(0, '', obj2arr($info));
 
