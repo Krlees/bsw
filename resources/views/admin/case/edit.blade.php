@@ -30,11 +30,11 @@
                         @endcomponent
 
                         <div class="control-group">
-                            <label class="control-label">头像</label>
-                            <div class="controls">
-                                <img id="upload-avatar" src="{$Think.const.__UPLOAD__}/avatar/{$data.id}_180.jpg">
+                            <label class="col-sm-2 control-label">头像</label>
+                            <div class="col-sm-10">
+                                <img id="upload-avatar" src="{{$info->logo}}">
                                 <input id="avatar" type="file" accept="image/*">
-                                <input name="avatar" type="hidden">
+                                <input name="imgs[]" type="hidden">
                                 <div class="clearfix"></div>
                             </div>
                         </div>
@@ -100,8 +100,8 @@
                     if(base64.substr(22).length > 2097152) {
                         noty({ text: "图片不能大于2M", type: "error" });
                     } else {
-                        $("#upload-avatar").attr("src", base64);
-                        $("input[name='avatar']").val(base64.substr(22));
+                        $("#upload-avatar").attr("src", base64).css('width','110px');
+                        $("input[name='imgs[]']").val(base64.substr(22));
                     }
                 }
             });

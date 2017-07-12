@@ -34,7 +34,7 @@ class UserFriend extends Model
      */
     public function create($user_id, $follow_id)
     {
-        $created_at = date('Y-m-d H:i:s');
+        $created_at = time();
         try {
             $id = DB::table($this->table)->insertGetId(compact('user_id', 'follow_id', 'created_at'));
             return $id ?: false;

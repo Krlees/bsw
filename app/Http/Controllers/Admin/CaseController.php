@@ -115,10 +115,6 @@ class CaseController extends BaseController
     public function del()
     {
         $ids = $this->getDelIds();
-        foreach ($ids as $v) {
-            if ($v == 1)
-                $this->responseApi(80001, "不可以删除超级管理员");
-        }
 
         $result = DB::table($this->case->getTable())->whereIn('id', $ids)->delete();
         $result ? $this->responseApi(0) : $this->responseApi(9000);
