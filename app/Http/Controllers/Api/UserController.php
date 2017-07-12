@@ -193,7 +193,7 @@ class UserController extends BaseController
     {
         $result = $userFollow->getFans($this->user_ses->id);
         foreach ($result as &$v) {
-            $v['created_at'] = date('Y - m - d H:i:s', $v['created_at']);
+            $v['created_at'] = date('Y-m-d H:i:s', $v['created_at']);
             $users = DB::table($member->getTable())->find($v['user_id'], ['avatar', 'nickname', 'netease_token']);
             $v['nickname'] = $users ? $users->nickname : '';
             $v['avatar'] = $users ? $users->avatar : '';
@@ -257,7 +257,7 @@ class UserController extends BaseController
                     $r = $userJuan->createData($userJuan->getTable(), [
                         'user_id' => $this->user_ses->id,
                         'nums' => 1,
-                        'created_at' => date('Y - m - d H:i:s')
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             }
@@ -284,7 +284,7 @@ class UserController extends BaseController
         $type = (int)$request->input('type') or $this->responseApi(1004);
         switch ($type) {
             case 1: // 已解锁的信息
-                $rows = DB::table($transaction->transactionPayRecordTb() . ' as a')->join($transaction->getTable() . ' as b', 'a.transaction_id', ' = ', 'b.id')
+                $rows = DB::table($transaction->transactionPayRecordTb() . ' as a')->join($transaction->getTable() . ' as b', 'a.transaction_id', '=', 'b.id')
                     ->where('a.user_id', ' = ', $this->user_ses->id)
                     ->offset($pages['page'] * $pages['limit'])
                     ->limit($pages['limit'])
@@ -294,7 +294,7 @@ class UserController extends BaseController
                     $v->cover = $coverImg ? $coverImg->img_thumb : '';
                     $v->collect_count = DB::table($transaction->transctionFollowTb())->where('transaction_id', $v->id)->count();
                     $v->comment_count = DB::table($comment->getTable())->where('transaction_id', $v->id)->count();
-                    $v->addtime = date('Y - m - d H:i:s', $v->created_at);
+                    $v->addtime = date('Y-m-d H:i:s', $v->created_at);
                 }
                 $rows = obj2arr($rows);
 
@@ -320,7 +320,7 @@ class UserController extends BaseController
                     $v->cover = $coverImg ? $coverImg->img_thumb : '';
                     $v->collect_count = DB::table($transaction->transctionFollowTb())->where('transaction_id', $v->id)->count();
                     $v->comment_count = DB::table($comment->getTable())->where('transaction_id', $v->id)->count();
-                    $v->addtime = date('Y - m - d H:i:s', $v->created_at);
+                    $v->addtime = date('Y-m-d H:i:s', $v->created_at);
                 }
                 break;
             case 4:
@@ -347,7 +347,7 @@ class UserController extends BaseController
         $name = $request->input('name') or $this->responseApi(1004);
         $desc = $request->input('desc') or $this->responseApi(1004);
         $img = $request->input('img') or $this->responseApi(1004);
-        $created_at = date('Y - m - d H:i:s');
+        $created_at = date('Y-m-d H:i:s');
         $user_id = $this->user_ses->id;
 
         $img = $this->thumbImg($img, 'adv');
@@ -386,7 +386,7 @@ class UserController extends BaseController
     {
         $product_id = $request->input('product_id') or $this->responseApi(1004);
         $url = $request->input('url') or $this->responseApi(1004);
-        $created_at = date('Y - m - d H:i:s');
+        $created_at = date('Y-m-d H:i:s');
         $user_id = $this->user_ses->id;
 
         $where[] = ['product_id', ' = ', $product_id];
