@@ -77,17 +77,17 @@ class CaseController extends BaseController
     {
         if ($request->ajax()) {
             $data = $request->input('data');
-            $logo = $request->input(['imgs']);
-            $cphoto = $request->input(['imgs2']);
-            if($logo){
-                $data['logo'] = $logo ? $this->thumbImg($logo[0], 'Head') : '';
+            $logo = $request->input(['logo']);
+            $cphoto = $request->input(['cphoto']);
+
+            if (!empty($logo)) {
+                $data['logo'] = $logo ? $this->thumbImg($logo, 'case') : '';
+            }
+            if (!empty($cphoto)) {
+                $data['cphoto'] = $this->thumbImg($cphoto, 'case');
             }
 
-            if($cphoto) {
-                $data['cphoto'] = $this->thumbImg($cphoto[0], 'Head');
-            }
-
-            $b = $this->case->createData($this->case->getTable(), $data);
+            $b = $this->case->updateData($this->case->getTable(), $id, $data);
             return $b ? $this->responseApi(0) : $this->responseApi(9000);
 
         } else {

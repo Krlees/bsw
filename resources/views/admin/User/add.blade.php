@@ -42,17 +42,15 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="control-group">
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">头像</label>
                             <div class="col-sm-10">
-                                <ul class="image-list" id="image-list"></ul>
-                                <div class="upload-image" id="upload-image"></div>
-                                <input class="image" id="image" type="file" accept="image/*">
+                                <img style="width: 110px" class="upload-avatar" id="upload-avatar" src="{{asset('hplus/img/user.png')}}">
+                                <input id="avatar" type="file" accept="image/*">
+                                <input name="avatar" type="hidden">
                                 <div class="clearfix"></div>
-                                <p class="help-block">单击图片可指定封面图片，双击图片可删除，最多可上传1张图片</p>
                             </div>
                         </div>
-
 
 
                         <div class="hr-line-dashed"></div>
@@ -74,43 +72,22 @@
     <script>
         $(".chosen-select").chosen({width: "150px"})
         $("#province").change(function () {
-            getSub('/components/get-district',$(this).val(),'city');
+            getSub('/components/get-district', $(this).val(), 'city');
         })
 
-        $("#image-list").delegate("li", "dblclick", function() {
-            $(this).remove();
-        }).delegate("li", "click", function() {
-            $(this).addClass("cover").siblings().removeClass("cover");
-            $("input[name='cover']").val($(this).index());
-        });
-
-        $("#upload-image").click(function() {
-            $("#image").click();
-        });
-        if(typeof UploadPic != 'undefined') {
-            var u = new UploadPic();
-            u.init({
-                maxWidth: 720,
-                maxHeight: 720,
-                quality: 1,
-                input: document.querySelector("#image"),
-                before: function() {
-                    this.li = $('<li><img src="/hplus/img/loading.gif"><input name="imgs[]" type="hidden"></li>').appendTo("#image-list");
-                },
+        if (typeof UploadPic != 'undefined') {
+            var avatar = new UploadPic();
+            avatar.init({
+                maxWidth: 480,
+                maxHeight: 480,
+                quality: 0.9,
+                input: document.querySelector("#avatar"),
                 callback: function (base64) {
-                    var _li = this.li;
-                    if(base64.substr(22).length > 2097152) {
-                        $.noty.closeAll();
-                        noty({ text: "图片不能大于2M", type: "error" });
-                        _li.remove();
+                    if (base64.substr(22).length > 2097152) {
+                        noty({text: "图片不能大于2M", type: "error"});
                     } else {
-                        if($("#image-list img").length >= 2) {
-                            $.noty.closeAll();
-                            noty({ text: "图片不能超过10个", type: "error" });
-                            _li.remove();
-                        } else {
-                            _li.find("input[name='imgs[]']").val(base64.substr(22)).end().find("img").attr("src", base64);
-                        }
+                        $("#upload-avatar").attr("src", base64).css('width', '110px');
+                        $("input[name='avatar']").val(base64.substr(22));
                     }
                 }
             });
@@ -118,9 +95,6 @@
     </script>
 
 @endsection
-
-
-
 
 
 </body>

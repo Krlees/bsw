@@ -117,9 +117,10 @@ class Transaction extends Model
             }
 
 
-            $avatars = DB::table('user')->find($v['user_id'], ['avatar']);
+            $avatars = DB::table('user')->find($v['user_id'], ['avatar', 'nickname']);
             $result[$k]['head_img'] = $avatars ? picture_url($avatars->avatar) : '';
             $result[$k]['avatar'] = $result[$k]['head_img'];
+            $result[$k]['nickname'] = $result[$k]['nickname'];
         }
 
         return $result;

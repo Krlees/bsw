@@ -65,7 +65,16 @@
     height: 80px;
     cursor: pointer;
 }
+.upload-avatar {
+    display: block;
+    height: 110px;
+    width: 110px;
+    cursor: pointer;
+}
 
+.avatar {
+    display: none;
+}
 #avatar {
     display: none;
 }

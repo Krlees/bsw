@@ -18,7 +18,7 @@
                         <div>
                             <small>{{date('Y-m-d H:i:s',$v->created_at)}}</small>
                             <h4>经营项目图片</h4>
-                            <p><img style="width: 140px;" src="{{$v->img_thumb}}"></p>
+                            <p><img style="width: 140px;" src="{{$v->img}}"></p>
                             <a href="#"><i class="fa fa-trash-o "></i></a>
                         </div>
                     </li>

@@ -208,10 +208,11 @@ class UserController extends BaseController
     {
         $request = request();
         $data = $request->input('data');
-        $imgs = $request->input('imgs');
+        $imgs = $request->input('avatar');
         if ($imgs) {
-            $data['avatar'] = $this->thumbImg($imgs[0], 'Head');
-            $data['origin_img'] = $data['avatar'];
+            $avatar = $this->thumbImg($imgs, 'Head');
+            $data['avatar'] = $avatar;
+            $data['origin_img'] = $avatar;
         }
 
         $data['province'] = $this->getByCity($request->input('province'));

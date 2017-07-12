@@ -34,20 +34,17 @@
                             <div class="col-sm-10">
                                 <img id="upload-avatar" src="{{$info->logo}}">
                                 <input id="avatar" type="file" accept="image/*">
-                                <input name="imgs[]" type="hidden">
+                                <input name="logo" type="hidden">
                                 <div class="clearfix"></div>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="col-sm-2 control-label">内容图片</label>
                             <div class="col-sm-10">
-                                <ul class="image-list" id="image-list2">
-                                    <li><img src="{{$info->cphoto}}" alt=""></li>
-                                </ul>
-                                <div class="upload-image" id="upload-image2"></div>
-                                <input class="image" id="image2" type="file" accept="image/*">
+                                <img class="upload-avatar" id="upload-avatar2" src="{{$info->cphoto}}">
+                                <input class="avatar" id="avatar2" type="file" accept="image/*">
+                                <input name="cphoto" type="hidden">
                                 <div class="clearfix"></div>
-                                <p class="help-block">单击图片可指定封面图片，双击图片可删除，最多可上传4张图片</p>
                             </div>
                         </div>
 
@@ -69,26 +66,6 @@
     <script src="{{asset('hplus/js/uploadpic.js')}}"></script>
     <script>
         $(".chosen-select").chosen({width: "150px"})
-        $("#image-list").delegate("li", "dblclick", function() {
-            $(this).remove();
-        }).delegate("li", "click", function() {
-            $(this).addClass("cover").siblings().removeClass("cover");
-            $("input[name='cover']").val($(this).index());
-        });
-
-        $("#upload-image").click(function() {
-            $("#image").click();
-        });
-        $("#image-list2").delegate("li", "dblclick", function() {
-            $(this).remove();
-        }).delegate("li", "click", function() {
-            $(this).addClass("cover").siblings().removeClass("cover");
-            $("input[name='cover']").val($(this).index());
-        });
-
-        $("#upload-image2").click(function() {
-            $("#image2").click();
-        });
         if(typeof UploadPic != 'undefined') {
             var avatar = new UploadPic();
             avatar.init({
@@ -101,34 +78,22 @@
                         noty({ text: "图片不能大于2M", type: "error" });
                     } else {
                         $("#upload-avatar").attr("src", base64).css('width','110px');
-                        $("input[name='imgs[]']").val(base64.substr(22));
+                        $("input[name='logo']").val(base64.substr(22));
                     }
                 }
             });
-
-            var u2 = new UploadPic();
-            u2.init({
-                maxWidth: 720,
-                maxHeight: 720,
-                quality: 1,
-                input: document.querySelector("#image2"),
-                before: function() {
-                    this.li = $('<li><img src="/hplus/img/loading.gif"><input name="imgs2[]" type="hidden"></li>').appendTo("#image-list2");
-                },
+            var avatar2 = new UploadPic();
+            avatar2.init({
+                maxWidth: 480,
+                maxHeight: 480,
+                quality: 0.9,
+                input: document.querySelector("#avatar2"),
                 callback: function (base64) {
-                    var _li = this.li;
                     if(base64.substr(22).length > 2097152) {
-                        $.noty.closeAll();
                         noty({ text: "图片不能大于2M", type: "error" });
-                        _li.remove();
                     } else {
-                        if($("#image-list2 img").length >= 3) {
-                            $.noty.closeAll();
-                            noty({ text: "图片不能超过10个", type: "error" });
-                            _li.remove();
-                        } else {
-                            _li.find("input[name='imgs2[]']").val(base64.substr(22)).end().find("img").attr("src", base64);
-                        }
+                        $("#upload-avatar2").attr("src", base64).css('width','110px');
+                        $("input[name='cphoto']").val(base64.substr(22));
                     }
                 }
             });
