@@ -176,7 +176,7 @@ class UserController extends BaseController
         $result = $userFollow->getFollow($pages, $this->user_ses->id, $label_id);
         foreach ($result as &$v) {
             $v['created_at'] = date('Y-m-d H:i:s', $v['created_at']);
-            $users = DB::table($member->getTable())->find($v['user_id'], ['avatar', 'nickname', 'netease_token', 'mobile']);
+            $users = DB::table($member->getTable())->find($v['follow_id'], ['avatar', 'nickname', 'netease_token', 'mobile']);
             $v['nickname'] = $users ? $users->nickname : '';
             $v['avatar'] = $users ? $users->avatar : '';
             $v['netease_token'] = $users ? $users->netease_token : '';
