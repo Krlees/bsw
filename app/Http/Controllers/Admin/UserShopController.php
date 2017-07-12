@@ -188,7 +188,7 @@ class UserShopController extends BaseController
             $this->delImg($this->goods->goodsImgDb());
 
             // 判断是否切换封面
-
+            $this->tabCoverImg($this->goods->goodsImgDb());
 
             // 更新数据
             $id = $this->goods->updateData($this->goods->getTable(), $id, $data);

@@ -30,23 +30,36 @@ trait ImageTraits
         return storage_path('uploads/' . $originName);
     }
 
-    public function delImg($tbName, $field='id')
+    public function delImg($tbName, $field = 'id')
     {
         // 判断是否删除旧图片
         $dels = request()->input('dels');
         if ($dels) {
-            $r = \DB::table($tbName)->whereIn($field, $dels)->delete();
-            return $r ? true : false;
+            try {
+                $r = \DB::table($tbName)->whereIn($field, $dels)->delete();
+                return $r ? true : false;
+
+            } catch (\Exception $e) {
+                return false;
+            }
+
         }
 
         return true;
     }
 
-    public function tabCoverImg()
+    public function tabCoverImg($tbName)
     {
-        $cover = request()->input('cover');
-        if($cover){
-
+        $coverId = request()->input('cover');
+        if ($coverId) {
+            try {
+                \DB::table($tbName)->where('id', $coverId)->update(['is_cover' => 1]);
+                return true;
+            } catch (\Exception $e) {
+                return false;
+            }
         }
+
+        return true;
     }
 }
